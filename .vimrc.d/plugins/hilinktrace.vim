@@ -1,0 +1,1 @@
+Plugin 'gerw/vim-HiLinkTrace'
