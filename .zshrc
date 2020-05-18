@@ -2,10 +2,9 @@ set -e
 
 export ZSH=/Users/afrael/.oh-my-zsh
 
-ZSH_THEME="robbyrussell"
 COMPLETION_WAITING_DOTS="true"
-
 ZSH_CUSTOM="${HOME}/Projects/github.com/bartsmykla/oh-my-zsh-custom"
+ZSH_THEME="robbyrussell"
 
 # Plugins: ~/.oh-my-zsh/plugins/*
 # Custom plugins: ~/.oh-my-zsh/custom/plugins/
@@ -81,7 +80,7 @@ autoload -U add-zsh-hook
 
         if ! [[ -s "${SECRETS_PATH}/${name}" ]]; then
             echo -n "Secret ${name} doesn't exist in SECRETS_PATH" >&2
-            echo    " (${SECRETS_PATH})" >&2
+            echo    " (${SECRETS_PATH}) or is empty" >&2
             return 1
         fi
 
@@ -121,7 +120,8 @@ autoload -U add-zsh-hook
 # Aliases:
     alias zshrc="${EDITOR:=vim} ${ZSHRC:=~/.zshrc}"
     alias hi="/Volumes/fortress/.hi" 
-    alias b="cd ${PROJECTS_PATH}/src/github.com/bartsmykla"
+    alias b="cd ${PROJECTS_PATH}/bartsmykla"
+    alias p="cd ${PROJECTS_PATH}"
     alias rem="rm -i"
 
 # History management
