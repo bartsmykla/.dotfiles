@@ -40,6 +40,7 @@ autoload -U add-zsh-hook
     readonly DOTFILES_PATH="${PROJECTS_PATH}/bartsmykla/.dotfiles"
     readonly CUSTOM_SCRIPTS_PATH="${DOTFILES_PATH}/custom_scripts"
     readonly SECRETS_PATH="${DOTFILES_PATH}/secrets"
+    readonly ZSHRC="${DOTFILES_PATH}/.zshrc"
     export NVM_DIR="${HOME}/.nvm"
 
 # Completions not handled by oh-my-zsh plugins
