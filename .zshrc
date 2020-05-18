@@ -1,40 +1,3 @@
-export ZSH=/Users/afrael/.oh-my-zsh
-
-COMPLETION_WAITING_DOTS="true"
-ZSH_CUSTOM="${HOME}/Projects/github.com/bartsmykla/oh-my-zsh-custom"
-ZSH_THEME="robbyrussell"
-
-# Plugins: ~/.oh-my-zsh/plugins/*
-# Custom plugins: ~/.oh-my-zsh/custom/plugins/
-plugins=(
-  git
-  aws
-  brew # adds several brew related aliases like `bubo`, `bubc` etc.
-  colorize
-  docker
-  gcloud # completion
-  golang
-  helm # completion
-  history # adds aliases 'h', 'hs', 'hsi'
-  history-substring-search
-  iterm2 # adds few direct iterm2 functions like `iterm2_tab_color r g b` etc.
-  kubectl # Completion for cluster manager + some kubectl aliases like `k` etc.
-  kops # completion
-  osx
-  rust # completion for rustc
-  tmux # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/tmux
-  zsh-autosuggestions
-  zsh_reload
-)
-
-source $ZSH/oh-my-zsh.sh
-
-# ---
-
-# Load add-zsh-hook to be able to call some function when something happens
-# More: http://zsh.sourceforge.net/Doc/Release/User-Contributions.html#Manipulating-Hook-Functions
-autoload -U add-zsh-hook
-
 # Vars
     readonly PROJECTS_PATH="${HOME}/Projects/github.com"
     readonly DOTFILES_PATH="${PROJECTS_PATH}/bartsmykla/.dotfiles"
@@ -42,6 +5,46 @@ autoload -U add-zsh-hook
     readonly SECRETS_PATH="${DOTFILES_PATH}/secrets"
     readonly ZSHRC="${DOTFILES_PATH}/.zshrc"
     export NVM_DIR="${HOME}/.nvm"
+    export ZSH="${HOME}/.oh-my-zsh"
+
+# ZSH
+    ZSH_CUSTOM="${DOTFILES_PATH}/oh-my-zsh-custom"
+    ZSH_THEME="robbyrussell"
+
+    # Load add-zsh-hook to be able to call some function when something happens
+    # More: http://zsh.sourceforge.net/Doc/Release/User-Contributions.html#Manipulating-Hook-Functions
+    autoload -U add-zsh-hook
+
+# OH MY ZSH
+    COMPLETION_WAITING_DOTS="true"
+
+    # Plugins: ~/.oh-my-zsh/plugins/*
+    # Custom plugins: ${ZSH_CUSTOM}/plugins/
+    plugins=(
+        git
+        aws
+        brew # adds several brew related aliases like `bubo`, `bubc` etc.
+        colorize
+        docker
+        gcloud # completion
+        golang
+        helm # completion
+        history # adds aliases 'h', 'hs', 'hsi'
+        history-substring-search
+        iterm2 # adds few direct iterm2 functions like `iterm2_tab_color r g b` etc.
+        kubectl # Completion for cluster manager + some kubectl aliases like `k` etc.
+        kops # completion
+        osx
+        rust # completion for rustc
+        tmux # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/tmux
+        zsh-autosuggestions
+        zsh_reload
+    )
+
+    source $ZSH/oh-my-zsh.sh
+
+    # ohmyzsh plugin history-substring-search
+    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # Completions not handled by oh-my-zsh plugins
     source <(stern --completion=zsh)
@@ -86,7 +89,7 @@ autoload -U add-zsh-hook
         cat "${SECRETS_PATH}/${name}"
     }
 
-# Key binds
+# Key bindings related
     # Skip forward/back a word with opt-arrow
     bindkey '[C' forward-word
     bindkey '[D' backward-word
@@ -96,12 +99,11 @@ autoload -U add-zsh-hook
 
     bindkey '^U' backward-kill-line
 
-# Hooks
-    add-zsh-hook chpwd load_kopsrc
-
-# Other ZSH
     autoload -Uz copy-earlier-word
     zle -N copy-earlier-word
+
+# Hooks
+    add-zsh-hook chpwd load_kopsrc
 
 # PATH
     # Custom binaries with superuser privileges required
@@ -147,9 +149,5 @@ autoload -U add-zsh-hook
         export PKG_CONFIG_PATH="/usr/local/opt/ruby/lib/pkgconfig"
     fi
 
-# ohmyzsh plugin history-substring-search
-    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-
 source_custom_scripts
 load_kopsrc
-
