@@ -1,5 +1,3 @@
-set -e
-
 export ZSH=/Users/afrael/.oh-my-zsh
 
 COMPLETION_WAITING_DOTS="true"
