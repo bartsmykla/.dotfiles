@@ -6,8 +6,12 @@ MY_PROJECTS_PATH="${PROJECTS_PATH}/bartsmykla"
 DOTFILES_REPO="git@github.com:bartsmykla/.dotfiles.git"
 DOTFILES_PATH="${MY_PROJECTS_PATH}/.dotfiles"
 
-! git --version && echo "No git. Exiting" >&2; exit 1
-! git-crypt --version && echo "No git-crypt. Exiting" >&2; exit§
+# Checking dependencies
+! git --version >/dev/null 2>&1 \
+    && echo "No git. Exiting" >&2; exit 1
+! git-crypt --version  >/dev/null 2>&1 \
+    && echo "No git-crypt. Exiting" >&2; exit 1
+
 ! [[ -d "${MY_PROJECTS_PATH}" ]] && mkdir -p "${MY_PROJECTS_PATH}"
 if ! [[ -d "${DOTFILES_PATH}" ]]; then
     git clone "${DOTFILES_REPO}" "${DOTFILES_PATH}"
