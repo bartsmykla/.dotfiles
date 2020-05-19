@@ -1,5 +1,5 @@
 # Vars
-    readonly PROJECTS_PATH="${HOME}/Projects/github.com"
+    export PROJECTS_PATH="${HOME}/Projects/github.com"
     readonly DOTFILES_PATH="${PROJECTS_PATH}/bartsmykla/.dotfiles"
     readonly CUSTOM_SCRIPTS_PATH="${DOTFILES_PATH}/custom_scripts"
     readonly SECRETS_PATH="${DOTFILES_PATH}/secrets"
