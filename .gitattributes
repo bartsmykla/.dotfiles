@@ -1,2 +1,4 @@
 secrets/** filter=git-crypt diff=git-crypt
-
+custom_scripts/**/*.secret.sh filter=git-crypt diff=git-crypt
+custom_scripts/**/*.secret.bash filter=git-crypt diff=git-crypt
+custom_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
