@@ -1,0 +1,8 @@
+# For more info: 
+#   https://raw.githubusercontent.com/alacritty/alacritty/master/alacritty.yml
+window:
+  startup_mode: Fullscreen
+font:
+  normal:
+    family: Fira Code
+  size: 13.0

@@ -21,4 +21,6 @@ if ! [[ -d "${DOTFILES_PATH}" ]]; then
 fi
 echo "source ${DOTFILES_PATH}/.zshrc" > ~/.zshrc
 source "${DOTFILES_PATH}/.zshrc"
+
+ln -sfv "${DOTFILES_PATH}/.alacritty.yml ~/.alacritty.yml
 ```
