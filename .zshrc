@@ -127,6 +127,7 @@
     alias b="cd ${PROJECTS_PATH}/bartsmykla"
     alias p="cd ${PROJECTS_PATH}"
     alias rem="rm -i"
+    alias gcs="git commit -sS"
 
 # History management
     # Avoid duplicates
