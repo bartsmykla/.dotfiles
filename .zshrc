@@ -1,7 +1,7 @@
 # Vars
     export PROJECTS_PATH="${HOME}/Projects/github.com"
     readonly DOTFILES_PATH="${PROJECTS_PATH}/bartsmykla/.dotfiles"
-    readonly CUSTOM_SCRIPTS_PATH="${DOTFILES_PATH}/custom_scripts"
+    readonly CUSTOM_SCRIPTS_PATH="${DOTFILES_PATH}/autoload_scripts"
     readonly SECRETS_PATH="${DOTFILES_PATH}/secrets"
     readonly ZSHRC="${DOTFILES_PATH}/.zshrc"
     export NVM_DIR="${HOME}/.nvm"
