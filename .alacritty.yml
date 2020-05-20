@@ -6,3 +6,6 @@ font:
   normal:
     family: Fira Code
   size: 13.0
+debug:
+  log_level: Debug
+  print_events: false
