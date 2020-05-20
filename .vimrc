@@ -12,10 +12,3 @@ set rtp+=~/.vimrc.d
 
 runtime! vundle.vim
 runtime! native.vim
-
-" Jump to the last position when reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
-
