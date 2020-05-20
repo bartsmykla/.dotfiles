@@ -8,7 +8,7 @@ _parse_github_url() {
         return 1
     fi
 
-    local regex='^(git:\/\/|git@|https:\/\/)?github.com[:\/]([[:alnum:]_-]+)\/([[:alnum:]_-]+)\/?(\.git)?$'
+    local regex='^(git:\/\/|git@|https:\/\/)?github.com[:\/]([[:alnum:]_-]+)\/([[:alnum:]_-\.]+)\/?(\.git)?$'
     local repository="${1}"
     local organization
     local name
