@@ -5,9 +5,6 @@ if !exists('g:not_finish_vimplug')
   colorscheme molokai
 endif
 
-" syntax highlighting
-syntax on
-
 " lines number
 set number
 
@@ -65,3 +62,17 @@ set backspace=indent,eol,start
 nmap // :noh<cr>
 vmap // :noh<cr>
 
+" Folding
+set nocompatible
+
+filetype plugin indent on
+
+set foldenable
+set foldmethod=marker
+
+au FileType sh let g:sh_fold_enabled=5
+au FileType sh let g:is_bash=1
+au FileType sh set foldmethod=syntax
+
+" syntax highlighting
+syntax enable
