@@ -41,7 +41,7 @@
         zsh_reload
     )
 
-    source $ZSH/oh-my-zsh.sh
+    source "${ZSH}/oh-my-zsh.sh"
 
     # ohmyzsh plugin history-substring-search
     source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -113,13 +113,16 @@
 
 # Secrets
     # Homebrew
-    export HOMEBREW_GITHUB_API_TOKEN="$(get_secret HOMEBREW_GITHUB_API_TOKEN)"
+    export HOMEBREW_GITHUB_API_TOKEN;
+        HOMEBREW_GITHUB_API_TOKEN="$(get_secret HOMEBREW_GITHUB_API_TOKEN)"
     # AWS terraform_learning account
-    export AWS_ACCESS_KEY_ID="$(get_secret AWS_ACCESS_KEY_ID)"
-    export AWS_SECRET_ACCESS_KEY="$(get_secret AWS_SECRET_ACCESS_KEY)"
+    export AWS_ACCESS_KEY_ID;
+        AWS_ACCESS_KEY_ID="$(get_secret AWS_ACCESS_KEY_ID)"
+    export AWS_SECRET_ACCESS_KEY;
+        AWS_SECRET_ACCESS_KEY="$(get_secret AWS_SECRET_ACCESS_KEY)"
 
 # Aliases:
-    alias zshrc="${EDITOR:=vim} ${ZSHRC:=~/.zshrc}"
+    alias zshrc="\${EDITOR:=vim} \${ZSHRC:=~/.zshrc}"
     alias hi="/Volumes/fortress/.hi" 
     alias b="cd ${PROJECTS_PATH}/bartsmykla"
     alias p="cd ${PROJECTS_PATH}"
