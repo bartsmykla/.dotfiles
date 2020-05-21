@@ -6,6 +6,7 @@
     readonly ZSHRC="${DOTFILES_PATH}/.zshrc"
     export NVM_DIR="${HOME}/.nvm"
     export ZSH="${HOME}/.oh-my-zsh"
+    export CPPFLAGS=""
 
 # ZSH
     ZSH_CUSTOM="${DOTFILES_PATH}/oh-my-zsh-custom"
@@ -110,6 +111,8 @@
     export PATH="/usr/local/sbin:${PATH}"
     # Overwrite default MacOS's version of getopt with the proper one
     export PATH="/usr/local/opt/gnu-getopt/bin:${PATH}"
+    # OpenJDK
+    export PATH="/usr/local/opt/openjdk/bin:${PATH}"
 
 # Secrets
     # Homebrew
@@ -149,9 +152,12 @@
     if ruby --version >/dev/null 2>&1; then
         export PATH="/usr/local/opt/ruby/bin:$PATH"
         export LDFLAGS="-L/usr/local/opt/ruby/lib"
-        export CPPFLAGS="-I/usr/local/opt/ruby/include"
         export PKG_CONFIG_PATH="/usr/local/opt/ruby/lib/pkgconfig"
+        CPPFLAGS+=" -I/usr/local/opt/ruby/include"
     fi
+
+# OpenJDK
+    CPPFLAGS+=" -I/usr/local/opt/openjdk/include"
 
 source_custom_scripts
 load_kopsrc
