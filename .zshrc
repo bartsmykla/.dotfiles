@@ -63,13 +63,18 @@
         fi
     }
 
-    load_kopsrc() {
-        local file=".kops"
+    load_src() {
+        local files=(
+            .kops
+            .env
+        )
 
-        if [ -f "${file}" ]; then
-            echo "found ${file}"
-            source "${file}"
-        fi
+        for file in "${files[@]}"; do
+            if [ -f "${file}" ]; then
+                echo "found ${file}"
+                source "${file}"
+            fi
+        done
     }
 
     get_secret() {
@@ -104,7 +109,7 @@
     zle -N copy-earlier-word
 
 # Hooks
-    add-zsh-hook chpwd load_kopsrc
+    add-zsh-hook chpwd load_src
 
 # PATH
     # Custom binaries with superuser privileges required
@@ -160,4 +165,4 @@
     CPPFLAGS+=" -I/usr/local/opt/openjdk/include"
 
 source_custom_scripts
-load_kopsrc
+load_src
