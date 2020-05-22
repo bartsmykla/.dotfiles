@@ -65,3 +65,15 @@ gccld() {
     echo "Changing directory to cloned repository (from: $(pwd))"
     cd "${project_path}" || return
 }
+
+# Push to current branch (origin) with force flag
+ggpf() {
+    if [[ $# != 0 ]]; then
+        echo "ggpf(): function doesn't expect any parameters" >&2
+        return 1
+    fi
+
+    local branch; branch="$(git_current_branch)" || return
+
+    git push --force origin "${branch}"
+}
