@@ -73,6 +73,11 @@ ggpf() {
         return 1
     fi
 
+    if ! command -v git_current_branch >/dev/null 2>&1; then
+        echo "ggpf(): couldn't find function: git_current_branch" >&2
+        return 1
+    fi
+
     local branch; branch="$(git_current_branch)" || return
 
     git push --force origin "${branch}"
