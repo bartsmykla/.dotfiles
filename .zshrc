@@ -143,6 +143,7 @@
 # Aliases:
     alias zshrc="\${EDITOR:=vim} \${ZSHRC:=~/.zshrc}"
     alias hi="/Volumes/fortress/.hi" 
+    alias sad="ssh-add /Volumes/fortress/.ssh/fortress1_rsa"
     alias p="cd ${PROJECTS_PATH}"
     alias rem="rm -i"
     alias gcs="git commit -sS"
