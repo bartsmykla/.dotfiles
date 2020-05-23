@@ -95,6 +95,17 @@
         cat "${SECRETS_PATH}/${name}"
     }
 
+    b.() {
+        cd "${DOTFILES_PATH}"
+    }
+
+    b() {
+        case ${1} in
+            ".")    b.;;
+            *)      cd "${PROJECTS_PATH}/bartsmykla/${1}";;
+        esac
+    }
+
 # Key bindings related
     # Skip forward/back a word with opt-arrow
     bindkey '[C' forward-word
@@ -132,7 +143,6 @@
 # Aliases:
     alias zshrc="\${EDITOR:=vim} \${ZSHRC:=~/.zshrc}"
     alias hi="/Volumes/fortress/.hi" 
-    alias b="cd ${PROJECTS_PATH}/bartsmykla"
     alias p="cd ${PROJECTS_PATH}"
     alias rem="rm -i"
     alias gcs="git commit -sS"
