@@ -6,6 +6,44 @@ MY_PROJECTS_PATH="${PROJECTS_PATH}/bartsmykla"
 DOTFILES_REPO="git@github.com:bartsmykla/.dotfiles.git"
 DOTFILES_PATH="${MY_PROJECTS_PATH}/.dotfiles"
 
+CASK_FORMULAS=(
+    mpv
+    xquartz
+)
+
+FORMULAS=(
+    ack
+    ansible
+    awscli
+    bash
+    docker
+    fswatch
+    git-crypt
+    gnu-getopt
+    gnu-sed
+    gnupg
+    go
+    helm
+    jq
+    kops
+    kubernetes-cli
+    lua
+    mps-youtube
+    shellcheck
+    terraform
+    tmux
+    vim
+    zsh-history-substring-search 
+)
+
+for formula in "${CASK_FORMULAS[@]}"; do
+    brew cask install "${formula}"
+done
+
+for formula in "${FORMULAS[@]}"; do
+    brew install "${formula}"
+done
+
 # Checking dependencies
 ! git --version >/dev/null 2>&1 \
     && echo "No git. Exiting" >&2; exit 1
@@ -25,3 +63,4 @@ source "${DOTFILES_PATH}/.zshrc"
 ln -sfv "${DOTFILES_PATH}/.alacritty.yml ~/.alacritty.yml"
 ln -sfv "${DOTFILES_PATH}/.tmux.conf ~/.tmux.conf"
 ```
+
