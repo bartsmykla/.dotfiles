@@ -6,4 +6,5 @@ helper_scripts/**/*.secret.sh filter=git-crypt diff=git-crypt
 helper_scripts/**/*.secret.bash filter=git-crypt diff=git-crypt
 helper_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
 mps-youtube/**/* filter=git-crypt diff=git-crypt
+todos/**/* filter=git-crypt diff=git-crypt
 
