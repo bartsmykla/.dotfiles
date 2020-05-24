@@ -36,6 +36,8 @@ FORMULAS=(
     zsh-history-substring-search 
 )
 
+# 'mps-youtube' has a hard dependency of 'xquart' so casks are being installed
+# first (maybe in the future we'll improve this a little bit
 for formula in "${CASK_FORMULAS[@]}"; do
     brew cask install "${formula}"
 done
