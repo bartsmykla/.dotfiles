@@ -30,10 +30,15 @@ FORMULAS=(
     lua
     mps-youtube
     shellcheck
+    sleepwatcher
     terraform
     tmux
     vim
     zsh-history-substring-search 
+)
+
+SERVICES_TO_START=(
+    sleepwatcher
 )
 
 # 'mps-youtube' has a hard dependency of 'xquart' so casks are being installed
@@ -45,6 +50,13 @@ done
 for formula in "${FORMULAS[@]}"; do
     brew install "${formula}"
 done
+
+# TODO: sleepwatcher need to be configured (launchd plist files) before we just
+#       start the service, so for now it's commented
+# # Start teh service formula and register it to launch at login
+# for service in "${SERVICES_TO_START[@]}"; do
+#     brew services start "${service}"
+# done
 
 # Checking dependencies
 ! git --version >/dev/null 2>&1 \
