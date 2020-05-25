@@ -78,5 +78,6 @@ source "${DOTFILES_PATH}/.zshrc"
 ln -sfv "${DOTFILES_PATH}/.alacritty.yml ~/.alacritty.yml"
 ln -sfv "${DOTFILES_PATH}/.tmux.conf ~/.tmux.conf"
 ln -sfv "${DOTFILES_PATH}/mps-youtube ~/.config/mps-youtube"
+ln -sfv "${DOTFILES_PATH}/.config/tmuxinator ~/.config/tmuxinator"
 ```
 
