@@ -182,6 +182,17 @@
         ssh-add "${KEY_FILE}"
     }
 
+    cs() {
+        if [[ $# != 1 ]]; then
+            echo "cs(command): function expects 1 argument" >&2
+            return 1
+        fi
+
+        local cmd="${1}"
+
+        curl "cheat.sh/${cmd}"
+    }
+
 # Key bindings related
     # Skip forward/back a word with opt-arrow
     bindkey '[C' forward-word
