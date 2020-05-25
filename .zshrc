@@ -13,6 +13,7 @@
     readonly KEY_NAME="fortress1_rsa"
     readonly KEY_FILE="/Volumes/${VOLUME_NAME}/.ssh/${KEY_NAME}"
     export EDITOR="vim"
+    export MYVIMRCD="${DOTFILES_PATH}/.vimrc.d"
 
 # ZSH
     ZSH_CUSTOM="${DOTFILES_PATH}/oh-my-zsh-custom"

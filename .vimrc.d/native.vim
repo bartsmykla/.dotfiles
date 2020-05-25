@@ -96,3 +96,8 @@ augroup END
 " Remap the <Leader> key to ','
 let mapleader=","
 
+" Edit vimr configuration file
+nnoremap <Leader>ve :e ${MYVIMRCD}/native.vim<CR>
+" Reload vimr configuration file
+nnoremap <Leader>vr :source ${MYVIMRC}<CR>
+
