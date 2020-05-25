@@ -12,6 +12,7 @@
     readonly VOLUME_NAME="fortress"
     readonly KEY_NAME="fortress1_rsa"
     readonly KEY_FILE="/Volumes/${VOLUME_NAME}/.ssh/${KEY_NAME}"
+    export EDITOR="vim"
 
 # ZSH
     ZSH_CUSTOM="${DOTFILES_PATH}/oh-my-zsh-custom"
@@ -221,6 +222,7 @@
     alias p="cd ${PROJECTS_PATH}"
     alias rem="rm -i"
     alias gcs="git commit -sS"
+    alias t="tmuxinator"
 
 # History management
     # Avoid duplicates
