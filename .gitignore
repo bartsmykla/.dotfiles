@@ -1,4 +1,4 @@
 **/*.tmp.*
 **/*.swp
-mps-youtube/cache*
+.config/mps-youtube/cache*
 
