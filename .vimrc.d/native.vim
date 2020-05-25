@@ -93,3 +93,6 @@ augroup remember_folds
     autocmd BufWinEnter * silent! loadview
 augroup END
 
+" Remap the <Leader> key to ','
+let mapleader=","
+
