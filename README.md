@@ -33,6 +33,7 @@ FORMULAS=(
     sleepwatcher
     terraform
     tmux
+    tmuxinator
     vim
     zsh-history-substring-search 
 )
