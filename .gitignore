@@ -1,4 +1,6 @@
 **/*.tmp.*
 **/*.swp
 .config/mps-youtube/cache*
+.config/mps-youtube/input_history
+.config/mps-youtube/play_history.m3u
 
