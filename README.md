@@ -6,6 +6,10 @@ MY_PROJECTS_PATH="${PROJECTS_PATH}/bartsmykla"
 DOTFILES_REPO="git@github.com:bartsmykla/.dotfiles.git"
 DOTFILES_PATH="${MY_PROJECTS_PATH}/.dotfiles"
 
+TAPS=(
+    discoteq/discoteq
+)
+
 CASK_FORMULAS=(
     mpv
     xquartz
@@ -17,6 +21,7 @@ FORMULAS=(
     awscli
     bash
     docker
+    flock
     fswatch
     git-crypt
     gnu-getopt
@@ -42,6 +47,10 @@ FORMULAS=(
 SERVICES_TO_START=(
     sleepwatcher
 )
+
+for tap in "${TAPS[@]}"; do
+    brew tap "${tap}"
+done
 
 # 'mps-youtube' has a hard dependency of 'xquart' so casks are being installed
 # first (maybe in the future we'll improve this a little bit
