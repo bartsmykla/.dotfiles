@@ -263,6 +263,7 @@
 # OpenJDK
     CPPFLAGS+=" -I/usr/local/opt/openjdk/include"
 
-add_identity_maybe
+flock /tmp/add_identity_maybe.lock add_identity_maybe
 source_custom_scripts
 load_src
+
