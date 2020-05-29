@@ -125,10 +125,6 @@
     }
 
 # Key bindings related
-    # Skip forward/back a word with opt-arrow
-    bindkey '[C' forward-word
-    bindkey '[D' backward-word
-
     # accepting autosuggestions by using ctrl + space keys
     bindkey '^ ' autosuggest-accept
 
@@ -166,6 +162,7 @@
     alias rem="rm -i"
     alias gcs="git commit -sS"
     alias t="tmuxinator"
+    alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io" 
 
 # History management
     # Avoid duplicates
