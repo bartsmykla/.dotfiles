@@ -45,6 +45,7 @@
         osx
         rust # completion for rustc
         tmux # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/tmux
+        zsh-abbr
         zsh-autosuggestions
         zsh_reload
     )
