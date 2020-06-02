@@ -87,6 +87,7 @@ source "${DOTFILES_PATH}/.zshrc"
 
 ln -sfv "${DOTFILES_PATH}/.alacritty.yml" ~/.alacritty.yml
 ln -sfv "${DOTFILES_PATH}/.tmux.conf" ~/.tmux.conf
+ln -sfv "${DOTFILES_PATH}/.config/exercism" ~/.config/exercism
 ln -sfv "${DOTFILES_PATH}/.config/mps-youtube" ~/.config/mps-youtube
 ln -sfv "${DOTFILES_PATH}/.config/tmuxinator" ~/.config/tmuxinator
 ln -sfv "${DOTFILES_PATH}/.hammerspoon/init.lua" ~/.hammerspoon/init.lua
