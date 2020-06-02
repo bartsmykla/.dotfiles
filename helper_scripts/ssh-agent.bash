@@ -7,16 +7,7 @@
 get_ssh_hash() {
     local line;
 
-    if [[ $# == 1 ]]; then
-        line="${1}"
-    elif [[ $# -gt 1 ]]; then
-        echo -n "get_hash: to many parameters passed (function expects" >&2
-        echo    " 1 parameter OR input to be provided via STDIN [eg." >&2
-        echo    " cat \"path_to_key.pub\" | get_hash]" >&2
-        return 1
-    else
-        read -r line
-    fi
+    read -r line
 
     echo "${line}" | awk '{ print $2 }'
 }
