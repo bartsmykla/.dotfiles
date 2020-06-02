@@ -19,6 +19,7 @@ FORMULAS=(
     ack
     ansible
     awscli
+    bats # test runner for bash
     bash
     docker
     flock
@@ -41,7 +42,7 @@ FORMULAS=(
     tmux
     tmuxinator
     vim
-    zsh-history-substring-search 
+    zsh-history-substring-search
 )
 
 SERVICES_TO_START=(
@@ -96,4 +97,3 @@ ln -sfv "${DOTFILES_PATH}/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
 
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
-
