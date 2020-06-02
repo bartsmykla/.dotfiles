@@ -11,7 +11,6 @@
     export CPPFLAGS=""
     readonly VOLUME_NAME="fortress"
     readonly KEY_NAME="fortress1_rsa"
-    readonly KEY_FILE="/Volumes/${VOLUME_NAME}/.ssh/${KEY_NAME}"
     export EDITOR="vim"
     export MYVIMRCD="${DOTFILES_PATH}/.vimrc.d"
 
@@ -192,8 +191,8 @@
 # OpenJDK
     CPPFLAGS+=" -I/usr/local/opt/openjdk/include"
 
-flock /tmp/add_identity_maybe.lock -c \
-    "KEY_FILE="${KEY_FILE}" bash ${DOTFILES_PATH}/helper_scripts/ssh-agent.bash"
+bash "${DOTFILES_PATH}/helper_scripts/ssh-agent.bash" \
+    "/Volumes/${VOLUME_NAME}/.ssh/${KEY_NAME}"
 source_custom_scripts
 load_src
 
