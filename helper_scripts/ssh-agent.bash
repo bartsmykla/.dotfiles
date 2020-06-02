@@ -10,6 +10,10 @@ readonly LOCKFILE="${LOCKDIR}/${SCRIPT_NAME}"
 readonly LOCKFD=99
 readonly KEY_FILE="${1:?ssh-agent.bash expects KEY_FILE to be passed as a first parameter}"
 
+# More about locking mechanism used in this script:
+# https://stackoverflow.com/a/1985512
+# https://gist.github.com/przemoc/571091
+
 # PRIVATE
 _lock()             { flock -${1} ${LOCKFD}; }
 _no_more_locking()  { _lock u; _lock xn && rm -f "${LOCKFILE}"; }
