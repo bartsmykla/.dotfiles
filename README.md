@@ -21,6 +21,7 @@ FORMULAS=(
     awscli
     bats # test runner for bash
     bash
+    dbus
     docker
     flock
     fswatch
