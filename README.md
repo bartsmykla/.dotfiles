@@ -38,6 +38,7 @@ FORMULAS=(
     kubernetes-cli
     lua
     mps-youtube
+    pylint
     shellcheck
     sleepwatcher
     terraform
