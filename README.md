@@ -11,6 +11,7 @@ TAPS=(
 )
 
 CASK_FORMULAS=(
+    alfred # https://www.alfredapp.com
     mpv
     xquartz
 )
