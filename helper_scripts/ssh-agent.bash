@@ -15,7 +15,7 @@ readonly KEY_FILE="${1:?ssh-agent.bash expects KEY_FILE to be passed as a first 
 # https://gist.github.com/przemoc/571091
 
 # PRIVATE
-_lock()             { flock -${1} ${LOCKFD}; }
+_lock()             { flock --timeout 5 -${1} ${LOCKFD}; }
 _no_more_locking()  { _lock u; _lock xn && rm -f "${LOCKFILE}"; }
 _prepare_locking()  {
     mkdir -p "${LOCKDIR}"
