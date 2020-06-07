@@ -162,6 +162,7 @@
     alias rem="rm -i"
     alias gcs="git commit -sS"
     alias t="tmuxinator"
+    alias td="tmuxinator dev"
     alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io" 
 
 # History management
