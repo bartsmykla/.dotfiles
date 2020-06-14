@@ -163,7 +163,12 @@
     alias gcs="git commit -sS"
     alias t="tmuxinator"
     alias td="tmuxinator dev"
-    alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io" 
+    alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io"
+
+# Set additional options
+    # Extended glob options to be able to use for example negation "^"
+    # More: http://zsh.sourceforge.net/Intro/intro_2.html
+    setopt extendedglob
 
 # History management
     # Avoid duplicates
