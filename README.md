@@ -40,6 +40,7 @@ FORMULAS=(
     mps-youtube
     pylint
     shellcheck
+    skopeo
     sleepwatcher
     terraform
     tmux
