@@ -124,6 +124,19 @@
         curl "cheat.sh/${cmd}"
     }
 
+    kill_port() {
+        if (( $# != 1 )); then
+            echo "kill_port(port): function expects 1 argument" >&2
+            return 1
+        fi
+
+        local port="${1}"
+
+        lsof -i ":${port}" -sTCP:LISTEN \
+            | awk 'NR > 1 {print $2}' \
+            | xargs kill -9
+    }
+
 # Key bindings related
     # accepting autosuggestions by using ctrl + space keys
     bindkey '^ ' autosuggest-accept
