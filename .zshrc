@@ -1,7 +1,8 @@
 # TODO: Check dependencies (awk, flock, grep)
 
 # Vars
-    export PROJECTS_PATH="${HOME}/Projects/github.com"
+    export PROJECTS_ROOT_PATH="${HOME}/Projects"
+    export PROJECTS_PATH="${PROJECTS_ROOT_PATH}/github.com"
     readonly DOTFILES_PATH="${PROJECTS_PATH}/bartsmykla/.dotfiles"
     readonly CUSTOM_SCRIPTS_PATH="${DOTFILES_PATH}/autoload_scripts"
     readonly SECRETS_PATH="${DOTFILES_PATH}/secrets"
