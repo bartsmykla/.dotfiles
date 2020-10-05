@@ -151,6 +151,8 @@
     add-zsh-hook chpwd load_src
 
 # PATH
+    # Binaries from .dotfiles repository
+    export PATH="${DOTFILES_PATH}/bin:${PATH}"
     # Custom binaries with superuser privileges required
     export PATH="/usr/local/sbin:${PATH}"
     # Overwrite default MacOS's version of getopt with the proper one
@@ -210,6 +212,12 @@
 
 # OpenJDK
     CPPFLAGS+=" -I/usr/local/opt/openjdk/include"
+
+# sdkman
+    source "${HOME}/.sdkman/bin/sdkman-init.sh"
+
+# RVM
+    source "${HOME}/.rvm/scripts/rvm"
 
 bash "${DOTFILES_PATH}/helper_scripts/ssh-agent.bash" \
     "/Volumes/${VOLUME_NAME}/.ssh/${KEY_NAME}"
