@@ -180,6 +180,7 @@
     alias t="tmuxinator"
     alias td="tmuxinator dev"
     alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io"
+    alias km="cd ${PROJECTS_PATH}/kumahq/kuma"
 
 # Set additional options
     # Extended glob options to be able to use for example negation "^"
