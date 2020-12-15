@@ -181,6 +181,7 @@
     alias td="tmuxinator dev"
     alias kio="cd ${PROJECTS_PATH}/kubernetes/k8s.io"
     alias km="cd ${PROJECTS_PATH}/kumahq/kuma"
+    alias kmt="cd ${PROJECTS_PATH}/kumahq/kuma/tmp"
 
 # Set additional options
     # Extended glob options to be able to use for example negation "^"
