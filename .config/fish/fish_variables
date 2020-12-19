@@ -7,6 +7,7 @@ SETUVAR FZF_PREVIEW_DIR_CMD:ls
 SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010
 SETUVAR FZF_TMUX_HEIGHT:40\x25
 SETUVAR __fish_initialized:3100
+SETUVAR _fish_abbr_b:cd\x20/Users/bartsmykla/Projects/github\x2ecom/bartsmykla/
 SETUVAR _fish_abbr_cat:bat
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
@@ -18,6 +19,7 @@ SETUVAR _fish_abbr_ggpf:git\x20push\x20\x2d\x2dforce\x20origin\x20master
 SETUVAR _fish_abbr_gst:git\x20status
 SETUVAR _fish_abbr_l:ls\x20\x2dlah
 SETUVAR _fish_abbr_mux:tmuxinator
+SETUVAR _fish_abbr_p:cd\x20/Users/bartsmykla/Projects/github\x2ecom/
 SETUVAR _fish_abbr_td:tmuxinator\x20dev
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
