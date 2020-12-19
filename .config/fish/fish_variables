@@ -1,6 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:3100
+SETUVAR _fish_abbr_l:ls\x20\x2dlah
 SETUVAR _fish_abbr_mux:tmuxinator
 SETUVAR _fish_abbr_td:tmuxinator\x20dev
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
