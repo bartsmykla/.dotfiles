@@ -6,3 +6,5 @@
   # nul is a name of `Ctrl + Space` key binding
   bind -k nul forward-char
 
+export FZF_DEFAULT_OPTS="--bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
+
