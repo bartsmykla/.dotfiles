@@ -4,6 +4,7 @@ SETUVAR __fish_initialized:3100
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
 SETUVAR _fish_abbr_gcs:git\x20commit\x20\x2dsS
+SETUVAR _fish_abbr_ggp:git\x20push\x20origin\x20master
 SETUVAR _fish_abbr_gst:git\x20status
 SETUVAR _fish_abbr_l:ls\x20\x2dlah
 SETUVAR _fish_abbr_mux:tmuxinator
