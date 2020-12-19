@@ -8,6 +8,7 @@ SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010
 SETUVAR FZF_TMUX_HEIGHT:40\x25
 SETUVAR __fish_initialized:3100
 SETUVAR _fish_abbr_b:cd\x20/Users/bartsmykla/Projects/github\x2ecom/bartsmykla/
+SETUVAR _fish_abbr_b_2E_:cd\x20/Users/bartsmykla/Projects/github\x2ecom/bartsmykla/\x2edotfiles/
 SETUVAR _fish_abbr_cat:bat
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
