@@ -9,3 +9,6 @@ font:
 debug:
   log_level: Debug
   print_events: false
+scrolling:
+  history: 0
+
