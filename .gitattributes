@@ -5,7 +5,5 @@ autoload_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
 helper_scripts/**/*.secret.sh filter=git-crypt diff=git-crypt
 helper_scripts/**/*.secret.bash filter=git-crypt diff=git-crypt
 helper_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
-.config/mps-youtube/**/* filter=git-crypt diff=git-crypt
 .config/exercism/user.json filter=git-crypt diff=git-crypt
 todos/**/* filter=git-crypt diff=git-crypt
-
