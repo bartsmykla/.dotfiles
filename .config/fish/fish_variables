@@ -16,6 +16,7 @@ SETUVAR _fish_abbr_bs:brew\x20search
 SETUVAR _fish_abbr_cat:bat
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
+SETUVAR _fish_abbr_gbda:git_clean_branches
 SETUVAR _fish_abbr_gcb:git\x20checkout\x20\x2db
 SETUVAR _fish_abbr_gcm:git\x20checkout\x20master
 SETUVAR _fish_abbr_gco:git\x20checkout
