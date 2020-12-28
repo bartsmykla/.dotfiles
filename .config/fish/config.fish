@@ -1,3 +1,8 @@
+# vars
+  set --export PROJECTS_PATH $HOME/Projects/github.com
+  set --export MY_PROJECTS_PATH $PROJECTS_PATH/bartsmykla
+  set --export DOTFILES_PATH $MY_PROJECTS_PATH/.dotfiles
+
 # autojump 
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
@@ -11,4 +16,7 @@
 
 # EDITOR
   export EDITOR="vim"
+
+# PATH
+  set --path MY_PATH $PATH $DOTFILES_PATH/bin
 
