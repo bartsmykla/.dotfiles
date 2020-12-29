@@ -1,4 +1,4 @@
-function git_clone_to_projects_and_cd --description "Git clone repository to\
+function git_clone_to_projects --description "Git clone repository to\
  \$PROJECTS_PATH ($PROJECTS_PATH) and create parent directory if doesn't exist"\
  --argument-names repo_url;
   # TODO: Make it configurable
@@ -28,5 +28,5 @@ function git_clone_to_projects_and_cd --description "Git clone repository to\
 
   mkdir -p $full_path && \
   git clone $repo_url $full_path && \
-  cd $full_path
+  set -g __LAST_CLONED_REPO_PATH $full_path
 end
