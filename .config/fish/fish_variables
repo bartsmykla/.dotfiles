@@ -14,6 +14,7 @@ SETUVAR _fish_abbr_bic:brew\x20install\x20\x2d\x2dcask
 SETUVAR _fish_abbr_binf:brew\x20info
 SETUVAR _fish_abbr_bs:brew\x20search
 SETUVAR _fish_abbr_cat:bat
+SETUVAR _fish_abbr_cp:rsync\x20\x2daP
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
 SETUVAR _fish_abbr_gbda:git_clean_branches
@@ -26,6 +27,7 @@ SETUVAR _fish_abbr_ggpf:git\x20push\x20\x2d\x2dforce\x20origin\x20\x28git\x20bra
 SETUVAR _fish_abbr_gst:git\x20status
 SETUVAR _fish_abbr_l:ls\x20\x2dlah
 SETUVAR _fish_abbr_mux:tmuxinator
+SETUVAR _fish_abbr_mv:rsync\x20\x2d\x2dremove\x2dsource\x2dfiles\x20\x2daP
 SETUVAR _fish_abbr_p:cd\x20/Users/bartsmykla/Projects/github\x2ecom/
 SETUVAR _fish_abbr_pgc:git_clone_to_projects
 SETUVAR _fish_abbr_td:tmuxinator\x20dev
