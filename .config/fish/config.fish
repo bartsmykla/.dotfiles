@@ -2,6 +2,7 @@
   set --export PROJECTS_PATH $HOME/Projects/github.com
   set --export MY_PROJECTS_PATH $PROJECTS_PATH/bartsmykla
   set --export DOTFILES_PATH $MY_PROJECTS_PATH/.dotfiles
+  set --export FORTRESS_PATH /Volumes/fortress-carima
 
 # autojump 
 [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
@@ -18,5 +19,10 @@
   export EDITOR="vim"
 
 # PATH
-  set --path MY_PATH $PATH $DOTFILES_PATH/bin
+  # `bin` directory of .dotfiles repository 
+  set -gx PATH $PATH $DOTFILES_PATH/bin
+  # `bin` directory on fortress
+  set -gx PATH $PATH $FORTRESS_PATH/.dotfiles/bin
+  # rust/cargo
+  set -gx PATH "$HOME/.cargo/bin" $PATH
 
