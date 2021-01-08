@@ -28,5 +28,5 @@ function git_clone_to_projects --description "Git clone repository to\
 
   mkdir -p $full_path && \
   git clone $repo_url $full_path && \
-  set -g __LAST_CLONED_REPO_PATH $full_path
+  set -xg __LAST_CLONED_REPO_PATH $full_path
 end

@@ -14,6 +14,7 @@ SETUVAR _fish_abbr_bic:brew\x20install\x20\x2d\x2dcask
 SETUVAR _fish_abbr_binf:brew\x20info
 SETUVAR _fish_abbr_bs:brew\x20search
 SETUVAR _fish_abbr_cat:bat
+SETUVAR _fish_abbr_cdl:cd\x20\x24__LAST_CLONED_REPO_PATH
 SETUVAR _fish_abbr_cp:rsync\x20\x2daP
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_gaa:git\x20add\x20\x2dA
