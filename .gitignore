@@ -5,3 +5,5 @@
 .config/mps-youtube/play_history.m3u
 .idea
 .DS_Store
+bin/jetbrains
+
