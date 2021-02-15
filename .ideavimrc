@@ -83,3 +83,11 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " Panes should split to the right, or to the bottom
 set splitbelow
 set splitright
+
+" AceJump
+" Press `f` to activate AceJump
+map f :action AceAction<CR>
+" Press `F` to activate Target Mode
+map F :action AceTargetAction<CR>
+" Press `g` to activate Line Mode
+map g :action AceLineAction<CR>
