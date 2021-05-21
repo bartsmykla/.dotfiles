@@ -25,4 +25,19 @@
   set -gx PATH $PATH $FORTRESS_PATH/.dotfiles/bin
   # rust/cargo
   set -gx PATH "$HOME/.cargo/bin" $PATH
+  # kuma ~/bin directory
+  set -gx PATH $PATH ~/bin
 
+# ansible
+  set -gx ANSIBLE_CONFIG $DOTFILES_PATH/ansible/ansible.cfg
+
+# nvm
+  set -gx nvm_default_version 15.4.0
+
+# go
+  set -gx GOPATH $HOME/go;
+  set -gx GOROOT $HOME/.go;
+  set -gx PATH $GOPATH/bin $PATH; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
+# gcloud cli tool
+   source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
