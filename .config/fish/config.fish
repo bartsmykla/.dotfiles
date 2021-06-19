@@ -27,6 +27,8 @@
   set -gx PATH "$HOME/.cargo/bin" $PATH
   # kuma ~/bin directory
   set -gx PATH $PATH ~/bin
+  # GNU coreutils
+  set -gx PATH /usr/local/opt/coreutils/libexec/gnubin $PATH
 
 # ansible
   set -gx ANSIBLE_CONFIG $DOTFILES_PATH/ansible/ansible.cfg
