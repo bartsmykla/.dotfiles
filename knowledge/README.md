@@ -126,3 +126,4 @@ tar -xvzf name.tar.gz
 ### Linux general
 
 * [Beginner's Guide to Installing from Source](https://moi.vonos.net/linux/beginners-installing-from-source/) - found when reading ["Linux From Scratch" prerequisites](https://www.linuxfromscratch.org/lfs/view/stable-systemd/prologue/prerequisites.html)
+* [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) - also found when reading [LFS and Standards](https://www.linuxfromscratch.org/lfs/view/stable-systemd/prologue/standards.html)
