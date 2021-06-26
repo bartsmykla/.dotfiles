@@ -104,3 +104,15 @@ echo $json | jq 'map(select(.name | contains("foo")))'
 # [...]
 echo $json | jq '[.[] | select(.name | contains("foo"))]'
 ```
+
+## `tar`
+
+```sh
+# -x, --extract        | extract the archive
+# -v                   | verbose
+# -z, --gunzip, --gzip | uncompress archive with gzip - this option is
+#                        ignored in most tar versions when extracting
+#                        archives, so can be omitted
+# -f, --file           | extract the provided file
+tar -xvzf name.tar.gz
+```
