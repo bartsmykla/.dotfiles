@@ -120,3 +120,9 @@ echo $json | jq '[.[] | select(.name | contains("foo"))]'
 # -f, --file           | extract the provided file
 tar -xvzf name.tar.gz
 ```
+
+## Helpful links
+
+### Linux general
+
+* [Beginner's Guide to Installing from Source](https://moi.vonos.net/linux/beginners-installing-from-source/) - found when reading ["Linux From Scratch" prerequisites](https://www.linuxfromscratch.org/lfs/view/stable-systemd/prologue/prerequisites.html)
