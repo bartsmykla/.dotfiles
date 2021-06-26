@@ -1,4 +1,4 @@
-# Learning
+# Knowledge
 
 ## List all `iptables` rules
 
@@ -21,7 +21,18 @@ echo "tmp/*.go" >> .git/info/exclude
 
 ```sh
 kubectl get endpointslice,replicaset,mutatingwebhookconfiguration,validatingwebhookconfiguration,configmap,secret,crd,svc,clusterrole,clusterrolebinding,role,rolebinding,deploy,serviceaccount,ingress -A -o json \
-  | jq -r '.items[] | select(.metadata.name | contains("kong-mesh") or contains("kuma")) | select(.kind != "Namespace" and .kind != "Pod") | select(.kind != "Secret" or .metadata.name != "kong-mesh-license") | .metadata.namespace as $namespace | "\(.kind | ascii_downcase)/\(.metadata.name)" as $resource | if $namespace then "-n \($namespace) \($resource)" else "\($resource)" end' \
+  | jq -r '.items[]
+    | select(.metadata.name | contains("kong-mesh") or contains("kuma")) 
+    | select(.kind != "Namespace" and .kind != "Pod")
+    | select(.kind != "Secret" or .metadata.name != "kong-mesh-license") 
+    | .metadata.namespace as $namespace
+    | "\(.kind | ascii_downcase)/\(.metadata.name)" as $resource 
+    | if $namespace
+      then
+        "-n \($namespace) \($resource)"
+      else
+        "\($resource)"
+      end' \
   | xargs -d "\n" -I "{}" /bin/bash -c 'kubectl delete {} &'; \
   wait
 ```
@@ -58,4 +69,38 @@ set -gx PATH /usr/local/opt/gnu-sed/libexec/gnubin $PATH
 #      interested in, and it's only available in GNU sed, not BSD's 
 #      version of sed)
 sed -Ez 's//'
+```
+
+## `jq`
+
+### filter array by object properties
+
+Filter an array of objects by the `name` property containing word `foo`
+
+**Command**
+
+```sh
+json='[{"name": "foo"},{"name": "bar"},{"name": "foobar"}]'
+
+echo $json | jq 'map(select(.name | contains("foo")))'
+```
+
+**Result**
+
+```json
+[
+  {
+    "name": "foo"
+  },
+  {
+    "name": "foobar"
+  }
+]
+```
+
+**Other way of achieving the same result**
+
+```sh
+# [...]
+echo $json | jq '[.[] | select(.name | contains("foo"))]'
 ```
