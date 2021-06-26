@@ -1,6 +1,6 @@
 # .dotfiles
 
-```shell
+```sh
 PROJECTS_PATH="${HOME}/Projects/github.com"
 MY_PROJECTS_PATH="${PROJECTS_PATH}/bartsmykla"
 DOTFILES_REPO="git@github.com:bartsmykla/.dotfiles.git"
@@ -103,4 +103,10 @@ git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 
 # Installing sdkman (https://sdkman.io)
 curl -s "https://get.sdkman.io" | bash
+```
+
+## Show only active apps in MacOS' dock
+
+```sh
+defaults write com.apple.dock static-only -bool true; killall Dock
 ```
