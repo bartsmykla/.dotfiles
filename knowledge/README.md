@@ -131,3 +131,5 @@ tar -xvzf name.tar.gz
 ### Bash
 
 * [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
+
+* [How To Use Bash Wildcards for Globbing?](https://www.shell-tips.com/bash/wildcards-globbing/)
