@@ -29,6 +29,10 @@
   set -gx PATH $PATH ~/bin
   # GNU coreutils
   set -gx PATH /usr/local/opt/coreutils/libexec/gnubin $PATH
+  # krew - kubectl plugin manager
+  set -gx PATH $PATH $HOME/.krew/bin
+  # xargs
+  set -gx PATH /usr/local/opt/findutils/libexec/gnubin $PATH
 
 # ansible
   set -gx ANSIBLE_CONFIG $DOTFILES_PATH/ansible/ansible.cfg
