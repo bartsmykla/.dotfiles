@@ -129,6 +129,10 @@ tar -xvzf name.tar.gz
 * [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) - also found when reading [LFS and Standards](https://www.linuxfromscratch.org/lfs/view/stable-systemd/prologue/standards.html)
 * [Understanding the /etc/shadow File](https://linuxize.com/post/etc-shadow-file/)
 
+### RedHat based Linux
+
+* [YUM Cheat Sheet](https://access.redhat.com/sites/default/files/attachments/rh_yum_cheatsheet_1214_jcs_print-1.pdf)
+
 ### Bash
 
 * [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
