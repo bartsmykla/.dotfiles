@@ -117,6 +117,45 @@ echo $json | jq '[.[] | select(.name | contains("foo"))]'
 tar -xvzf name.tar.gz
 ```
 
+## swap STDIN in running process with FIFO pipe
+
+1. Get and save Process ID (PID) of a process we are interested in swapping STDIN ap
+
+   ```sh
+   export MY_PID="61234"
+   ```
+
+2. Create a FIFO pipe we will be using as STDIN
+
+   ```sh
+   mkfifo /tmp/foo
+   ```
+
+3. Save commands which GDB will be calling to a file
+
+   ```sh
+   printf 'p (int) close(0)\np (int) openat(0, "/tmp/foo", 66)\nq\n' > /tmp/gdb_commands
+   ```
+
+   This is how this file should look like:
+
+   ```sh
+   p (int) close(0)
+   p (int) openat(0, "/tmp/foo", 66)
+   q
+   ```
+
+4. Run above commands in GDB for our process
+
+   ```sh
+   gdb -p $MY_PID -x /tmp/gdb_commands
+   ```
+
+5. That's it - now we can send something to our pipe
+   ```sh
+   echo "hello" >> /tmp/foo
+   ```
+
 ## Helpful links
 
 ### Linux general
