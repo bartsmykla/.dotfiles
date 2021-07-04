@@ -105,10 +105,6 @@ echo $json | jq 'map(select(.name | contains("foo")))'
 echo $json | jq '[.[] | select(.name | contains("foo"))]'
 ```
 
-### `jq` related links
-
-* [Processing JSON using jq](https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4)
-
 ## `tar`
 
 ```sh
@@ -138,3 +134,7 @@ tar -xvzf name.tar.gz
 * [Bash Extended Globbing](https://www.linuxjournal.com/content/bash-extended-globbing)
 
 * [How To Use Bash Wildcards for Globbing?](https://www.shell-tips.com/bash/wildcards-globbing/)
+
+### `jq`
+
+* [Processing JSON using jq](https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4)
