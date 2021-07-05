@@ -177,3 +177,7 @@ tar -xvzf name.tar.gz
 ### `jq`
 
 * [Processing JSON using jq](https://gist.github.com/olih/f7437fb6962fb3ee9fe95bda8d2c8fa4)
+
+### Networking
+
+* [`iproute2` documentation](http://www.policyrouting.org/iproute2.doc.html)
