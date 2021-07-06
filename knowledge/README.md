@@ -164,6 +164,7 @@ tar -xvzf name.tar.gz
 * [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) - also found when reading [LFS and Standards](https://www.linuxfromscratch.org/lfs/view/stable-systemd/prologue/standards.html)
 * [Understanding the /etc/shadow File](https://linuxize.com/post/etc-shadow-file/)
 * [sudoers manual](https://www.sudo.ws/man/1.8.13/sudoers.man.html)
+* [Explaining Soft Link And Hard Link In Linux With Examples](https://ostechnix.com/explaining-soft-link-and-hard-link-in-linux-with-examples/)
 
 ### RedHat based Linux
 
