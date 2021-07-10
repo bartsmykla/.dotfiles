@@ -166,6 +166,10 @@ tar -xvzf name.tar.gz
 * [sudoers manual](https://www.sudo.ws/man/1.8.13/sudoers.man.html)
 * [Explaining Soft Link And Hard Link In Linux With Examples](https://ostechnix.com/explaining-soft-link-and-hard-link-in-linux-with-examples/)
 
+#### systemd
+
+* [Demystifying systemd](https://www.youtube.com/watch?v=tY9GYsoxeLg) - Really great presentation about systemd, with a lot of helpful commands and other hints
+
 ### RedHat based Linux
 
 * [YUM Cheat Sheet](https://access.redhat.com/sites/default/files/attachments/rh_yum_cheatsheet_1214_jcs_print-1.pdf)
