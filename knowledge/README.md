@@ -165,6 +165,7 @@ tar -xvzf name.tar.gz
 * [Understanding the /etc/shadow File](https://linuxize.com/post/etc-shadow-file/)
 * [sudoers manual](https://www.sudo.ws/man/1.8.13/sudoers.man.html)
 * [Explaining Soft Link And Hard Link In Linux With Examples](https://ostechnix.com/explaining-soft-link-and-hard-link-in-linux-with-examples/)
+* [sysvinit documentation](https://wiki.gentoo.org/wiki/Sysvinit) I find this documentation on gentoo site as a great place to learn more about sysvinit
 
 #### systemd
 
