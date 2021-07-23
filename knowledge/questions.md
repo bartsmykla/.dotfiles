@@ -18,3 +18,9 @@ Links:
 * [Blog Tigera: When Linux `conntrack` Is No Longer Your Friend](https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/)
 * [Debian: `conntrack(8)` manual page](https://manpages.debian.org/testing/conntrack/conntrack.8.en.html)
 * [Blog Cloudflare: `conntrack` Tales One Thousand And One Flows](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/)
+
+## What is `SNAT`?
+
+Links:
+
+* [SNAT vs DNAT](https://ipwithease.com/snat-vs-dnat/)
