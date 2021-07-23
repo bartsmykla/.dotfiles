@@ -10,3 +10,11 @@ Source: [Discussion: iptables: how to list tables?](https://comp.os.linux.networ
 
 > When run this command on my VM (CentOS 8, iptables v1.8.4 (nf_tables))
 > this file was empty, so maybe it's distribution related.
+
+## What is `conntrack` (connection tracking)?
+
+Links:
+
+* [Blog Tigera: When Linux `conntrack` Is No Longer Your Friend](https://www.tigera.io/blog/when-linux-conntrack-is-no-longer-your-friend/)
+* [Debian: `conntrack(8)` manual page](https://manpages.debian.org/testing/conntrack/conntrack.8.en.html)
+* [Blog Cloudflare: `conntrack` Tales One Thousand And One Flows](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/)
