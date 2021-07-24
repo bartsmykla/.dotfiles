@@ -189,3 +189,4 @@ tar -xvzf name.tar.gz
 ### Networking
 
 * [`iproute2` documentation](http://www.policyrouting.org/iproute2.doc.html)
+* [YT: 3.8 Hacking the Switch: Promiscuous Mode and Switch Security](https://www.youtube.com/watch?v=YVcBShtWFmo)
