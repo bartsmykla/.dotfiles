@@ -167,6 +167,7 @@ tar -xvzf name.tar.gz
 * [Explaining Soft Link And Hard Link In Linux With Examples](https://ostechnix.com/explaining-soft-link-and-hard-link-in-linux-with-examples/)
 * [sysvinit documentation](https://wiki.gentoo.org/wiki/Sysvinit) I find this documentation on gentoo site as a great place to learn more about sysvinit
 * [A history of modern init systems](https://blog.darknedgy.net/technology/2015/09/05/0/)
+* [If you’re not using SSH certificates you’re doing SSH wrong](https://smallstep.com/blog/use-ssh-certificates/)
 
 #### systemd
 
@@ -190,3 +191,16 @@ tar -xvzf name.tar.gz
 
 * [`iproute2` documentation](http://www.policyrouting.org/iproute2.doc.html)
 * [YT: 3.8 Hacking the Switch: Promiscuous Mode and Switch Security](https://www.youtube.com/watch?v=YVcBShtWFmo)
+* [IPv4 route lookup on Linux](https://vincent.bernat.ch/en/blog/2017-ipv4-route-lookup-linux)
+* [Bastion host](https://en.wikipedia.org/wiki/Bastion_host)
+
+### kubernetes
+
+* [kubectl context vs cluster](https://stackoverflow.com/questions/56299440/kubectl-context-vs-cluster)
+* [Kubernetes Networking: How to Write Your Own CNI Plug-in with Bash](https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/)
+* [Kubernetes networking: Writing a CNI plugin from scratch](https://github.com/eranyanay/cni-from-scratch)
+* [Kubectl output options](https://gist.github.com/so0k/42313dbb3b547a0f51a547bb968696ba)
+
+### containers
+
+* [YT: Linux Container Primitives: cgroups, namespaces, and more!](https://www.youtube.com/watch?v=x1npPrzyKfs)
