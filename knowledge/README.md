@@ -194,6 +194,7 @@ tar -xvzf name.tar.gz
 * [IPv4 route lookup on Linux](https://vincent.bernat.ch/en/blog/2017-ipv4-route-lookup-linux)
 * [Bastion host](https://en.wikipedia.org/wiki/Bastion_host)
 * [Queueing in the Linux Network Stack](https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/)
+* [Controlling Queue Delay](https://queue.acm.org/detail.cfm?id=2209336)
 
 ### kubernetes
 
