@@ -193,6 +193,7 @@ tar -xvzf name.tar.gz
 * [YT: 3.8 Hacking the Switch: Promiscuous Mode and Switch Security](https://www.youtube.com/watch?v=YVcBShtWFmo)
 * [IPv4 route lookup on Linux](https://vincent.bernat.ch/en/blog/2017-ipv4-route-lookup-linux)
 * [Bastion host](https://en.wikipedia.org/wiki/Bastion_host)
+* [Queueing in the Linux Network Stack](https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/)
 
 ### kubernetes
 
