@@ -13,7 +13,7 @@
    ```
 3. Update time and date
    ```sh
-   timedatectl ste-ntp true
+   timedatectl set-ntp true
    timedatectl status
    ```
 4. Create and format Linux partitions
