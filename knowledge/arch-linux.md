@@ -133,6 +133,10 @@
    ```sh
      iwctl --passphrase [passphrase] station [device] connect [SSID]
    ```
+5. [TODO] Install `i3wm`
+   1. [TODO] Increase keypress speed
+   2. [TODO] Inverse scroll
+   3. [TODO] Find a driver (?) or configure touchpad gesture
 
 ## Troubleshooting
 
