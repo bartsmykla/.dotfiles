@@ -24,13 +24,6 @@ format = "[$symbol$branch]($style)"
 
 [git_commit]
 only_detached = false
-format = "[\\($hash$tag\\)]($style)"
-
-[git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\)'
-
-[character]
-format = "$symbol "
 
 [cmd_duration]
 format = "[$duration]($style) "
