@@ -8,3 +8,4 @@ helper_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
 .config/exercism/user.json filter=git-crypt diff=git-crypt
 todos/**/* filter=git-crypt diff=git-crypt
 ansible/**/* filter=git-crypt diff=git-crypt
+helpers/**/*.secret.* filter=git-crypt diff=git-crypt
