@@ -3,9 +3,10 @@
   set --export MY_PROJECTS_PATH $PROJECTS_PATH/bartsmykla
   set --export DOTFILES_PATH $MY_PROJECTS_PATH/.dotfiles
   set --export FORTRESS_PATH /Volumes/fortress-carima
+  set --export SECRETS_PATH $DOTFILES_PATH/secrets
 
 # autojump 
-[ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
+  [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
 # key bindings
   # https://github.com/fish-shell/fish-shell/issues/3189
@@ -38,7 +39,7 @@
   set -gx ANSIBLE_CONFIG $DOTFILES_PATH/ansible/ansible.cfg
 
 # nvm
-  set -gx nvm_default_version 15.4.0
+  set -gx nvm_default_version v16.6.1
 
 # go
   set -gx GOPATH $HOME/go;
@@ -47,3 +48,12 @@
 
 # gcloud cli tool
    source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
+
+# save history before running any command
+  function save_history --on-event fish_preexec
+      history --save
+  end
+
+# install direnv hook (https://direnv.net/docs/hook.html#fish)
+  direnv hook fish | source
+  set -g direnv_fish_mode eval_on_arrow
