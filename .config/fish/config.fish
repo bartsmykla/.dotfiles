@@ -57,3 +57,6 @@
 # install direnv hook (https://direnv.net/docs/hook.html#fish)
   direnv hook fish | source
   set -g direnv_fish_mode eval_on_arrow
+
+# starship prompt
+  starship init fish | source

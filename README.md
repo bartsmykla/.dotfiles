@@ -47,6 +47,7 @@ FORMULAS=(
     tmuxinator
     vim
     zsh-history-substring-search
+    starship
 )
 
 SERVICES_TO_START=(
@@ -95,6 +96,7 @@ ln -sfv "${DOTFILES_PATH}/.tmux.conf" ~/.tmux.conf
 ln -sfv "${DOTFILES_PATH}/.config/exercism" ~/.config/exercism
 ln -sfv "${DOTFILES_PATH}/.config/mps-youtube" ~/.config/mps-youtube
 ln -sfv "${DOTFILES_PATH}/.config/tmuxinator" ~/.config/tmuxinator
+ln -sfv "${DOTFILES_PATH}/.config/starship.toml" ~/.config/starship.toml
 ln -sfv "${DOTFILES_PATH}/.hammerspoon/init.lua" ~/.hammerspoon/init.lua
 ln -sfv "${DOTFILES_PATH}/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
 ln -sfv "${DOTFILES_PATH}/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
