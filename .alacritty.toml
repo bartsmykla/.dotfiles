@@ -1,0 +1,20 @@
+[debug]
+log_level = "Debug"
+print_events = false
+
+[font]
+size = 20.0
+
+[font.normal]
+family = "FiraCode Nerd Font Mono"
+
+[scrolling]
+history = 100000
+multiplier = 3
+
+[shell]
+program = "/opt/homebrew/bin/fish"
+args = ["--command", "tmuxinator dev"]
+
+[window]
+startup_mode = "Fullscreen"
