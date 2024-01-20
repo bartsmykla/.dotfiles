@@ -16,3 +16,4 @@ runtime! auto_set_paste.vim
 
 set number
 set relativenumber
+syntax on
