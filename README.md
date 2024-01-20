@@ -55,21 +55,37 @@ set --local TAPS \
     homebrew/cask-versions \
 
 set --local CASK_FORMULAS \
-    alfred \
     alacritty \
+    alfred \
+    discord \
     firefox-developer-edition \
+    font-fira-code \
+    font-fira-code-nerd-font \
     google-cloud-sdk \
+    gpg-suite \
+    jetbrains-toolbox \
+    obsidian \
+    rectangle \
+    signal \
 
 set --local FORMULAS \
     ack \
     awscli \
     bash \
+    bat \
+    colima \
+    direnv \
     docker \
+    docker-completion \
+    fish \
+    fzf \
     git-crypt \
     gnu-sed \
     gnupg \
+    gnutls \
     helm \
     jq \
+    yq \
     kubernetes-cli \
     lua \
     shellcheck \
@@ -77,6 +93,8 @@ set --local FORMULAS \
     tmuxinator \
     vim \
     starship \
+    eza \
+    k9s \
 
 for tap in $TAPS
     brew tap "$tap"
