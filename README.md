@@ -73,10 +73,10 @@ set --local FORMULAS \
     awscli \
     bash \
     bat \
-    colima \
     direnv \
     docker \
     docker-completion \
+    eza \
     fish \
     fzf \
     git-crypt \
@@ -85,16 +85,16 @@ set --local FORMULAS \
     gnutls \
     helm \
     jq \
-    yq \
+    k9s \
     kubernetes-cli \
     lua \
+    orbstack \
     shellcheck \
+    starship \
     tmux \
     tmuxinator \
     vim \
-    starship \
-    eza \
-    k9s \
+    yq \
 
 for tap in $TAPS
     brew tap "$tap"
