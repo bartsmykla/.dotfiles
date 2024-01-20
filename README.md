@@ -1,8 +1,6 @@
 # .dotfiles
 
-## Turn off macOS' `Ctrl + Space` keyboard shortcut
-
-This shortcut it going to be used [to accept autosuggestion](https://github.com/bartsmykla/.dotfiles/blob/5a1fc97ea48b4e9419d602fe96752e8cc47b3855/.config/fish/functions/fish_user_key_bindings.fish#L4) in fish
+## Turn off macOS' conflicting keyboard shortcuts
 
 1. Open `System Settings` > `Keyboard`
 
@@ -10,19 +8,39 @@ This shortcut it going to be used [to accept autosuggestion](https://github.com/
    open -b com.apple.systempreferences /System/Library/PreferencePanes/Keyboard.prefPane
    ```
 
-2. Open `Keyboard Shortcuts` and go to `Input Sources` tab
+2. Open `Keyboard Shortcuts`
 
-   <details>
-       <summary>Show Screenshot</summary>
-       <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/a8e5c5d0-80fb-47f1-a2cd-25b754c8edf4" alt="System Settings > Keybord > Keyboard Shortcuts > Input Sources" />
-   </details>
+   1. `Ctrl + Space` (This shortcut it going to be used [to accept autosuggestion](https://github.com/bartsmykla/.dotfiles/blob/5a1fc97ea48b4e9419d602fe96752e8cc47b3855/.config/fish/functions/fish_user_key_bindings.fish#L4) in fish)
 
-3. Unselect shortcuts
-    
-   | Description                      | Shortcut  |
-   |----------------------------------|-----------|
-   | Select the previous input source | `⌃Space`  |
-   | Select next source in input menu | `⌃⌥Space` |
+      1. Go to `Input Sources` tab
+
+         <details>
+             <summary>Show Screenshot</summary>
+             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/a8e5c5d0-80fb-47f1-a2cd-25b754c8edf4" alt="System Settings > Keybord > Keyboard Shortcuts > Input Sources" />
+         </details>
+
+      2. Unselect shortcuts
+          
+         | Description                      | Shortcut  |
+         |----------------------------------|-----------|
+         | Select the previous input source | `⌃Space`  |
+         | Select next source in input menu | `⌃⌥Space` |
+
+   2. `Cmd + Space` (This shortcut is being used by Alfred)
+
+      1. Go to `Spotlight` tab
+
+         <details>
+             <summary>Show Screenshot</summary>
+             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/bfc0764d-f07a-48ee-aff2-365262bb6d8e" alt="System Settings > Keybord > Keyboard Shortcuts > Spotlight" />
+         </details>
+
+      2. Unselect shortcuts
+          
+         | Description               | Shortcut  |
+         |---------------------------|-----------|
+         | Show Spotlight search     | `⌘Space`  |
+         | Show Finder search window | `⌥⌘Space` |
 
 ## Install tools
 
