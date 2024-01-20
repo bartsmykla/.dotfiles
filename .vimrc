@@ -8,7 +8,11 @@ endif
 let mapleader=","
 let maplocalleader=","
 
-set rtp+=~/.vimrc.d
+set rtp+="$DOTFILES_PATH/.vimrc.d"
 
 runtime! vundle.vim
 runtime! native.vim
+runtime! auto_set_paste.vim
+
+set number
+set relativenumber
