@@ -101,7 +101,7 @@ for tap in $TAPS
 end
 
 for formula in $CASK_FORMULAS
-    brew cask install "$formula"
+    brew install --cask "$formula"
 end
 
 for formula in $FORMULAS
