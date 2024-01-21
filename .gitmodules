@@ -1,3 +1,51 @@
 [submodule ".vim/bundle/Vundle.vim"]
 	path = .vim/bundle/Vundle.vim
 	url = git@github.com:VundleVim/Vundle.vim.git
+[submodule ".vim/bundle/ale"]
+	path = .vim/bundle/ale
+	url = git@github.com:w0rp/ale.git
+[submodule ".vim/bundle/awesome-vim-colorschemes"]
+	path = .vim/bundle/awesome-vim-colorschemes
+	url = git@github.com:rafi/awesome-vim-colorschemes.git
+[submodule ".vim/bundle/incsearch.vim"]
+	path = .vim/bundle/incsearch.vim
+	url = git@github.com:haya14busa/incsearch.vim.git
+[submodule ".vim/bundle/nerdcommenter"]
+	path = .vim/bundle/nerdcommenter
+	url = git@github.com:preservim/nerdcommenter.git
+[submodule ".vim/bundle/nerdtree"]
+	path = .vim/bundle/nerdtree
+	url = git@github.com:scrooloose/nerdtree.git
+[submodule ".vim/bundle/rainbow"]
+	path = .vim/bundle/rainbow
+	url = git@github.com:luochen1990/rainbow.git
+[submodule ".vim/bundle/tabular"]
+	path = .vim/bundle/tabular
+	url = git@github.com:godlygeek/tabular.git
+[submodule ".vim/bundle/tagbar"]
+	path = .vim/bundle/tagbar
+	url = git@github.com:majutsushi/tagbar.git
+[submodule ".vim/bundle/vim-HiLinkTrace"]
+	path = .vim/bundle/vim-HiLinkTrace
+	url = git@github.com:gerw/vim-HiLinkTrace.git
+[submodule ".vim/bundle/vim-airline"]
+	path = .vim/bundle/vim-airline
+	url = git@github.com:bling/vim-airline.git
+[submodule ".vim/bundle/vim-ansible-yaml"]
+	path = .vim/bundle/vim-ansible-yaml
+	url = git@github.com:chase/vim-ansible-yaml.git
+[submodule ".vim/bundle/vim-argwrap"]
+	path = .vim/bundle/vim-argwrap
+	url = git@github.com:FooSoft/vim-argwrap.git
+[submodule ".vim/bundle/vim-easy-align"]
+	path = .vim/bundle/vim-easy-align
+	url = git@github.com:junegunn/vim-easy-align.git
+[submodule ".vim/bundle/vim-easymotion"]
+	path = .vim/bundle/vim-easymotion
+	url = git@github.com:easymotion/vim-easymotion.git
+[submodule ".vim/bundle/vim-go"]
+	path = .vim/bundle/vim-go
+	url = git@github.com:fatih/vim-go.git
+[submodule ".vim/bundle/vim-indent-guides"]
+	path = .vim/bundle/vim-indent-guides
+	url = git@github.com:nathanaelkane/vim-indent-guides.git
