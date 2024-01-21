@@ -37,6 +37,7 @@
 [submodule ".vim/bundle/vim-argwrap"]
 	path = .vim/bundle/vim-argwrap
 	url = git@github.com:FooSoft/vim-argwrap.git
+	ignore = untracked
 [submodule ".vim/bundle/vim-easy-align"]
 	path = .vim/bundle/vim-easy-align
 	url = git@github.com:junegunn/vim-easy-align.git
