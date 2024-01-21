@@ -71,6 +71,5 @@
 # starship prompt
   starship init fish | source
 
-# autojump
-  [ -f /usr/local/share/autojump/autojump.fish ];
-  and source /usr/local/share/autojump/autojump.fish
+# jump (https://github.com/gsamokovarov/jump)
+  jump shell fish | source
