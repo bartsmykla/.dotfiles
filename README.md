@@ -125,7 +125,6 @@ ln -sfv "$DOTFILES_PATH/.alacritty.yml" ~/.alacritty.yml
 ln -sfv "$DOTFILES_PATH/.tmux.conf" ~/.tmux.conf
 ln -sfv "$DOTFILES_PATH/.vimrc" ~/.vimrc
 ln -sfv "$DOTFILES_PATH/.vim" ~/.vim
-ln -sfv "$DOTFILES_PATH/.vimrc.d" ~/.vimrc.d
 ln -sfv "$DOTFILES_PATH/.config/exercism" ~/.config/exercism
 ln -sfv "$DOTFILES_PATH/.config/tmuxinator" ~/.config/tmuxinator
 ln -sfv "$DOTFILES_PATH/.config/starship.toml" ~/.config/starship.toml

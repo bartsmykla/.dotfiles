@@ -1,4 +1,4 @@
-"seting amount of colors of terminal
+" setting amount of colors of terminal
 set t_Co=256
 
 if !exists('g:not_finish_vimplug')
@@ -13,7 +13,7 @@ set number
 "             edited its plugin file
 "             is loaded [if there is one for the detected filetype])
 " indent    : loads the file `indent.vim` in `runtimepath` (when a file is
-"             edited its indent file 
+"             edited its indent file
 "             is loaded [if there is one for the detected filetype])
 " filetype plugin indent on // commented because it's already set by vundle
 
@@ -29,7 +29,7 @@ set tabstop=4
 "   value as `shiftwidth`. If `expandtab` is unset, and `tabstop` is different
 "   from `softtabstop`, the <TAB> key will minimize the amount of spaces
 "   inserted by using multiples of TAB characters. For instance, if `tabstop`
-"   is 8, and the amount of consecutive space inserted is 20, two 
+"   is 8, and the amount of consecutive space inserted is 20, two
 "   TAB characters and four spaces will be used
 set softtabstop=4
 
@@ -37,7 +37,7 @@ set softtabstop=4
 "   automatic indentation works.
 set shiftwidth=4
 
-" highlighting search results 
+" highlighting search results
 set hlsearch
 
 " turning on line numbers in the left column and when you are moving cursor
@@ -96,8 +96,8 @@ augroup END
 " Remap the <Leader> key to ','
 let mapleader=","
 
-" Edit vimr configuration file
-nnoremap <Leader>ve :e ${MYVIMRCD}/native.vim<CR>
-" Reload vimr configuration file
-nnoremap <Leader>vr :source ${MYVIMRC}<CR>
+" Edit .vimrc configuration file
+nnoremap <Leader>ve :e $MYVIMRC/native.vim<CR>
+" Reload .vimrc configuration file
+nnoremap <Leader>vr :source $MYVIMRC<CR>
 
