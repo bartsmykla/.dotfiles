@@ -92,6 +92,7 @@ set --local FORMULAS \
     orbstack \
     shellcheck \
     starship \
+    terraform \
     tmux \
     tmuxinator \
     vim \
