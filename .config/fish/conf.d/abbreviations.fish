@@ -1,3 +1,4 @@
+abbr -a -- awsbt 'op connect server list &> /dev/null || eval $(op signin); set otp $(op item get "BT - AWS" --otp) && awsume bt --mfa-token $otp && aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 273030768099.dkr.ecr.eu-west-1.amazonaws.com' # imported from a universal variable, see `help abbr`
 abbr -a -- pgc git_clone_to_projects
 abbr -a -- e2e_clean 'make kind/stop/all; docker stop (docker ps -aq)'
 abbr -a -- gcs 'git commit -sS'
@@ -29,3 +30,4 @@ abbr -a -- sshno 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/nul
 abbr -a -- set-ns 'kubectl config set-context --current --namespace'
 abbr -a -- l 'eza --all --long --icons'
 abbr -a -- lt 'eza --all --long --icons --tree'
+abbr -a -- awslogin 'saml2aws -a kong-sandbox-mesh login && eval (saml2aws script -a kong-sandbox-mesh)'
