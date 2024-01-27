@@ -90,6 +90,7 @@ set --local FORMULAS \
     kubernetes-cli \
     lua \
     orbstack \
+    saml2aws \
     shellcheck \
     starship \
     terraform \
@@ -134,6 +135,14 @@ ln -sfv "$DOTFILES_PATH/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
 ln -sfv "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
 
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
+```
+
+## Install rust
+
+From https://www.rust-lang.org/tools/install
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ## Show only active apps in MacOS' dock
