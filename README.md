@@ -77,6 +77,7 @@ set --local FORMULAS \
     docker \
     docker-completion \
     eza \
+    fd \
     fish \
     fzf \
     git-crypt \
