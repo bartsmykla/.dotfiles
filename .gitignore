@@ -5,3 +5,4 @@
 bin/jetbrains
 tmp
 .vim/view
+.config/fish/fish_variables
