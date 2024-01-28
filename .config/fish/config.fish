@@ -13,8 +13,11 @@
   and source /usr/local/share/autojump/autojump.fish
 
 # fzf
-  set --global --export FZF_DEFAULT_OPTS \
-    "--bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
+  fzf_configure_bindings \
+    --directory=\cf \
+    --git_log=\cl \
+    --git_status=\cs \
+    --processes=\cp
 
 # EDITOR
   set --global --export EDITOR vim
@@ -77,4 +80,3 @@
 # locale
   set --global --export LC_ALL en_US.UTF-8
   set --global --export LANG en_US.UTF-8
-
