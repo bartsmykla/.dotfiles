@@ -81,6 +81,7 @@ set --local FORMULAS \
     fd \
     fish \
     fzf \
+    gh \
     git-crypt \
     gnu-sed \
     gnupg \
