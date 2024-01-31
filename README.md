@@ -73,6 +73,7 @@ set --local FORMULAS \
     awscli \
     bash \
     bat \
+    broot \
     direnv \
     docker \
     docker-completion \
@@ -87,6 +88,7 @@ set --local FORMULAS \
     helm \
     jump \
     jq \
+    k3d \
     k9s \
     kubernetes-cli \
     lua \
@@ -126,6 +128,7 @@ if ! [[ -d "$DOTFILES_PATH" ]]; then
 fi
 
 ln -sfv "$DOTFILES_PATH/.alacritty.yml" ~/.alacritty.yml
+ln -sfv "$DOTFILES_PATH/.config/broot" ~/.config/broot
 ln -sfv "$DOTFILES_PATH/.tmux" ~/.tmux
 ln -sfv "$DOTFILES_PATH/.tmux.conf" ~/.tmux.conf
 ln -sfv "$DOTFILES_PATH/.vimrc" ~/.vimrc
