@@ -53,6 +53,7 @@ set --export --global DOTFILES_PATH "$MY_PROJECTS_PATH/.dotfiles"
 set --local TAPS \
     homebrew/cask-fonts \
     homebrew/cask-versions \
+    helm/tap \
 
 set --local CASK_FORMULAS \
     alacritty \
@@ -74,6 +75,7 @@ set --local FORMULAS \
     bash \
     bat \
     broot \
+    chart-releaser \
     direnv \
     docker \
     docker-completion \
