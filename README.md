@@ -76,6 +76,7 @@ set --local FORMULAS \
     bat \
     broot \
     chart-releaser \
+    coreutils \
     direnv \
     docker \
     docker-completion \
@@ -86,6 +87,7 @@ set --local FORMULAS \
     gh \
     git-crypt \
     gnu-sed \
+    gnu-tar \
     gnupg \
     gnutls \
     helm \
