@@ -32,7 +32,7 @@
   # kuma ~/bin directory
   fish_add_path "$HOME/bin"
   # GNU coreutils
-  fish_add_path /usr/local/opt/coreutils/libexec/gnubin
+  fish_add_path /opt/homebrew/opt/coreutils/libexec/gnubin
   # krew - kubectl plugin manager
   fish_add_path --append "$HOME/.krew/bin"
   # curl
