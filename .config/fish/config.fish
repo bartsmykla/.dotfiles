@@ -8,10 +8,6 @@
   set --export FORTRESS_PATH /Volumes/fortress-carima
   set --export SECRETS_PATH $DOTFILES_PATH/secrets
 
-# autojump
-  [ -f /usr/local/share/autojump/autojump.fish ];
-  and source /usr/local/share/autojump/autojump.fish
-
 # fzf
   fzf_configure_bindings \
     --directory=\cf \
@@ -32,7 +28,7 @@
   # kuma ~/bin directory
   fish_add_path "$HOME/bin"
   # GNU coreutils
-  fish_add_path /opt/homebrew/opt/coreutils/libexec/gnubin
+  fish_add_path $(brew --prefix)/opt/coreutils/libexec/gnubin
   # krew - kubectl plugin manager
   fish_add_path --append "$HOME/.krew/bin"
   # curl
