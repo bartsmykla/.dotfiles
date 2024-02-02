@@ -67,6 +67,7 @@ set --local CASK_FORMULAS \
     jetbrains-toolbox \
     obsidian \
     rectangle \
+    send-to-kindle \
     signal \
 
 set --local FORMULAS \
