@@ -98,6 +98,7 @@ set --local FORMULAS \
     k9s \
     kubernetes-cli \
     lua \
+    mutagen \
     orbstack \
     saml2aws \
     shellcheck \
@@ -157,7 +158,7 @@ From https://www.rust-lang.org/tools/install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-## Show only active apps in MacOS' dock
+## Show only active apps in macOS' dock
 
 ```sh
 defaults write com.apple.dock static-only -bool true; killall Dock
