@@ -1,3 +1,6 @@
+# Disable initial welcome message
+  set --global fish_greeting
+
 # Homebrew
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
