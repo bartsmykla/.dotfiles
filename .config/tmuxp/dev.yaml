@@ -1,0 +1,4 @@
+session_name: dev
+windows:
+- window_name: main
+  layout: tiled
