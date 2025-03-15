@@ -134,18 +134,20 @@ if ! [[ -d "$DOTFILES_PATH" ]]; then
     (cd "$DOTFILES_PATH"; git-crypt unlock)
 fi
 
-ln -sfv "$DOTFILES_PATH/.config/broot" ~/.config/broot
-ln -sfv "$DOTFILES_PATH/.tmux" ~/.tmux
-ln -sfv "$DOTFILES_PATH/.tmux.conf" ~/.tmux.conf
-ln -sfv "$DOTFILES_PATH/.vimrc" ~/.vimrc
-ln -sfv "$DOTFILES_PATH/.vim" ~/.vim
-ln -sfv "$DOTFILES_PATH/.config/alacritty" ~/.config/alacritty
-ln -sfv "$DOTFILES_PATH/.config/exercism" ~/.config/exercism
-ln -sfv "$DOTFILES_PATH/.config/tmuxinator" ~/.config/tmuxinator
-ln -sfv "$DOTFILES_PATH/.config/tmuxp" ~/.config/tmuxp
-ln -sfv "$DOTFILES_PATH/.config/starship.toml" ~/.config/starship.toml
-ln -sfv "$DOTFILES_PATH/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
-ln -sfv "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
+ln --symbolic --force --verbose "$DOTFILES_PATH/.tmux" ~/.tmux
+ln --symbolic --force --verbose "$DOTFILES_PATH/.tmux.conf" ~/.tmux.conf
+ln --symbolic --force --verbose "$DOTFILES_PATH/.vim" ~/.vim
+ln --symbolic --force --verbose "$DOTFILES_PATH/.vimrc" ~/.vimrc
+# ~/.config
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/starship.toml" ~/.config/starship.toml
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/alacritty" ~/.config/alacritty
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/broot" ~/.config/broot
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/exercism" ~/.config/exercism
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/tmuxinator" ~/.config/tmuxinator
+ln --symbolic --force --verbose "$DOTFILES_PATH/.config/tmuxp" ~/.config/tmuxp
+# ~/.gnupg
+ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
+ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
 
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
