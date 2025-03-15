@@ -27,4 +27,3 @@ function up-or-search -d "Depending on cursor position and current mode, either 
             commandline -f up-line
     end
 end
-
