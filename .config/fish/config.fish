@@ -2,7 +2,7 @@
   set --global fish_greeting
 
 # Homebrew
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  /opt/homebrew/bin/brew shellenv | source
 
 # vars
   set --export PROJECTS_PATH $HOME/Projects/github.com
@@ -14,30 +14,26 @@
 # fzf
   fzf_configure_bindings \
     --directory=\cf \
-    --git_log=\cl \
+    --git_log=\co \
     --git_status=\cs \
     --processes=\cp
+
+  set fzf_history_opts --layout=default --algo=v2
 
 # EDITOR
   set --global --export EDITOR vim
 
 # PATH
-  # `bin` directory of .dotfiles repository
-  fish_add_path $DOTFILES_PATH/bin
   # `bin` directory on fortress
-  fish_add_path $FORTRESS_PATH/.dotfiles/bin
+  fish_add_path --global --move $FORTRESS_PATH/.dotfiles/bin
   # rust/cargo
-  fish_add_path "$HOME/.cargo/bin"
+  fish_add_path --global --move "$HOME/.cargo/bin"
   # kuma ~/bin directory
-  fish_add_path "$HOME/bin"
+  fish_add_path --global --move "$HOME/bin"
   # GNU coreutils
-  fish_add_path $(brew --prefix)/opt/coreutils/libexec/gnubin
+  fish_add_path --global --move "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin"
   # krew - kubectl plugin manager
-  fish_add_path --append "$HOME/.krew/bin"
-  # curl
-  fish_add_path /usr/local/opt/curl/bin
-  # g-install: do NOT edit, see https://github.com/stefanmaric/g
-  fish_add_path "$GOPATH/bin"
+  fish_add_path --global --append "$HOME/.krew/bin"
 
 # zlib
   set --global --export LDFLAGS "-L/usr/local/opt/zlib/lib"
@@ -46,25 +42,9 @@
 # ansible
   set --global --export ANSIBLE_CONFIG "$DOTFILES_PATH/ansible/ansible.cfg"
 
-# nvm
-  set --global --export nvm_default_version v16.18.0
-
-  [ -f .nvmrc ] || [ -f .node-version ]; \
-  and command --query nvm || functions --query nvm;
-  and nvm use
-
-# go
-  set --global --export GOPATH "$HOME/go"
-  set --global --export GOROOT "$HOME/.go"
-
 # gcloud cli tool
   set --global --export USE_GKE_GCLOUD_AUTH_PLUGIN "True"
-  source "$(brew --prefix)/share/google-cloud-sdk/path.fish.inc"
-
-# save history before running any command
-  function save_history --on-event fish_preexec
-      history --save
-  end
+  source "$HOMEBREW_PREFIX/share/google-cloud-sdk/path.fish.inc"
 
 # install direnv hook (https://direnv.net/docs/hook.html#fish)
   direnv hook fish | source
@@ -82,4 +62,3 @@
 
 # mise
   [ -f $HOME/.local/bin/mise ] && $HOME/.local/bin/mise activate fish | source
-

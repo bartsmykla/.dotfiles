@@ -5,4 +5,6 @@
 bin/jetbrains
 tmp
 .vim/view
+.config/fish/debug.log
 .config/fish/fish_variables
+.config/k9s/clusters
