@@ -150,6 +150,12 @@ ln -sfv "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
 
+### Install mise
+
+```sh
+curl https://mise.run | sh
+```
+
 ## Install rust
 
 From https://www.rust-lang.org/tools/install
