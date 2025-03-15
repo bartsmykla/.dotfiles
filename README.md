@@ -92,8 +92,8 @@ set --local FORMULAS \
     gnupg \
     gnutls \
     helm \
-    jump \
     jq \
+    jump \
     k3d \
     k9s \
     kubernetes-cli \
