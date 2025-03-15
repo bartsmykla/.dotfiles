@@ -12,9 +12,9 @@ family = "FiraCode Nerd Font Mono"
 history = 100000
 multiplier = 3
 
-[shell]
+[terminal.shell]
 program = "/opt/homebrew/bin/fish"
-args = ["--command", "tmuxinator dev"]
+args = ["--command", "tmuxp load dev"]
 
 [window]
 startup_mode = "Fullscreen"
