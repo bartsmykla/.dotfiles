@@ -62,3 +62,6 @@
 
 # mise
   [ -f $HOME/.local/bin/mise ] && $HOME/.local/bin/mise activate fish | source
+
+# 1password
+  set --global --export SSH_AUTH_SOCK "$HOME/.1password/agent.sock"
