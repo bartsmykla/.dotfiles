@@ -65,3 +65,7 @@
 
 # 1password
   set --global --export SSH_AUTH_SOCK "$HOME/.1password/agent.sock"
+
+# teleport
+  # teleport is not working well with 1password when $SSH_AUTH_SOCK is specified
+  set --global --export TELEPORT_USE_LOCAL_SSH_AGENT false
