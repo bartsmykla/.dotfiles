@@ -55,6 +55,7 @@ set --local TAPS \
     homebrew/cask-versions \
     helm/tap \
 
+# GUI apps to install
 set --local CASK_FORMULAS \
     alacritty \
     alfred \
@@ -70,8 +71,10 @@ set --local CASK_FORMULAS \
     send-to-kindle \
     signal \
 
+# Apps to install
 set --local FORMULAS \
     ack \
+    atuin \
     awscli \
     bash \
     bat \
@@ -109,6 +112,10 @@ set --local FORMULAS \
     vim \
     yq \
 
+# Services to start
+set --local SERVICES \
+    atuin \
+
 for tap in $TAPS
     brew tap "$tap"
 end
@@ -119,6 +126,10 @@ end
 
 for formula in $FORMULAS
     brew install "$formula"
+end
+
+for service in $SERVICES
+    brew services start "$service"
 end
 
 # Checking dependencies
@@ -150,6 +161,8 @@ ln --symbolic --force --verbose "$DOTFILES_PATH/.config/tmuxp" ~/.config/tmuxp
 ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
 ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
 
+link_dotfile .config/atuin
+
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
 
@@ -157,12 +170,6 @@ git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 
 ```sh
 curl https://mise.run | sh
-```
-
-### Install [Atuin](https://docs.atuin.sh/)
-
-```sh
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 ```
 
 ### Install [krew](https://krew.sigs.k8s.io)
