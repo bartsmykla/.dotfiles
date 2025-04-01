@@ -32,6 +32,7 @@ $time\
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+command_timeout = 3600
 
 [directory]
 style = "bg:#9A348E"
