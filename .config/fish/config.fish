@@ -11,14 +11,19 @@
   set --export FORTRESS_PATH /Volumes/fortress-carima
   set --export SECRETS_PATH $DOTFILES_PATH/secrets
 
-# # fzf
-#   fzf_configure_bindings \
-#     --directory=\cf \
-#     --git_log=\co \
-#     --git_status=\cs \
-#     --processes=\cp
-#
-#   set fzf_history_opts --layout=default --algo=v2
+# Atuin
+  atuin init fish | source
+
+# fzf
+  # History search is handled by Atuin, so fzf's history binding is disabled
+  # (empty shortcut)
+  fzf_configure_bindings \
+    --directory=\cf \
+    --git_log=\co \
+    --git_status=\cs \
+    --processes=\cp \
+    --variables=\cv \
+    --history=
 
 # EDITOR
   set --global --export EDITOR vim
@@ -69,6 +74,3 @@
 # teleport
   # teleport is not working well with 1password when $SSH_AUTH_SOCK is specified
   set --global --export TELEPORT_USE_LOCAL_SSH_AGENT false
-
-# Atuin
-  atuin init fish | source
