@@ -16,7 +16,7 @@
 
          <details>
              <summary>Show Screenshot</summary>
-             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/a8e5c5d0-80fb-47f1-a2cd-25b754c8edf4" alt="System Settings > Keybord > Keyboard Shortcuts > Input Sources" />
+             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/a8e5c5d0-80fb-47f1-a2cd-25b754c8edf4" alt="System Settings > Keyboard > Keyboard Shortcuts > Input Sources" />
          </details>
 
       2. Unselect shortcuts
@@ -32,7 +32,7 @@
 
          <details>
              <summary>Show Screenshot</summary>
-             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/bfc0764d-f07a-48ee-aff2-365262bb6d8e" alt="System Settings > Keybord > Keyboard Shortcuts > Spotlight" />
+             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/bfc0764d-f07a-48ee-aff2-365262bb6d8e" alt="System Settings > Keyboard > Keyboard Shortcuts > Spotlight" />
          </details>
 
       2. Unselect shortcuts
@@ -145,23 +145,20 @@ if ! [[ -d "$DOTFILES_PATH" ]]; then
     (cd "$DOTFILES_PATH"; git-crypt unlock)
 fi
 
-ln --symbolic --force --verbose "$DOTFILES_PATH/.tmux" ~/.tmux
-ln --symbolic --force --verbose "$DOTFILES_PATH/.tmux.conf" ~/.tmux.conf
-ln --symbolic --force --verbose "$DOTFILES_PATH/.vim" ~/.vim
-ln --symbolic --force --verbose "$DOTFILES_PATH/.vimrc" ~/.vimrc
+link_dotfile .tmux
+link_dotfile .tmux.conf
+link_dotfile .vim
+link_dotfile .vimrc
 # ~/.config
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/starship.toml" ~/.config/starship.toml
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/alacritty" ~/.config/alacritty
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/broot" ~/.config/broot
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/exercism" ~/.config/exercism
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/k9s" ~/.config/k9s
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/tmuxinator" ~/.config/tmuxinator
-ln --symbolic --force --verbose "$DOTFILES_PATH/.config/tmuxp" ~/.config/tmuxp
-# ~/.gnupg
-ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg-agent.conf" ~/.gnupg/gpg-agent.conf
-ln --symbolic --force --verbose "$DOTFILES_PATH/.gnupg/gpg.conf" ~/.gnupg/gpg.conf
-
+link_dotfile .config/starship.toml
+link_dotfile .config/alacritty
 link_dotfile .config/atuin
+link_dotfile .config/broot
+link_dotfile .config/exercism
+link_dotfile .config/k9s
+link_dotfile .config/tmuxinator
+link_dotfile .config/tmuxp
+link_dotfile .gnupg
 
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
