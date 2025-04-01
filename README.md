@@ -159,6 +159,12 @@ git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 curl https://mise.run | sh
 ```
 
+### Install [Atuin](https://docs.atuin.sh/)
+
+```sh
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+```
+
 ### Install [krew](https://krew.sigs.k8s.io)
 
 ```sh
