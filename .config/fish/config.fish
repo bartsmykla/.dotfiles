@@ -11,9 +11,6 @@
   set --export FORTRESS_PATH /Volumes/fortress-carima
   set --export SECRETS_PATH $DOTFILES_PATH/secrets
 
-# Atuin
-  atuin init fish | source
-
 # fzf
   # History search is handled by Atuin, so fzf's history binding is disabled
   # (empty shortcut)
@@ -24,6 +21,9 @@
     --processes=\cp \
     --variables=\cv \
     --history=
+
+# Atuin
+  atuin init fish --disable-up-arrow | source
 
 # EDITOR
   set --global --export EDITOR vim
