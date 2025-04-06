@@ -40,10 +40,6 @@
   # krew - kubectl plugin manager
   fish_add_path --global --append "$HOME/.krew/bin"
 
-# zlib
-  set --global --export LDFLAGS "-L/usr/local/opt/zlib/lib"
-  set --global --export CPPFLAGS "-I/usr/local/opt/zlib/include"
-
 # ansible
   set --global --export ANSIBLE_CONFIG "$DOTFILES_PATH/ansible/ansible.cfg"
 
