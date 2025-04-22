@@ -53,6 +53,7 @@ set --export --global DOTFILES_PATH "$MY_PROJECTS_PATH/.dotfiles"
 set --local TAPS \
     homebrew/cask-fonts \
     homebrew/cask-versions \
+    bartsmykla/af \
     helm/tap \
 
 # GUI apps to install
@@ -73,6 +74,7 @@ set --local CASK_FORMULAS \
 
 # Apps to install
 set --local FORMULAS \
+    bartsmykla/af/af \
     ack \
     atuin \
     awscli \
