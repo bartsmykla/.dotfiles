@@ -147,6 +147,7 @@ if ! [[ -d "$DOTFILES_PATH" ]]; then
     (cd "$DOTFILES_PATH"; git-crypt unlock)
 fi
 
+link_dotfile .gnupg
 link_dotfile .tmux
 link_dotfile .tmux.conf
 link_dotfile .vim
@@ -158,9 +159,9 @@ link_dotfile .config/atuin
 link_dotfile .config/broot
 link_dotfile .config/exercism
 link_dotfile .config/k9s
+link_dotfile .config/syft
 link_dotfile .config/tmuxinator
 link_dotfile .config/tmuxp
-link_dotfile .gnupg
 
 git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
 ```
