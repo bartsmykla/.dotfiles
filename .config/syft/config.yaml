@@ -1,6 +1,6 @@
 log:
   # suppress all logging output (env: SYFT_LOG_QUIET)
-  quiet: true
+  quiet: false
 
   # increase verbosity (-v = info, -vv = debug) (env: SYFT_LOG_VERBOSITY)
   verbosity: 0
@@ -31,7 +31,7 @@ legacyFile: ''
 
 format:
   # default value for all formats that support the "pretty" option (default is unset) (env: SYFT_FORMAT_PRETTY)
-  pretty:
+  pretty: true
 
   template:
     # path to the template file to use when rendering the output with the template output format.
