@@ -158,6 +158,7 @@ link_dotfile .config/alacritty
 link_dotfile .config/atuin
 link_dotfile .config/broot
 link_dotfile .config/exercism
+link_dotfile .config/grype
 link_dotfile .config/k9s
 link_dotfile .config/syft
 link_dotfile .config/tmuxinator
