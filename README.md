@@ -42,16 +42,13 @@
          | Show Spotlight search     | `⌘Space`  |
          | Show Finder search window | `⌥⌘Space` |
 
-## Install tools
+## Install tools using Homebrew
 
 ```sh
 set --export --global PROJECTS_PATH "$HOME/Projects/github.com"
 set --export --global MY_PROJECTS_PATH "$PROJECTS_PATH/bartsmykla"
 set --export --global DOTFILES_REPO "git@github.com:bartsmykla/.dotfiles.git"
 set --export --global DOTFILES_PATH "$MY_PROJECTS_PATH/.dotfiles"
-
-# mise (https://mise.jdx.dev)
-curl https://mise.run | sh
 
 set --local TAPS \
     homebrew/cask-fonts \
