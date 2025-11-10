@@ -1,6 +1,10 @@
 [tools]
-go = "1.24.5"
+cosign = "3.0.2"
+go = "1.25.3"
+golangci-lint = "2.6.1"
+pnpm = "9.15.9"
 ruby = "3.2.6"
+shellcheck = "0.11.0"
 
 [settings]
 experimental = true
