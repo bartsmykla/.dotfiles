@@ -58,11 +58,15 @@ jobs:
         run: |
           while IFS= read -r -d '' file; do
             fish -n "$file" || exit 1
-          done < <(find .config/fish -name "*.fish" -type f -print0)
+          done < <(find chezmoi/private_dot_config/fish -name "*.fish" -type f -print0)
 
-      # Test Fish config loads successfully
+      # Test Fish config loads successfully (requires applying chezmoi first)
       - name: Test Fish configuration
-        run: fish -c "echo 'Fish config OK'"
+        run: |
+          # Apply fish config to temporary location for testing
+          mkdir -p "$HOME/.config/fish"
+          cp -r chezmoi/private_dot_config/fish/* "$HOME/.config/fish/"
+          fish -c "echo 'Fish config OK'"
 
       # Test Vim config loads (install vim first if needed)
       - name: Test Vim configuration
@@ -70,7 +74,7 @@ jobs:
           if ! command -v vim >/dev/null 2>&1; then
             brew install vim
           fi
-          vim -u .vimrc +qall
+          vim -u chezmoi/dot_vimrc +qall
 
       # Lint all shell scripts
       - name: Lint shell scripts
