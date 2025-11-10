@@ -36,7 +36,7 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 
    ```bash
    mkdir -p ~/.config/chezmoi
-   # Copy your age key to ~/.config/chezmoi/key.txt
+   op document get dyhxf4wgavxqwqt23wbsl5my2m > ~/.config/chezmoi/key.txt
    chmod 600 ~/.config/chezmoi/key.txt
    ```
 
