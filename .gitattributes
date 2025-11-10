@@ -12,3 +12,4 @@ helpers/**/*.secret.* filter=git-crypt diff=git-crypt
 .config/fish/conf.d/abbreviations.fish filter=git-crypt diff=git-crypt
 .config/k9s/config.yaml filter=git-crypt diff=git-crypt
 CLAUDE.md filter=git-crypt diff=git-crypt
+Brewfile filter=git-crypt diff=git-crypt
