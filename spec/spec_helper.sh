@@ -15,7 +15,8 @@
 
 # Set up test environment
 # shellcheck disable=SC2155  # Declare and assign separately - not critical for test setup
-export DOTFILES_PATH="${DOTFILES_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+# shellcheck disable=SC2296  # $SHELLSPEC_PROJECT_ROOT is a ShellSpec built-in variable
+export DOTFILES_PATH="${SHELLSPEC_PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 export HOME="${HOME:-$HOME}"
 export PROJECTS_PATH="${PROJECTS_PATH:-$HOME/Projects/github.com}"
 
@@ -58,5 +59,5 @@ fish_function_exists() {
 # USAGE: fish_source_config
 #
 fish_source_config() {
-    fish -c "source ${DOTFILES_PATH}/.config/fish/config.fish"
+    fish -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/config.fish"
 }
