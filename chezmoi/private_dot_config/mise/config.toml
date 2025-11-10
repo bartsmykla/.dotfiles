@@ -1,4 +1,5 @@
 [tools]
+age = "1.2.1"
 chezmoi = "2.67.0"
 cosign = "3.0.2"
 go = "1.25.4"
