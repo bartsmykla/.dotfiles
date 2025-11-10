@@ -194,10 +194,10 @@ tasks:
     internal: true
     dir: '{{.G_DOTFILES}}'
     sources:
-      - '.config/fish/**/*.fish'
+      - 'chezmoi/private_dot_config/fish/**/*.fish'
     cmds:
       - echo "Checking Fish scripts..."
-      - find .config/fish -name "*.fish" -type f -exec fish -n {} +
+      - find chezmoi/private_dot_config/fish -name "*.fish" -type f -exec fish -n {} +
       - echo "✓ Fish scripts valid"
 
   test:syntax:shell:
@@ -208,7 +208,12 @@ tasks:
       - '**/*.sh'
     cmds:
       - echo "Checking shell scripts..."
-      - find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+      - |
+        find . -name "*.sh" -type f \
+          -not -path "./tmp/*" \
+          -not -path "./chezmoi/dot_vim/*" \
+          -not -path "./chezmoi/dot_tmux/*" \
+          -print0 | xargs -0 -r shellcheck
       - echo "✓ Shell scripts valid"
 
   test:fish:
@@ -271,17 +276,22 @@ tasks:
       - '**/*.sh'
     cmds:
       - echo "▶ Linting shell scripts"
-      - find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+      - |
+        find . -name "*.sh" -type f \
+          -not -path "./tmp/*" \
+          -not -path "./chezmoi/dot_vim/*" \
+          -not -path "./chezmoi/dot_tmux/*" \
+          -print0 | xargs -0 -r shellcheck
       - echo "✓ Shell scripts pass shellcheck"
 
   lint:fish:
     desc: Check Fish script syntax
     dir: '{{.G_DOTFILES}}'
     sources:
-      - '.config/fish/**/*.fish'
+      - 'chezmoi/private_dot_config/fish/**/*.fish'
     cmds:
       - echo "▶ Linting Fish scripts"
-      - find .config/fish -name "*.fish" -type f -exec fish -n {} +
+      - find chezmoi/private_dot_config/fish -name "*.fish" -type f -exec fish -n {} +
       - echo "✓ Fish scripts valid"
 
   lint:markdown:
@@ -291,7 +301,14 @@ tasks:
       - '**/*.md'
     cmds:
       - echo "▶ Linting Markdown files"
-      - find . -name "*.md" -type f -print0 | xargs -0 -r markdownlint
+      - |
+        find . -name "*.md" -type f \
+          -not -path "./tmp/*" \
+          -not -path "./chezmoi/dot_vim/*" \
+          -not -path "./chezmoi/dot_tmux/*" \
+          -not -path "./knowledge/*" \
+          -not -path "./todos/*" \
+          -print0 | xargs -0 -r markdownlint
       - echo "✓ Markdown files pass linting"
 
   lint:taskfile:

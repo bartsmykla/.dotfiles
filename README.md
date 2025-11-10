@@ -61,17 +61,66 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 
 ### Taskfile Commands
 
-```bash
-task test          # Run all tests
-task lint          # Run all linters
-task check         # Alias for lint
+#### Core Commands
 
-task test:fish     # Test Fish config
-task lint:shell    # Shellcheck validation
-task lint:markdown # Markdown linting
+| Command        | Description                                       | Aliases  |
+|----------------|---------------------------------------------------|----------|
+| `task`         | Show all available tasks                          | ls, list |
+| `task test`    | Run all tests (syntax, Fish, Brewfile)            |          |
+| `task lint`    | Run all linters (shell, Fish, Markdown, Taskfile) |          |
+| `task check`   | Alias for lint (common convention)                | c        |
+| `task install` | Full dotfiles installation                        |          |
+| `task update`  | Update all tools and packages                     |          |
+| `task clean`   | Remove broken symlinks and temp files             |          |
 
-task --list        # Show all tasks
-```
+#### Testing Tasks
+
+| Command               | Description                                  |
+|-----------------------|----------------------------------------------|
+| `task test:syntax`    | Check syntax of all shell and Fish scripts   |
+| `task test:fish`      | Test Fish configuration loads without errors |
+| `task test:brewfile`  | Validate Brewfile syntax and dependencies    |
+| `task test:shellspec` | Run ShellSpec test suite (if tests exist)    |
+
+#### Linting Tasks
+
+| Command               | Description                            |
+|-----------------------|----------------------------------------|
+| `task lint:shell`     | Lint shell scripts with shellcheck     |
+| `task lint:fish`      | Check Fish script syntax               |
+| `task lint:markdown`  | Lint Markdown files with markdownlint  |
+| `task lint:taskfile`  | Validate Taskfile.yaml against schema  |
+
+#### Installation Tasks
+
+| Command               | Description                             |
+|-----------------------|-----------------------------------------|
+| `task install:brew`   | Install Homebrew packages from Brewfile |
+| `task install:mise`   | Install mise and all configured tools   |
+| `task install:shells` | Setup Fish as default shell             |
+| `task install:fish`   | Initialize Fish configuration           |
+
+#### Completions Tasks
+
+| Command                  | Description                                  | Aliases    |
+|--------------------------|----------------------------------------------|------------|
+| `task completions:setup` | Generate Fish completions for all mise tools | comp       |
+| `task completions:list`  | List available tool completions              | comp:ls    |
+| `task completions:check` | Verify completions loaded in Fish            | comp:check |
+
+#### Maintenance Tasks
+
+| Command            | Description                  |
+|--------------------|------------------------------|
+| `task update:brew` | Update Homebrew and packages |
+| `task update:mise` | Update mise and tools        |
+| `task update:fish` | Update Fish plugins          |
+
+#### Utility Tasks
+
+| Command          | Description                             |
+|------------------|-----------------------------------------|
+| `task show:vars` | Show all Taskfile variables (debugging) |
 
 See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 

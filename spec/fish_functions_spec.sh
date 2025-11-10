@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2292  # ShellSpec uses [ ] intentionally for POSIX compliance
 #
 # Fish Functions Tests
 #
@@ -122,7 +123,7 @@ Describe 'Fish Functions'
                 fi
             done
 
-            [ $failed -eq 0 ]
+            [ "$failed" -eq 0 ]
             The status should be success
         End
     End

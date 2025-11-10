@@ -1,0 +1,26 @@
+# ShellCheck Configuration
+# https://github.com/koalaman/shellcheck/wiki/Directive
+
+# Default shell for files without shebang
+shell=bash
+
+# Enable all optional checks
+enable=all
+
+# Disable specific checks that are too strict or not applicable
+#
+# SC2155: Declare and assign separately to avoid masking return values
+#   Disabled: Common pattern in test setup, non-critical for dotfiles
+disable=SC2155
+
+# SC2250: Prefer putting braces around variable references
+#   Disabled: Overly strict style preference, not necessary for simple variables
+disable=SC2250
+
+# SC2312: Consider invoking command separately to avoid masking return values
+#   Disabled: Subprocess usage is intentional and clear in context
+disable=SC2312
+
+# Source path for shellcheck to find sourced files
+# Allows shellcheck to follow source directives
+source-path=SCRIPTDIR

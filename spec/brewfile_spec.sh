@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2292  # ShellSpec uses [ ] intentionally for POSIX compliance
 #
 # Brewfile Tests
 #
