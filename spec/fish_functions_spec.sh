@@ -29,27 +29,6 @@ Describe 'Fish Functions'
     }
     Before 'setup'
 
-    # Test: link_dotfile function exists and is defined
-    Describe 'link_dotfile'
-        It 'exists as a Fish function'
-            When call fish -c "type -q link_dotfile"
-            The status should be success
-        End
-
-        It 'has valid Fish syntax'
-            When call fish -n "${DOTFILES_PATH}/.config/fish/functions/link_dotfile.fish"
-            The status should be success
-        End
-
-        It 'shows help when called without arguments'
-            # This will fail currently but documents expected behavior
-            Skip "Not implemented yet - function should show usage"
-            When call fish -c "link_dotfile"
-            The status should be failure
-            The stderr should include "Usage:"
-        End
-    End
-
     # Test: git_clone_to_projects function
     Describe 'git_clone_to_projects'
         It 'exists as a Fish function'
@@ -58,7 +37,7 @@ Describe 'Fish Functions'
         End
 
         It 'has valid Fish syntax'
-            When call fish -n "${DOTFILES_PATH}/.config/fish/functions/git_clone_to_projects.fish"
+            When call fish -n "${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git_clone_to_projects.fish"
             The status should be success
         End
 
@@ -95,7 +74,7 @@ Describe 'Fish Functions'
         End
 
         It 'klg has valid syntax'
-            When call fish -n "${DOTFILES_PATH}/.config/fish/functions/klg.fish"
+            When call fish -n "${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/klg.fish"
             The status should be success
         End
 
@@ -105,7 +84,7 @@ Describe 'Fish Functions'
         End
 
         It 'kls has valid syntax'
-            When call fish -n "${DOTFILES_PATH}/.config/fish/functions/kls.fish"
+            When call fish -n "${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/kls.fish"
             The status should be success
         End
     End
@@ -113,18 +92,21 @@ Describe 'Fish Functions'
     # Test: All Fish functions have valid syntax
     Describe 'All Fish functions syntax'
         It 'checks syntax of all .fish files'
-            count=0
-            failed=0
-            for file in "${DOTFILES_PATH}/.config/fish/functions"/*.fish; do
-                [ -f "$file" ] || continue
-                count=$((count + 1))
-                if ! fish -n "$file" 2>/dev/null; then
-                    echo "Syntax error in: $file" >&2
-                    failed=$((failed + 1))
-                fi
-            done
-
-            [ "$failed" -eq 0 ]
+            check_all_fish_syntax() {
+                local count=0
+                local failed=0
+                local file
+                for file in "${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions"/*.fish; do
+                    [ -f "$file" ] || continue
+                    count=$((count + 1))
+                    if ! fish -n "$file" 2>/dev/null; then
+                        echo "Syntax error in: $file" >&2
+                        failed=$((failed + 1))
+                    fi
+                done
+                [ "$failed" -eq 0 ]
+            }
+            When call check_all_fish_syntax
             The status should be success
         End
     End

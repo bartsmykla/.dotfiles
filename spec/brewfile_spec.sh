@@ -41,7 +41,7 @@ Describe 'Brewfile'
         When call brew bundle check --file="${DOTFILES_PATH}/Brewfile" --no-upgrade
         # Accept both status 0 (all installed) and 1 (some missing) as valid
         The status should not equal 2
-        # Allow informational output
+        # Allow informational output (stdout and stderr from brew)
         The stdout should be present
     End
 
@@ -75,6 +75,7 @@ Describe 'Brewfile'
 
         It 'declares taps before formulas'
             check_tap_order() {
+                local tap_line brew_line
                 tap_line=$(grep -n '^tap ' "${DOTFILES_PATH}/Brewfile" | head -1 | cut -d: -f1)
                 brew_line=$(grep -n '^brew ' "${DOTFILES_PATH}/Brewfile" | head -1 | cut -d: -f1)
                 [ -n "$tap_line" ] && [ -n "$brew_line" ] && [ "$tap_line" -lt "$brew_line" ]

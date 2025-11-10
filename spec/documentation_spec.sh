@@ -61,8 +61,13 @@ Describe 'Documentation'
             The status should be success
         End
 
-        It 'has Tools Used section'
-            When call grep -q '## Tools' "${DOTFILES_PATH}/README.md"
+        It 'has Features section'
+            When call grep -q '## Features' "${DOTFILES_PATH}/README.md"
+            The status should be success
+        End
+
+        It 'has Usage section'
+            When call grep -q '## Usage' "${DOTFILES_PATH}/README.md"
             The status should be success
         End
 
@@ -79,18 +84,26 @@ Describe 'Documentation'
             The status should be success
         End
 
-        It 'all .md files have blank lines around headings (MD022)'
+        It 'core documentation files pass markdownlint'
             Skip if "markdownlint not installed" ! command -v markdownlint >/dev/null 2>&1
-            When call markdownlint -r MD022 "${DOTFILES_PATH}"/**/*.md
+            # Test only core docs, not vim bundles or tmp files
+            When call markdownlint \
+                "${DOTFILES_PATH}"/*.md \
+                "${DOTFILES_PATH}"/docs/*.md
             The status should be success
         End
     End
 
     Describe 'Code blocks in documentation'
-        It 'README.md code blocks specify language'
-            # Check that code blocks use ```lang not just ```
-            When call grep -P '^```$' "${DOTFILES_PATH}/README.md"
-            The status should be failure
+        It 'README.md has balanced code blocks'
+            # Count code block markers (should be even number - opening + closing)
+            check_code_blocks() {
+                local count
+                count=$(grep -c '^```' "${DOTFILES_PATH}/README.md" || true)
+                [ $((count % 2)) -eq 0 ]
+            }
+            When call check_code_blocks
+            The status should be success
         End
     End
 End
