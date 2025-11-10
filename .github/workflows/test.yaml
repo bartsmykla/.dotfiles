@@ -76,9 +76,13 @@ jobs:
           fi
           vim -u chezmoi/dot_vimrc +qall
 
-      # Lint all shell scripts
+      # Lint all shell scripts (exclude third-party plugins)
       - name: Lint shell scripts
-        run: find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+        run: |
+          find . -name "*.sh" -type f \
+            ! -path "./chezmoi/dot_tmux/plugins/*" \
+            ! -path "./chezmoi/dot_vim/bundle/*" \
+            -print0 | xargs -0 -r shellcheck
 
       # Lint Markdown files
       - name: Lint Markdown
