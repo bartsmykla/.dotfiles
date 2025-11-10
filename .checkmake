@@ -1,0 +1,28 @@
+# checkmake - Makefile Linter Configuration
+#
+# PURPOSE:
+#   Configure checkmake linting rules for the dotfiles Makefile
+#
+# REFERENCE:
+#   https://github.com/mrtazz/checkmake
+#
+# NOTE:
+#   checkmake does not support line length checking.
+#   Available rules: maxbodylength, minphony, phonydeclared, timestampexpanded
+
+[maxbodylength]
+# Maximum number of lines in a target body
+# Increased from default (5) to allow for more complex targets
+maxBodyLength = 15
+
+[phonydeclared]
+# Ensure all phony targets are declared with .PHONY
+enabled = true
+
+[minphony]
+# Minimum phony targets that must be present
+enabled = true
+
+[timestampexpanded]
+# Timestamp variables should use := (simple expansion)
+enabled = true
