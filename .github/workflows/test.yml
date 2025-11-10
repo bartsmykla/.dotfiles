@@ -51,7 +51,7 @@ jobs:
 
       # Install minimal tools needed for testing
       - name: Install testing tools
-        run: brew install fish shellcheck checkmake markdownlint-cli
+        run: brew install fish shellcheck markdownlint-cli check-jsonschema
 
       # Test Fish syntax without execution
       - name: Test Fish syntax
@@ -76,26 +76,15 @@ jobs:
       - name: Lint shell scripts
         run: find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
 
-      # Lint Makefile
-      - name: Lint Makefile
-        run: |
-          if [[ -f Makefile ]]; then
-            checkmake Makefile
-          fi
-
       # Lint Markdown files
       - name: Lint Markdown
         run: find . -name "*.md" -type f -print0 | xargs -0 -r markdownlint
 
-      # Check Makefile line length (max 100 chars)
-      - name: Check Makefile line length
+      # Validate Taskfile against schema
+      - name: Validate Taskfile
         run: |
-          if [[ -f Makefile ]]; then
-            awk 'length($0) > 100 {
-              printf "Line %d: %d chars\n", NR, length($0); violations++
-            } END {
-              if (violations > 0) exit 1
-            }' Makefile
+          if [[ -f Taskfile.yml ]]; then
+            check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yml
           fi
 
       - name: Success
