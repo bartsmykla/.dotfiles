@@ -44,65 +44,15 @@ jobs:
           echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
           echo "/home/linuxbrew/.linuxbrew/sbin" >> "$GITHUB_PATH"
 
-      # Validate Brewfile syntax (skip if encrypted)
-      - name: Validate Brewfile
+      # Install Task and testing dependencies
+      - name: Install dependencies
         run: |
-          if head -1 Brewfile | grep -q "BEGIN AGE ENCRYPTED"; then
-            echo "⏭️  Brewfile is encrypted, skipping validation in CI"
-          else
-            brew bundle check --verbose || echo "Some packages not installed (expected in CI)"
-          fi
+          brew install go-task fish shellcheck markdownlint-cli check-jsonschema shellspec vim
 
-      # Install minimal tools needed for testing
-      - name: Install testing tools
-        run: brew install fish shellcheck markdownlint-cli check-jsonschema
+      # Run all tests using Taskfile
+      - name: Run tests
+        run: task test
 
-      # Test Fish syntax without execution
-      - name: Test Fish syntax
-        run: |
-          while IFS= read -r -d '' file; do
-            fish -n "$file" || exit 1
-          done < <(find chezmoi/private_dot_config/fish -name "*.fish" -type f -print0)
-
-      # Test Fish config loads successfully (requires applying chezmoi first)
-      - name: Test Fish configuration
-        run: |
-          # Apply fish config to temporary location for testing
-          mkdir -p "$HOME/.config/fish"
-          cp -r chezmoi/private_dot_config/fish/* "$HOME/.config/fish/"
-          fish -c "echo 'Fish config OK'"
-
-      # Test Vim config loads (install vim first if needed)
-      - name: Test Vim configuration
-        run: |
-          if ! command -v vim >/dev/null 2>&1; then
-            brew install vim
-          fi
-          vim -u chezmoi/dot_vimrc +qall
-
-      # Lint all shell scripts (exclude third-party plugins)
-      - name: Lint shell scripts
-        run: |
-          find . -name "*.sh" -type f \
-            ! -path "./chezmoi/dot_tmux/plugins/*" \
-            ! -path "./chezmoi/dot_vim/bundle/*" \
-            -print0 | xargs -0 -r shellcheck
-
-      # Lint Markdown files (exclude third-party plugins)
-      - name: Lint Markdown
-        run: |
-          find . -name "*.md" -type f \
-            ! -path "./chezmoi/dot_tmux/plugins/*" \
-            ! -path "./chezmoi/dot_vim/bundle/*" \
-            ! -path "./tmp/*" \
-            -print0 | xargs -0 -r markdownlint
-
-      # Validate Taskfile against schema
-      - name: Validate Taskfile
-        run: |
-          if [[ -f Taskfile.yaml ]]; then
-            check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yaml
-          fi
-
-      - name: Success
-        run: echo "✅ All tests passed on ${{ matrix.os }}"
+      # Run all linters using Taskfile
+      - name: Run linters
+        run: task lint

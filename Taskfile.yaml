@@ -222,7 +222,10 @@ tasks:
     desc: Test Fish configuration loads without errors
     cmds:
       - echo "▶ Testing Fish configuration"
-      - fish -c "echo 'Fish config loads successfully'"
+      - |
+        # Test loading actual config from chezmoi source
+        export XDG_CONFIG_HOME="{{.G_DOTFILES}}/chezmoi/private_dot_config"
+        fish -c "echo 'Fish config loads successfully'"
       - echo "✓ Fish configuration valid"
 
   test:brewfile:
@@ -233,8 +236,13 @@ tasks:
       - Brewfile
     cmds:
       - echo "▶ Testing Brewfile"
-      - brew bundle check --file=Brewfile || echo "Some packages not installed (expected)"
-      - echo "✓ Brewfile valid"
+      - |
+        if head -1 Brewfile | grep -q "BEGIN AGE ENCRYPTED"; then
+          echo "⏭️  Brewfile is encrypted, skipping validation"
+        else
+          brew bundle check --file=Brewfile || echo "Some packages not installed (expected)"
+        fi
+      - echo "✓ Brewfile check complete"
 
   test:shellspec:
     desc: Run ShellSpec test suite (if tests exist)
