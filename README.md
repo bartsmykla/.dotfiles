@@ -148,6 +148,7 @@ if ! [[ -d "$DOTFILES_PATH" ]]; then
 fi
 
 link_dotfile .gnupg
+link_dotfile .lnav
 link_dotfile .tmux
 link_dotfile .tmux.conf
 link_dotfile .vim
