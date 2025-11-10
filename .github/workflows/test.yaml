@@ -67,10 +67,10 @@ jobs:
       # Test Vim config loads (install vim first if needed)
       - name: Test Vim configuration
         run: |
-          if command -v vim >/dev/null 2>&1; then
+          if ! command -v vim >/dev/null 2>&1; then
             brew install vim
-            vim -u .vimrc +qall
           fi
+          vim -u .vimrc +qall
 
       # Lint all shell scripts
       - name: Lint shell scripts
