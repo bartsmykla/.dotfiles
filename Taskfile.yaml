@@ -175,11 +175,13 @@ tasks:
       - Syntax validation (Fish, shell scripts)
       - Configuration loading tests
       - Brewfile validity
+      - ShellSpec test suite
       - Documentation structure
     deps:
       - test:syntax
       - test:fish
       - test:brewfile
+      - test:shellspec
     cmds:
       - echo "✅ All tests passed!"
 

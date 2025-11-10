@@ -44,10 +44,14 @@ jobs:
           echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
           echo "/home/linuxbrew/.linuxbrew/sbin" >> "$GITHUB_PATH"
 
-      # Validate Brewfile syntax (some packages may not be installed in CI)
+      # Validate Brewfile syntax (skip if encrypted)
       - name: Validate Brewfile
         run: |
-          brew bundle check --verbose || echo "Some packages not installed (expected in CI)"
+          if head -1 Brewfile | grep -q "BEGIN AGE ENCRYPTED"; then
+            echo "⏭️  Brewfile is encrypted, skipping validation in CI"
+          else
+            brew bundle check --verbose || echo "Some packages not installed (expected in CI)"
+          fi
 
       # Install minimal tools needed for testing
       - name: Install testing tools
