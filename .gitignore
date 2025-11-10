@@ -8,3 +8,5 @@ tmp
 .config/fish/debug.log
 .config/fish/fish_variables
 .config/k9s/clusters
+.tmux/plugins/tmux-resurrect
+.tmux/plugins/tmux-sensible
