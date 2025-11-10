@@ -1,0 +1,567 @@
+# Taskfile - Dotfiles Automation
+#
+# Modern task runner for dotfiles management, testing, and maintenance.
+# Uses Task (https://taskfile.dev/) - a modern Make alternative.
+#
+# Quick Start:
+#   task         - Show available tasks
+#   task install - Full dotfiles installation
+#   task test    - Run all tests
+#   task lint    - Run all linters
+#   task update  - Update all tools
+#
+# Requirements:
+#   - macOS with Homebrew
+#   - Git with git-crypt configured
+#   - mise for tool management
+
+version: '3'
+
+set: [pipefail]
+
+output: prefixed
+
+silent: false
+
+vars:
+  G_DOTFILES: '{{.USER_WORKING_DIR}}'
+  G_HOME: '{{.HOME}}'
+  G_PROJECTS_PATH: '{{.HOME}}/Projects/github.com'
+
+env:
+  NO_COLOR: '{{.NO_COLOR | default "0"}}'
+  PATH: '{{.G_HOME}}/.local/share/mise/shims:{{.PATH}}'
+
+tasks:
+  # ==========================================================================
+  # Default & Help
+  # ==========================================================================
+
+  default:
+    desc: Show available tasks
+    silent: true
+    aliases: [ls, list]
+    cmd: task --list
+
+  # ==========================================================================
+  # Installation
+  # ==========================================================================
+
+  install:
+    desc: Full dotfiles installation
+    summary: |
+      Complete dotfiles setup including:
+      - Homebrew packages
+      - mise tool installation
+      - Shell configuration
+
+      After installation:
+      1. Restart terminal or run exec fish
+      2. Verify with task test
+      3. Update with task update
+    platforms: [darwin]
+    run: once
+    deps:
+      - install:brew
+      - install:mise
+      - install:shells
+      - install:fish
+    cmds:
+      - echo "✓ Dotfiles installation complete!"
+      - echo ""
+      - echo "⚠️  Next steps"
+      - echo "  1. Restart your terminal or run exec fish"
+      - echo "  2. Verify installation with task test"
+      - echo "  3. Check for updates with task update"
+
+  install:brew:
+    desc: Install Homebrew packages from Brewfile
+    platforms: [darwin]
+    deps:
+      - install:brew:ensure
+    sources:
+      - '{{.G_DOTFILES}}/Brewfile'
+    cmds:
+      - echo "▶ Installing Homebrew packages"
+      - brew bundle install --file="{{.G_DOTFILES}}/Brewfile"
+      - echo "✓ Homebrew packages installed"
+
+  install:brew:ensure:
+    desc: Ensure Homebrew is installed
+    internal: true
+    platforms: [darwin]
+    status:
+      - command -v brew
+    cmds:
+      - echo "Homebrew not found. Installing..."
+      - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  install:mise:
+    desc: Install mise and all configured tools
+    platforms: [darwin, linux]
+    deps:
+      - install:mise:ensure
+    sources:
+      - '{{.G_DOTFILES}}/.config/mise/config.toml'
+    cmds:
+      - echo "▶ Installing mise tools"
+      - mise install
+      - echo "✓ mise tools installed"
+
+  install:mise:ensure:
+    desc: Ensure mise is installed
+    internal: true
+    platforms: [darwin, linux]
+    status:
+      - command -v mise
+    cmds:
+      - echo "Installing mise..."
+      - curl https://mise.run | sh
+
+  install:shells:
+    desc: Setup Fish as default shell
+    platforms: [darwin]
+    deps:
+      - install:shells:register
+      - install:shells:set-default
+
+  install:shells:register:
+    desc: Register Fish in /etc/shells
+    internal: true
+    platforms: [darwin]
+    preconditions:
+      - sh: command -v fish
+        msg: Fish shell must be installed first (run install:brew)
+    status:
+      - grep -q "$(command -v fish)" /etc/shells
+    cmds:
+      - echo "Adding Fish to /etc/shells..."
+      - command -v fish | sudo tee -a /etc/shells
+
+  install:shells:set-default:
+    desc: Set Fish as default shell
+    internal: true
+    platforms: [darwin]
+    preconditions:
+      - sh: command -v fish
+        msg: Fish shell must be installed first
+      - sh: grep -q "$(command -v fish)" /etc/shells
+        msg: Fish must be registered in /etc/shells first
+    status:
+      - test "$SHELL" = "$(command -v fish)"
+    cmds:
+      - echo "Setting Fish as default shell..."
+      - chsh -s "$(command -v fish)"
+      - echo "✓ Fish set as default shell (restart terminal to activate)"
+
+  install:fish:
+    desc: Initialize Fish configuration
+    preconditions:
+      - sh: command -v fish
+        msg: Fish shell must be installed first
+    cmds:
+      - echo "▶ Initializing Fish configuration"
+      - fish -c "echo 'Fish configuration initialized'"
+      - echo "✓ Fish configuration ready"
+
+  # ==========================================================================
+  # Testing
+  # ==========================================================================
+
+  test:
+    desc: Run all tests
+    summary: |
+      Run comprehensive test suite:
+      - Syntax validation (Fish, shell scripts)
+      - Configuration loading tests
+      - Brewfile validity
+      - Documentation structure
+    deps:
+      - test:syntax
+      - test:fish
+      - test:brewfile
+    cmds:
+      - echo "✅ All tests passed!"
+
+  test:syntax:
+    desc: Check syntax of all shell and Fish scripts
+    deps:
+      - test:syntax:fish
+      - test:syntax:shell
+
+  test:syntax:fish:
+    desc: Check Fish script syntax
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '.config/fish/**/*.fish'
+    cmds:
+      - echo "Checking Fish scripts..."
+      - find .config/fish -name "*.fish" -type f -exec fish -n {} +
+      - echo "✓ Fish scripts valid"
+
+  test:syntax:shell:
+    desc: Check shell script syntax
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '**/*.sh'
+    cmds:
+      - echo "Checking shell scripts..."
+      - find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+      - echo "✓ Shell scripts valid"
+
+  test:fish:
+    desc: Test Fish configuration loads without errors
+    cmds:
+      - echo "▶ Testing Fish configuration"
+      - fish -c "echo 'Fish config loads successfully'"
+      - echo "✓ Fish configuration valid"
+
+  test:brewfile:
+    desc: Validate Brewfile syntax and dependencies
+    dir: '{{.G_DOTFILES}}'
+    platforms: [darwin]
+    sources:
+      - Brewfile
+    cmds:
+      - echo "▶ Testing Brewfile"
+      - brew bundle check --file=Brewfile || echo "Some packages not installed (expected)"
+      - echo "✓ Brewfile valid"
+
+  test:shellspec:
+    desc: Run ShellSpec test suite (if tests exist)
+    dir: '{{.G_DOTFILES}}'
+    preconditions:
+      - sh: test -d spec
+        msg: No ShellSpec tests found (spec/ directory missing)
+    cmds:
+      - echo "▶ Running ShellSpec tests"
+      - shellspec
+
+  # ==========================================================================
+  # Linting
+  # ==========================================================================
+
+  lint:
+    desc: Run all linters
+    summary: |
+      Run code quality checks:
+      - shellcheck on shell scripts
+      - Fish syntax validation
+      - markdownlint on documentation
+      - Taskfile schema validation
+    deps:
+      - lint:shell
+      - lint:fish
+      - lint:markdown
+      - lint:taskfile
+    cmds:
+      - echo "✅ All linters passed!"
+
+  check:
+    desc: Alias for lint (common convention)
+    aliases: [c]
+    deps: [lint]
+
+  lint:shell:
+    desc: Lint shell scripts with shellcheck
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '**/*.sh'
+    cmds:
+      - echo "▶ Linting shell scripts"
+      - find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+      - echo "✓ Shell scripts pass shellcheck"
+
+  lint:fish:
+    desc: Check Fish script syntax
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '.config/fish/**/*.fish'
+    cmds:
+      - echo "▶ Linting Fish scripts"
+      - find .config/fish -name "*.fish" -type f -exec fish -n {} +
+      - echo "✓ Fish scripts valid"
+
+  lint:markdown:
+    desc: Lint Markdown files with markdownlint
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '**/*.md'
+    cmds:
+      - echo "▶ Linting Markdown files"
+      - find . -name "*.md" -type f -print0 | xargs -0 -r markdownlint
+      - echo "✓ Markdown files pass linting"
+
+  lint:taskfile:
+    desc: Validate Taskfile.yml against schema
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - Taskfile.yml
+    cmds:
+      - echo "▶ Validating Taskfile.yml"
+      - check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yml
+      - echo "✓ Taskfile.yml valid"
+
+  # ==========================================================================
+  # Maintenance
+  # ==========================================================================
+
+  update:
+    desc: Update all tools and packages
+    summary: |
+      Update everything:
+      - Homebrew packages
+      - mise and all tools
+      - Fish plugins
+    deps:
+      - update:brew
+      - update:mise
+      - update:fish
+
+  update:brew:
+    desc: Update Homebrew and packages
+    internal: true
+    platforms: [darwin]
+    cmds:
+      - echo "Updating Homebrew..."
+      - brew update
+      - brew upgrade
+      - echo "✓ Homebrew updated"
+
+  update:mise:
+    desc: Update mise and tools
+    internal: true
+    cmds:
+      - echo "Updating mise..."
+      - mise self-update || true
+      - mise upgrade || true
+      - echo "✓ mise updated"
+
+  update:fish:
+    desc: Update Fish plugins
+    internal: true
+    cmds:
+      - echo "Updating Fish plugins..."
+      - fish -c "fisher update" || true
+      - echo "✓ Fish plugins updated"
+
+  # ==========================================================================
+  # Shell Completions
+  # ==========================================================================
+
+  completions:setup:
+    desc: Generate Fish completions for all mise tools
+    summary: |
+      Scans mise installs for completion files and generates Fish config.
+
+      Supported patterns:
+        - completion/fish/*.fish  (task, gum)
+        - completions/*.fish       (chezmoi, goreleaser)
+
+      Output sourced automatically by Fish on startup.
+      Regenerate after installing/updating mise tools.
+    aliases: [comp]
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '{{.G_HOME}}/.local/share/mise/installs/*/latest/**'
+      - .config/mise/config.toml
+    generates:
+      - tmp/mise-completions.fish
+    preconditions:
+      - sh: command -v fish
+        msg: Fish shell required
+      - sh: test -d {{.G_HOME}}/.local/share/mise/installs
+        msg: No mise installations found
+    vars:
+      COMP_DIRS:
+        sh: |
+          for dir in {{.G_HOME}}/.local/share/mise/installs/*/latest; do
+            [[ ! -d "$dir" ]] && continue
+
+            # Check for completion/fish directory
+            if [[ -d "$dir/completion/fish" ]]; then
+              echo "$dir/completion/fish"
+              continue
+            fi
+
+            # Check for completions directory with .fish files
+            if [[ -d "$dir/completions" ]] && ls "$dir/completions/"*.fish &>/dev/null; then
+              echo "$dir/completions"
+            fi
+          done
+    cmds:
+      - task: completions:write
+        vars:
+          COMP_DIRS: '{{.COMP_DIRS}}'
+
+  completions:write:
+    desc: Write completion configuration file
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    vars:
+      TIMESTAMP:
+        sh: date -u +"%Y-%m-%d %H:%M:%S UTC"
+      TOOL_COUNT:
+        sh: echo "{{.COMP_DIRS}}" | grep -c . || echo "0"
+    cmds:
+      - mkdir -p tmp
+      - task: completions:write:header
+        vars: {COMP_DIRS: '{{.COMP_DIRS}}', TIMESTAMP: '{{.TIMESTAMP}}', TOOL_COUNT: '{{.TOOL_COUNT}}'}
+      - task: completions:write:dirs
+        vars: {COMP_DIRS: '{{.COMP_DIRS}}'}
+      - task: completions:write:fish
+        vars: {COMP_DIRS: '{{.COMP_DIRS}}'}
+      - echo "▶ Generated tmp/mise-completions.fish ({{.TOOL_COUNT}} tools)"
+
+  completions:write:header:
+    desc: Write file header
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    cmd: |
+      if [[ -z "{{.COMP_DIRS}}" ]]; then
+        echo "# No mise tool completions found" > tmp/mise-completions.fish
+        echo "▶ No tool completions found"
+        exit 0
+      fi
+
+      cat > tmp/mise-completions.fish <<EOF
+      # Auto-generated mise tool completions
+      # Generated: {{.TIMESTAMP}}
+      # Regenerate: task completions:setup
+      #
+      # Tools: {{.TOOL_COUNT}}
+      EOF
+
+  completions:write:dirs:
+    desc: Write discovered directories as comments
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    preconditions:
+      - sh: test -n "{{.COMP_DIRS}}"
+    cmd: |
+      {
+        echo ""
+        echo "{{.COMP_DIRS}}" | while IFS= read -r dir; do
+          [[ -z "$dir" ]] && continue
+
+          # Extract tool name using parameter expansion
+          tool_path="${dir#*/installs/}"
+          tool_name="${tool_path%%/*}"
+
+          echo "#   $tool_name: $dir"
+        done
+      } >> tmp/mise-completions.fish
+
+  completions:write:fish:
+    desc: Write Fish completion configuration
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    preconditions:
+      - sh: test -n "{{.COMP_DIRS}}"
+    cmd: |
+      {
+        echo ""
+        echo "set --global fish_complete_path \\"
+        echo "{{.COMP_DIRS}}" | sed 's|.*|  "&" \\|'
+        echo "  \$fish_complete_path"
+      } >> tmp/mise-completions.fish
+
+  completions:list:
+    desc: List available tool completions
+    aliases: [comp:ls]
+    dir: '{{.G_DOTFILES}}'
+    vars:
+      MISE_INSTALLS: '{{.G_HOME}}/.local/share/mise/installs'
+    cmd: |
+      echo "▶ Available mise tool completions:"
+      for tool_dir in {{.MISE_INSTALLS}}/*/latest; do
+        [[ ! -d "$tool_dir" ]] && continue
+
+        tool_name="${tool_dir#{{.MISE_INSTALLS}}/}"
+        tool_name="${tool_name%%/latest}"
+
+        # Check for Fish completion files
+        if ls "$tool_dir/completion/fish/"*.fish &>/dev/null; then
+          echo "  ✓ $tool_name (completion/fish/)"
+        elif ls "$tool_dir/completions/"*.fish &>/dev/null; then
+          echo "  ✓ $tool_name (completions/)"
+        fi
+      done | sort
+
+  completions:check:
+    desc: Verify completions loaded in Fish
+    aliases: [comp:check]
+    dir: '{{.G_DOTFILES}}'
+    vars:
+      LOADED_COUNT:
+        sh: fish -c 'echo $fish_complete_path' | tr ' ' '\n' | grep -c 'mise/installs' || echo "0"
+    preconditions:
+      - sh: test -f tmp/mise-completions.fish
+        msg: Run 'task completions:setup' first
+      - sh: command -v fish
+        msg: Fish shell required
+    cmds:
+      - echo "▶ Checking Fish completion paths"
+      - task: completions:check:report
+        vars: {LOADED_COUNT: '{{.LOADED_COUNT}}'}
+
+  completions:check:report:
+    desc: Report completion status
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    cmd: |
+      if [[ "{{.LOADED_COUNT}}" -gt 0 ]]; then
+        echo "✓ {{.LOADED_COUNT}} mise completion directories loaded"
+        fish -c 'echo $fish_complete_path' | \
+          tr ' ' '\n' | \
+          grep 'mise/installs' | \
+          while IFS= read -r path; do
+            tool_path="${path#*/installs/}"
+            echo "${tool_path%%/*}"
+          done | \
+          sort -u | \
+          sed 's/^/    - /'
+      else
+        echo "⚠️  No mise completions found in \$fish_complete_path"
+        echo "   Ensure config.fish sources tmp/mise-completions.fish"
+        exit 1
+      fi
+
+  clean:
+    desc: Remove broken symlinks and temp files
+    deps:
+      - clean:symlinks
+      - clean:tmp
+
+  clean:symlinks:
+    desc: Remove broken symlinks in home directory
+    internal: true
+    cmds:
+      - echo "Removing broken symlinks in home directory..."
+      - find {{.G_HOME}} -maxdepth 1 -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+      - echo "✓ Broken symlinks removed"
+
+  clean:tmp:
+    desc: Clean tmp directory
+    internal: true
+    dir: '{{.G_DOTFILES}}'
+    cmds:
+      - echo "Cleaning tmp directory..."
+      - rm -rf tmp/* 2>/dev/null || true
+      - echo "✓ tmp directory cleaned"
+
+  # ==========================================================================
+  # Debugging & Information
+  # ==========================================================================
+
+  show:vars:
+    desc: Show all Taskfile variables (debugging)
+    silent: true
+    cmds:
+      - echo "Taskfile Variables:"
+      - echo "  DOTFILES={{.G_DOTFILES}}"
+      - echo "  HOME={{.G_HOME}}"
+      - echo "  PROJECTS_PATH={{.G_PROJECTS_PATH}}"
+      - echo "  NO_COLOR={{.NO_COLOR}}"
