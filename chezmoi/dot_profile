@@ -1,0 +1,10 @@
+# mise tool version manager - add shims to PATH
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+. "$HOME/.cargo/env"
+
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/bart.smykla@konghq.com/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

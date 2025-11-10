@@ -1,0 +1,59 @@
+{{ $email := promptStringOnce . "email" "Email address" -}}
+{{ $name := promptStringOnce . "name" "Full name" -}}
+{{ $osid := .chezmoi.os -}}
+{{ if hasKey .chezmoi.osRelease "id" -}}
+{{ $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end }}
+
+# Chezmoi Configuration
+# https://www.chezmoi.io/reference/configuration-file/
+
+# Source directory (where dotfiles are stored)
+sourceDir = "~/Projects/github.com/bartsmykla/.dotfiles/chezmoi"
+
+# Data available in templates
+[data]
+    email = {{ $email | quote }}
+    name = {{ $name | quote }}
+    osid = {{ $osid | quote }}
+
+# Editor configuration
+[edit]
+    command = "vim"
+    args = []
+
+# Git configuration
+[git]
+    # Don't auto-commit changes (manual control preferred)
+    autoCommit = false
+    # Don't auto-push changes (manual control preferred)
+    autoPush = false
+
+# File addition behavior
+[add]
+    # Don't automatically encrypt files when adding
+    encrypt = false
+    # Warn about potential secrets in files
+    secrets = "warning"
+    # Don't template symlinks
+    templateSymlinks = false
+
+# Diff configuration
+[diff]
+    # Use external diff tool for better readability
+    command = "vim"
+    args = ["-d", "{{ "{{ .Destination }}" }}", "{{ "{{ .Target }}" }}"]
+    # Pager for viewing diffs
+    pager = "less"
+
+# Age encryption configuration
+[age]
+    # Identity file for decryption
+    identity = "~/.config/chezmoi/key.txt"
+    # Recipient for encryption
+    recipient = "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p"
+
+# Merge configuration
+[merge]
+    command = "vimdiff"
+    args = ["{{ "{{ .Destination }}" }}", "{{ "{{ .Source }}" }}", "{{ "{{ .Target }}" }}"]
