@@ -18,3 +18,4 @@ Brewfile filter=git-crypt diff=git-crypt
 chezmoi/**/private_dot_config/fish/conf.d/abbreviations.fish filter=git-crypt diff=git-crypt
 chezmoi/**/private_dot_config/exercism/user.json filter=git-crypt diff=git-crypt
 chezmoi/**/private_dot_config/k9s/config.yaml filter=git-crypt diff=git-crypt
+chezmoi/**/private_dot_claude/** filter=git-crypt diff=git-crypt
