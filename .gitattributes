@@ -1,21 +1,13 @@
-secrets/** filter=git-crypt diff=git-crypt
-autoload_scripts/**/*.secret.sh filter=git-crypt diff=git-crypt
-autoload_scripts/**/*.secret.bash filter=git-crypt diff=git-crypt
-autoload_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
-helper_scripts/**/*.secret.sh filter=git-crypt diff=git-crypt
-helper_scripts/**/*.secret.bash filter=git-crypt diff=git-crypt
-helper_scripts/**/*.secret.zsh filter=git-crypt diff=git-crypt
-.config/exercism/user.json filter=git-crypt diff=git-crypt
-todos/**/* filter=git-crypt diff=git-crypt
-ansible/**/* filter=git-crypt diff=git-crypt
-helpers/**/*.secret.* filter=git-crypt diff=git-crypt
-.config/fish/conf.d/abbreviations.fish filter=git-crypt diff=git-crypt
-.config/k9s/config.yaml filter=git-crypt diff=git-crypt
-CLAUDE.md filter=git-crypt diff=git-crypt
-Brewfile filter=git-crypt diff=git-crypt
-
-# Chezmoi source directory
-chezmoi/**/private_dot_config/fish/conf.d/abbreviations.fish filter=git-crypt diff=git-crypt
-chezmoi/**/private_dot_config/exercism/user.json filter=git-crypt diff=git-crypt
-chezmoi/**/private_dot_config/k9s/config.yaml filter=git-crypt diff=git-crypt
-chezmoi/**/private_dot_claude/** filter=git-crypt diff=git-crypt
+# Age-encrypted files (non-chezmoi managed)
+secrets/** filter=age diff=age
+autoload_scripts/**/*.secret.sh filter=age diff=age
+autoload_scripts/**/*.secret.bash filter=age diff=age
+autoload_scripts/**/*.secret.zsh filter=age diff=age
+helper_scripts/**/*.secret.sh filter=age diff=age
+helper_scripts/**/*.secret.bash filter=age diff=age
+helper_scripts/**/*.secret.zsh filter=age diff=age
+todos/**/* filter=age diff=age
+ansible/**/* filter=age diff=age
+helpers/**/*.secret.* filter=age diff=age
+CLAUDE.md filter=age diff=age
+Brewfile filter=age diff=age
