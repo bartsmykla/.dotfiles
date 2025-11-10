@@ -83,8 +83,8 @@ jobs:
       # Validate Taskfile against schema
       - name: Validate Taskfile
         run: |
-          if [[ -f Taskfile.yml ]]; then
-            check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yml
+          if [[ -f Taskfile.yaml ]]; then
+            check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yaml
           fi
 
       - name: Success

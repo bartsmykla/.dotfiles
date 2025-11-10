@@ -1,207 +1,287 @@
 # .dotfiles
 
-## Turn off macOS' conflicting keyboard shortcuts
+Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted with [age](https://age-encryption.org/), and automated with [Taskfile](https://taskfile.dev).
 
-1. Open `System Settings` > `Keyboard`
+## Quick Start
 
-   ```sh
+### Prerequisites
+
+- macOS (tested on macOS 15)
+- [Homebrew](https://brew.sh)
+- Git
+
+### Installation
+
+1. Install mise:
+
+   ```bash
+   curl https://mise.run | sh
+   ```
+
+2. Clone repository:
+
+   ```bash
+   git clone https://github.com/bartsmykla/.dotfiles ~/Projects/github.com/bartsmykla/.dotfiles
+   cd ~/Projects/github.com/bartsmykla/.dotfiles
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   mise install
+   brew bundle install --file=Brewfile
+   ```
+
+4. Set up age encryption key:
+
+   ```bash
+   mkdir -p ~/.config/chezmoi
+   # Copy your age key to ~/.config/chezmoi/key.txt
+   chmod 600 ~/.config/chezmoi/key.txt
+   ```
+
+5. Initialize and apply dotfiles:
+
+   ```bash
+   chezmoi init
+   chezmoi diff    # Review changes
+   chezmoi apply   # Apply dotfiles
+   ```
+
+## Features
+
+- **Dotfiles Management**: Declarative configuration with [chezmoi](https://chezmoi.io)
+- **Encryption**: Age encryption for secrets (`~/.claude`, `~/.config/k9s/config.yaml`, etc.)
+- **Task Automation**: Taskfile for linting, testing, and common operations
+- **Version Management**: mise for managing tool versions (shellcheck, markdownlint, task, etc.)
+- **CI/CD**: Automated testing on Ubuntu 24.04 and macOS 15
+- **Fish Shell**: Custom functions, completions, and integrations (fzf, atuin, starship)
+
+## Usage
+
+### Taskfile Commands
+
+```bash
+task test          # Run all tests
+task lint          # Run all linters
+task check         # Alias for lint
+
+task test:fish     # Test Fish config
+task lint:shell    # Shellcheck validation
+task lint:markdown # Markdown linting
+
+task --list        # Show all tasks
+```
+
+See [TESTING.md](TESTING.md) for comprehensive testing documentation.
+
+### Chezmoi Workflow
+
+#### Adding Files
+
+```bash
+chezmoi add --encrypt ~/.config/secret-file    # Add encrypted
+chezmoi add ~/.config/normal-file              # Add plain
+```
+
+#### Editing Files
+
+```bash
+chezmoi edit ~/.config/secret-file             # Edit encrypted file
+chezmoi edit ~/.config/fish/config.fish        # Edit plain file
+```
+
+#### Applying Changes
+
+```bash
+chezmoi diff                                   # Preview changes
+chezmoi apply                                  # Apply to home directory
+chezmoi apply --verbose                        # Verbose output
+```
+
+#### Syncing Changes
+
+After modifying files in the chezmoi source directory:
+
+```bash
+cd ~/Projects/github.com/bartsmykla/.dotfiles
+git add -A
+git commit -sS -m "type(scope): description"
+git push upstream master
+```
+
+See [chezmoi documentation](https://chezmoi.io/user-guide/command-overview/) for more commands.
+
+## Configuration
+
+### Encrypted Files
+
+Files encrypted with age:
+
+| Location                                   | Description                      |
+|--------------------------------------------|----------------------------------|
+| `~/.claude/**`                             | Claude Code configuration        |
+| `~/.config/fish/conf.d/abbreviations.fish` | Fish abbreviations               |
+| `~/.config/k9s/config.yaml`                | K9s configuration                |
+| `Brewfile`                                 | Homebrew packages (repository)   |
+| `CLAUDE.md`                                | Claude instructions (repository) |
+| `secrets/`, `todos/`                       | Secrets and todos (repository)   |
+
+### Age Encryption Key
+
+Key location: `~/.config/chezmoi/key.txt`
+
+**Important**: Keep this key secure and backed up to a password manager or encrypted storage.
+
+See [docs/age-encryption.md](docs/age-encryption.md) for detailed encryption documentation.
+
+### Environment Variables
+
+Key variables defined in `.config/fish/config.fish`:
+
+| Variable           | Value                         | Description            |
+|--------------------|-------------------------------|------------------------|
+| `PROJECTS_PATH`    | `$HOME/Projects/github.com`   | Base path for projects |
+| `MY_PROJECTS_PATH` | `$PROJECTS_PATH/bartsmykla`   | Personal projects      |
+| `DOTFILES_PATH`    | `$MY_PROJECTS_PATH/.dotfiles` | Dotfiles repository    |
+| `SECRETS_PATH`     | `$DOTFILES_PATH/secrets`      | Encrypted secrets      |
+
+## Fish Shell
+
+### Custom Functions
+
+| Function                                   | Description                                      |
+|--------------------------------------------|--------------------------------------------------|
+| `link_dotfile`                             | Symlink dotfiles with automatic backup           |
+| `git_clone_to_projects`                    | Clone repos to `$PROJECTS_PATH/{org}/{repo}`     |
+| `git-checkout-default-fetch-fast-forward`  | Checkout, fetch, and fast-forward default branch |
+| `git-push-upstream-first-force-with-lease` | Push to upstream with `--force-with-lease`       |
+| `klg`                                      | Kubernetes pod logs                              |
+| `kls`                                      | List Kubernetes resources                        |
+| `mkd`                                      | Create directory and cd into it                  |
+
+### Integrations
+
+- **fzf**: Fuzzy finder for directories, git log/status, processes, variables
+- **Atuin**: Shell history sync and search
+- **direnv**: Auto-load environment from `.envrc`
+- **starship**: Cross-shell prompt
+- **jump**: Quick directory navigation
+- **1Password**: SSH agent integration
+
+## macOS Setup
+
+### Disable Conflicting Keyboard Shortcuts
+
+<details>
+<summary>Ctrl + Space and Cmd + Space conflicts</summary>
+
+1. Open System Settings > Keyboard:
+
+   ```bash
    open -b com.apple.systempreferences /System/Library/PreferencePanes/Keyboard.prefPane
    ```
 
-2. Open `Keyboard Shortcuts`
+2. **Ctrl + Space** (for Fish autosuggestion):
 
-   1. `Ctrl + Space` (This shortcut it going to be used [to accept autosuggestion](https://github.com/bartsmykla/.dotfiles/blob/5a1fc97ea48b4e9419d602fe96752e8cc47b3855/.config/fish/functions/fish_user_key_bindings.fish#L4) in fish)
+   Navigate to **Input Sources** tab and unselect:
+   - Select the previous input source (`⌃Space`)
+   - Select next source in input menu (`⌃⌥Space`)
 
-      1. Go to `Input Sources` tab
+3. **Cmd + Space** (for Alfred):
 
-         <details>
-             <summary>Show Screenshot</summary>
-             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/a8e5c5d0-80fb-47f1-a2cd-25b754c8edf4" alt="System Settings > Keyboard > Keyboard Shortcuts > Input Sources" />
-         </details>
+   Navigate to **Spotlight** tab and unselect:
+   - Show Spotlight search (`⌘Space`)
+   - Show Finder search window (`⌥⌘Space`)
 
-      2. Unselect shortcuts
-          
-         | Description                      | Shortcut  |
-         |----------------------------------|-----------|
-         | Select the previous input source | `⌃Space`  |
-         | Select next source in input menu | `⌃⌥Space` |
+</details>
 
-   2. `Cmd + Space` (This shortcut is being used by Alfred)
+### Show Only Active Apps in Dock
 
-      1. Go to `Spotlight` tab
-
-         <details>
-             <summary>Show Screenshot</summary>
-             <img src="https://github.com/bartsmykla/.dotfiles/assets/11655498/bfc0764d-f07a-48ee-aff2-365262bb6d8e" alt="System Settings > Keyboard > Keyboard Shortcuts > Spotlight" />
-         </details>
-
-      2. Unselect shortcuts
-          
-         | Description               | Shortcut  |
-         |---------------------------|-----------|
-         | Show Spotlight search     | `⌘Space`  |
-         | Show Finder search window | `⌥⌘Space` |
-
-## Install tools using Homebrew
-
-```sh
-set --export --global PROJECTS_PATH "$HOME/Projects/github.com"
-set --export --global MY_PROJECTS_PATH "$PROJECTS_PATH/bartsmykla"
-set --export --global DOTFILES_REPO "git@github.com:bartsmykla/.dotfiles.git"
-set --export --global DOTFILES_PATH "$MY_PROJECTS_PATH/.dotfiles"
-
-set --local TAPS \
-    homebrew/cask-fonts \
-    homebrew/cask-versions \
-    bartsmykla/af \
-    helm/tap \
-
-# GUI apps to install
-set --local CASK_FORMULAS \
-    alacritty \
-    alfred \
-    discord \
-    firefox-developer-edition \
-    font-fira-code \
-    font-fira-code-nerd-font \
-    google-cloud-sdk \
-    gpg-suite \
-    jetbrains-toolbox \
-    obsidian \
-    rectangle \
-    send-to-kindle \
-    signal \
-
-# Apps to install
-set --local FORMULAS \
-    bartsmykla/af/af \
-    ack \
-    atuin \
-    awscli \
-    bash \
-    bat \
-    broot \
-    chart-releaser \
-    coreutils \
-    direnv \
-    docker \
-    docker-completion \
-    eza \
-    fd \
-    fish \
-    fzf \
-    gh \
-    git-crypt \
-    gnu-sed \
-    gnu-tar \
-    gnupg \
-    gnutls \
-    helm \
-    jq \
-    jump \
-    k3d \
-    k9s \
-    kubernetes-cli \
-    lua \
-    mutagen \
-    orbstack \
-    saml2aws \
-    shellcheck \
-    starship \
-    terraform \
-    tmux \
-    tmuxp \
-    vim \
-    yq \
-
-# Services to start
-set --local SERVICES \
-    atuin \
-
-for tap in $TAPS
-    brew tap "$tap"
-end
-
-for formula in $CASK_FORMULAS
-    brew install --cask "$formula"
-end
-
-for formula in $FORMULAS
-    brew install "$formula"
-end
-
-for service in $SERVICES
-    brew services start "$service"
-end
-
-# Checking dependencies
-! git --version >/dev/null 2>&1 \
-    && echo "No git. Exiting" >&2; exit 1
-! git-crypt --version  >/dev/null 2>&1 \
-    && echo "No git-crypt. Exiting" >&2; exit 1
-
-! [[ -d "$MY_PROJECTS_PATH" ]] && mkdir -p "$MY_PROJECTS_PATH"
-if ! [[ -d "$DOTFILES_PATH" ]]; then
-    git clone "$DOTFILES_REPO" "$DOTFILES_PATH"
-    git submodule update --init --recursive
-    (cd "$DOTFILES_PATH"; git-crypt unlock)
-fi
-
-link_dotfile .gnupg
-link_dotfile .lnav
-link_dotfile .tmux
-link_dotfile .tmux.conf
-link_dotfile .vim
-link_dotfile .vimrc
-# ~/.config
-link_dotfile .config/starship.toml
-link_dotfile .config/alacritty
-link_dotfile .config/atuin
-link_dotfile .config/broot
-link_dotfile .config/exercism
-link_dotfile .config/grype
-link_dotfile .config/k9s
-link_dotfile .config/mise
-link_dotfile .config/syft
-link_dotfile .config/tmuxinator
-link_dotfile .config/tmuxp
-
-git config --global gpg.program /usr/local/MacGPG2/bin/gpg2
+```bash
+defaults write com.apple.dock static-only -bool true
+killall Dock
 ```
 
-### Install mise
+## Development
 
-```sh
-curl https://mise.run | sh
+### Running Tests
+
+Before committing:
+
+```bash
+task test && task lint
 ```
 
-### Install [krew](https://krew.sigs.k8s.io)
+### Tool Management
 
-```sh
-# https://krew.sigs.k8s.io/docs/user-guide/setup/install/#fish
-begin
-  set -x; set temp_dir (mktemp -d); cd "$temp_dir" &&
-  set OS (uname | tr '[:upper:]' '[:lower:]') &&
-  set ARCH (uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/') &&
-  set KREW krew-$OS"_"$ARCH &&
-  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/$KREW.tar.gz" &&
-  tar zxvf $KREW.tar.gz &&
-  ./$KREW install krew &&
-  set -e KREW temp_dir &&
-  cd -
-end
+Update tools managed by mise:
+
+```bash
+mise ls-remote shellcheck     # List available versions
+mise use shellcheck@0.10.0    # Pin specific version
+mise install                  # Install tools
 ```
 
-## Install rust
+Commit updated `.config/mise/config.toml` after changes.
 
-From https://www.rust-lang.org/tools/install
+### File Structure
 
-```sh
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```text
+.dotfiles/
+├── chezmoi/              # Chezmoi source directory
+│   ├── .chezmoi.toml.tmpl
+│   ├── .chezmoiignore
+│   └── private_dot_config/
+├── docs/                 # Documentation
+├── .github/workflows/    # CI/CD
+├── Taskfile.yaml         # Task automation
+├── Brewfile              # Homebrew packages (encrypted)
+└── CLAUDE.md             # Claude Code instructions (encrypted)
 ```
 
-## Show only active apps in macOS' dock
+## Troubleshooting
 
-```sh
-defaults write com.apple.dock static-only -bool true; killall Dock
+### Chezmoi Issues
+
+**Files not syncing**:
+
+```bash
+chezmoi verify
 ```
+
+**Preview what chezmoi would do**:
+
+```bash
+chezmoi apply --dry-run --verbose
+```
+
+### Encryption Issues
+
+**Decryption failed**:
+
+```bash
+ls -la ~/.config/chezmoi/key.txt    # Check key exists
+chmod 600 ~/.config/chezmoi/key.txt # Fix permissions
+age --version                        # Verify age installed
+```
+
+### Testing Issues
+
+See [TESTING.md](TESTING.md#troubleshooting) for testing troubleshooting.
+
+## Documentation
+
+- [TESTING.md](TESTING.md) - Testing approach, commands, CI integration
+- [docs/age-encryption.md](docs/age-encryption.md) - Age encryption guide
+- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture and design
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contributing guidelines
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging guide
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

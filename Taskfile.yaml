@@ -295,14 +295,14 @@ tasks:
       - echo "✓ Markdown files pass linting"
 
   lint:taskfile:
-    desc: Validate Taskfile.yml against schema
+    desc: Validate Taskfile.yaml against schema
     dir: '{{.G_DOTFILES}}'
     sources:
-      - Taskfile.yml
+      - Taskfile.yaml
     cmds:
-      - echo "▶ Validating Taskfile.yml"
-      - check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yml
-      - echo "✓ Taskfile.yml valid"
+      - echo "▶ Validating Taskfile.yaml"
+      - check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yaml
+      - echo "✓ Taskfile.yaml valid"
 
   # ==========================================================================
   # Maintenance

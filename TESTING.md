@@ -83,7 +83,7 @@ task test:brewfile    # Validate Brewfile
 #### Taskfile
 
 ```bash
-task lint:taskfile    # Validate Taskfile.yml schema
+task lint:taskfile    # Validate Taskfile.yaml schema
 ```
 
 #### ShellSpec (if tests exist)
@@ -187,7 +187,7 @@ task test:shellspec
 To add linting for a new file type:
 
 1. Add tool to `mise` configuration
-2. Create new lint task in `Taskfile.yml`:
+2. Create new lint task in `Taskfile.yaml`:
 
    ```yaml
    lint:newtype:
