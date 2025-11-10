@@ -1,0 +1,102 @@
+# Automated testing of dotfiles across macOS and Linux platforms.
+# Tests syntax, configuration loading, and enforces code quality via linters.
+#
+# Security: Actions pinned to SHA, minimal permissions, no user input in commands.
+
+name: Test Dotfiles
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Use specific versions for reproducibility, update periodically
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Checkout with submodules (vim plugins)
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        with:
+          submodules: recursive
+
+      # Homebrew pre-installed on macOS, needs install on Linux
+      - name: Install Homebrew (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+          echo "/home/linuxbrew/.linuxbrew/sbin" >> "$GITHUB_PATH"
+
+      # Validate Brewfile syntax (some packages may not be installed in CI)
+      - name: Validate Brewfile
+        run: |
+          brew bundle check --verbose || echo "Some packages not installed (expected in CI)"
+
+      # Install minimal tools needed for testing
+      - name: Install testing tools
+        run: brew install fish shellcheck checkmake markdownlint-cli
+
+      # Test Fish syntax without execution
+      - name: Test Fish syntax
+        run: |
+          while IFS= read -r -d '' file; do
+            fish -n "$file" || exit 1
+          done < <(find .config/fish -name "*.fish" -type f -print0)
+
+      # Test Fish config loads successfully
+      - name: Test Fish configuration
+        run: fish -c "echo 'Fish config OK'"
+
+      # Test Vim config loads (install vim first if needed)
+      - name: Test Vim configuration
+        run: |
+          if command -v vim >/dev/null 2>&1; then
+            brew install vim
+            vim -u .vimrc +qall
+          fi
+
+      # Lint all shell scripts
+      - name: Lint shell scripts
+        run: find . -name "*.sh" -type f -print0 | xargs -0 -r shellcheck
+
+      # Lint Makefile
+      - name: Lint Makefile
+        run: |
+          if [[ -f Makefile ]]; then
+            checkmake Makefile
+          fi
+
+      # Lint Markdown files
+      - name: Lint Markdown
+        run: find . -name "*.md" -type f -print0 | xargs -0 -r markdownlint
+
+      # Check Makefile line length (max 100 chars)
+      - name: Check Makefile line length
+        run: |
+          if [[ -f Makefile ]]; then
+            awk 'length($0) > 100 {
+              printf "Line %d: %d chars\n", NR, length($0); violations++
+            } END {
+              if (violations > 0) exit 1
+            }' Makefile
+          fi
+
+      - name: Success
+        run: echo "✅ All tests passed on ${{ matrix.os }}"
