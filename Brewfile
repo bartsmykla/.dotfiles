@@ -1,281 +1,352 @@
------BEGIN AGE ENCRYPTED FILE-----
-YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzZDJYd1RNMHFYc0hZSWRE
-WEU2ZXlOc2QzUDJ5ZE4wS1gybWtBeFBnUlJzCkFMODJqZFYwNGVKbzR1U2R4QXlU
-RmtNeUpaN2JyR3F3ZzBCU1R0ajdMa1UKLS0tIDh1NUtqM3pKaW9LaXBoaUFSVUtl
-UVBXem03eWhKU1o1dGI5c0p6RE9TNEUK5fQ2it1vJnGxBC7E0axL/1hcHCicYcpc
-Epgv50TOevae34RMieiJBFBe8gYbsx6FhYFTjn26r+dWGuX2KtS0P7JoIhgycUm3
-Dz1SeaegPDx7qmHg85+XqP83/9VuvAjpljo6lqTT5NnQAzEuzw6G5D0ijR3GoMg2
-CPt0qpQfCyzz89UZOfh0qvf3kBJ502F7LoHmMMn9Td2Q0MqVein8YE+bSoXxPch2
-TzxlbRBQRf5vpiCtgHdJRMFzMWjLDomZsnzJSj6AQg6MIIVFvrgWz8iY3BXSVUjQ
-ZfHu6YKE+KjVxRDEsM7jnwMeKAZEl8+C4t4qPpRVCwIEASD1hfIKvZQ+XqBRCRyk
-aNpjn1lSV5QrWvU75n4u1J+DL0E3Eez5++UWuK+bXrxO+0b2IJAQuT/BzpUPNCwQ
-uS72kaQFQr5XAyeTj/yv1h/z/dX3ua6G51zQJ3JGo67LpgRRuNHOg75huVCVTR6N
-9zsk8Ne1W2j8SynYXGRopTsmusp0bhycXw2Tw8I+5S2Uxz00UBCK+QI/DW3qB56n
-IbZBKuow9O64BU5PkdtuHEW3g+PFsujZt1s99eixSlTClbd59YMKpq3V6suO2nGL
-zQvkZlYJw887tdOzs0Qg90Ce3xStSpY0AwlE1MuO3N3DXkWzT8J4fIhzvOwA+rD+
-JMIPpJ+VPuaYA6M6DPAZdyDGM4/+bAGN6XG8Nus4QMGAh5a5pSoUC7SkRwiISJg7
-xTuJOF59accxPUjzsBBoXzWIo0Xdbw7aCuwku/8YQ9c0geu9IjzREYURMg19YED9
-4One3neINz0silYKDCgF9+0wxs9zwbIp18g9DHW0IwkMT8P8E+qiYHbkKiX3t1T0
-tBDVsg4dg+tEHnwQrkAN5dBzCoH+pLpfxiXGyP7hBkvAWy7kITfBVSi8nthvqgV9
-+GAe29bPEQlSsxyPHMAZK1nkq3Vvhy/8KXKQLoWvYso1MbcPC9nnD2DgX0rsCwbU
-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
------END AGE ENCRYPTED FILE-----
+# Brewfile - Homebrew Package Management
+#
+# PURPOSE:
+#   Declarative package management for all Homebrew installations (formulas, casks, taps)
+#
+# USAGE:
+#   Install all packages:     brew bundle install
+#   Check what's missing:     brew bundle check
+#   Cleanup unused packages:  brew bundle cleanup
+#   Update this file:         brew bundle dump --force --describe
+#
+# BEST PRACTICES:
+#   - Keep taps before formulas (dependency order)
+#   - Group related packages together
+#   - Use comments to explain non-obvious packages
+#   - Pin versions only when needed (prefer latest)
+#
+# REFERENCE:
+#   https://docs.brew.sh/Brew-Bundle
+#   https://docs.brew.sh/Manpage#bundle-subcommand
+
+# ==============================================================================
+# TAPS - Third-party Homebrew repositories
+# ==============================================================================
+# Personal tap for custom tools
+tap "bartsmykla/af", "git@github.com:bartsmykla/homebrew-af.git"
+
+# Development tools
+tap "bufbuild/buf"           # Protocol Buffers tooling
+tap "chipmk/tap"             # Docker networking utilities
+tap "speakeasy-api/tap"      # API development tools
+
+# Infrastructure & Security
+tap "aquaproj/aqua"          # Declarative CLI version manager
+tap "aquasecurity/trivy"     # Container security scanner
+tap "cyclonedx/cyclonedx"    # Software Bill of Materials (SBOM)
+tap "derailed/popeye"        # Kubernetes cluster linter
+tap "hashicorp/tap"          # HashiCorp tools
+tap "mutagen-io/mutagen"     # File synchronization
+
+# Kubernetes & Cloud
+tap "helm/tap"               # Kubernetes package manager
+tap "grafana/grafana"        # Observability platform
+
+# Log analysis
+tap "pamburus/tap"           # JSON log viewer
+
+# Official Homebrew taps
+tap "homebrew/cask-fonts"    # Fonts as casks
+tap "homebrew/cask-versions" # Beta/development versions
+tap "homebrew/services"      # Service management (brew services)
+
+# ==============================================================================
+# CLI TOOLS - Core utilities and replacements
+# ==============================================================================
+# Modern Unix tools (better alternatives to standard tools)
+brew "bat"          # cat with syntax highlighting
+brew "eza"          # ls replacement with icons and git integration
+brew "fd"           # find replacement (faster, simpler syntax)
+brew "fzf"          # Fuzzy finder for command-line
+brew "the_silver_searcher"  # ag - faster grep alternative
+brew "ack"          # Search tool optimized for programmers
+
+# Shell & Terminal
+brew "fish"         # User-friendly shell (primary shell)
+brew "bash"         # Bourne-Again Shell (compatibility)
+brew "starship"     # Cross-shell prompt with Git integration
+brew "atuin", restart_service: :changed  # Shell history sync (runs as service)
+brew "tmux"         # Terminal multiplexer
+brew "tmuxp"        # Tmux session manager
+
+# File Management & Navigation
+brew "broot"        # Directory tree navigation
+brew "jump"         # Directory bookmarking (learning-based)
+brew "tree"         # Directory tree display
+brew "direnv"       # Per-directory environment variables
+
+# Text Processing & Viewing
+brew "jq"           # JSON processor
+brew "yq"           # YAML/JSON/XML processor
+brew "fx"           # Terminal JSON viewer (interactive)
+brew "lnav", args: ["HEAD"]  # Log file viewer (using latest from HEAD)
+
+# ==============================================================================
+# DEVELOPMENT TOOLS
+# ==============================================================================
+# Version Control
+brew "git"          # Distributed version control
+brew "git-crypt"    # Transparent file encryption in git
+brew "gh"           # GitHub CLI
+
+# Build Tools & Compilers
+brew "make"         # GNU Make
+brew "cmake"        # Cross-platform make
+brew "ninja"        # Small build system
+brew "autoconf"     # Automatic configure script builder
+brew "clang-format" # Code formatter (C/C++/Java/JS/TS)
+brew "llvm"         # Next-gen compiler infrastructure
+
+# Container & Kubernetes Tools
+brew "docker"       # Container runtime
+brew "k3d"          # k3s in Docker (local k8s)
+brew "kind"         # Kubernetes IN Docker
+brew "minikube"     # Local Kubernetes
+brew "kubernetes-cli"  # kubectl
+brew "kubectx"      # Switch kubectl contexts easily
+brew "k9s"          # Kubernetes TUI
+brew "kubeshark"    # Kubernetes network analyzer
+brew "helm"         # Kubernetes package manager
+brew "kustomize"    # Kubernetes manifest customization
+brew "kumactl"      # Kuma service mesh CLI
+brew "skaffold"     # Kubernetes development workflow
+brew "stern"        # Tail logs from multiple pods
+
+# Container Image Tools
+brew "crane"        # Tool for interacting with registries
+brew "skopeo"       # Work with remote image registries
+
+# Cloud CLIs
+brew "awscli"       # AWS CLI
+brew "azure-cli"    # Azure CLI
+brew "saml2aws"     # AWS login via SAML IDP
+brew "eksctl"       # Amazon EKS CLI
+
+# Infrastructure as Code
+brew "terraform"    # HashiCorp Terraform (IaC)
+brew "opentofu"     # OpenTofu (Terraform fork)
+
+# Security & Vulnerability Scanning
+brew "grype"        # Vulnerability scanner for containers
+brew "syft"         # SBOM generator
+brew "trivy", link: false  # Container vulnerability scanner
+brew "snyk-cli"     # Snyk security scanner
+brew "osv-scanner"  # OSV vulnerability database scanner
+brew "scorecard"    # OpenSSF security metrics
+
+# Linters & Formatters
+brew "actionlint"   # GitHub Actions workflow linter
+brew "cfn-lint"     # CloudFormation template validator
+brew "commitlint"   # Commit message linter
+brew "hadolint"     # Dockerfile linter
+brew "swiftlint"    # Swift code linter
+brew "vale"         # Prose linter
+brew "yamllint"     # YAML linter
+brew "shellcheck"   # Shell script linter (installed via mise)
+
+# Testing Tools
+brew "check-jsonschema"  # JSON Schema validator (supports Taskfile)
+brew "shellspec"         # Shell script testing framework (BDD-style)
+
+# Protocol Buffers
+brew "bufbuild/buf/buf"  # Protocol Buffers tooling
+brew "buildifier"        # Bazel BUILD file formatter
+brew "buildozer"         # Bazel BUILD file editor
+
+# API Development
+brew "muffet"       # Website link checker
+brew "speakeasy-api/tap/speakeasy"  # API client generation
+
+# Monitoring & Debugging
+brew "htop"         # Interactive process viewer
+brew "watch"        # Execute program periodically
+brew "socat"        # SOcket CAT (netcat on steroids)
+brew "toxiproxy"    # TCP proxy for chaos testing
+
+# ==============================================================================
+# PACKAGE MANAGERS & VERSION MANAGERS
+# ==============================================================================
+brew "aqua"         # Declarative CLI version manager
+brew "pre-commit"   # Git pre-commit hooks framework
+
+# ==============================================================================
+# UTILITIES
+# ==============================================================================
+# Network Tools
+brew "ipcalc"       # IP subnet calculator
+brew "sipcalc"      # Advanced IP subnet calculator
+brew "iproute2mac"  # IP command for macOS
+brew "wget"         # Internet file retriever
+
+# Cryptography & Security
+brew "gnupg"        # GNU Privacy Guard
+brew "openssl@3"    # Latest OpenSSL
+
+# Media Processing
+brew "ffmpeg"       # Audio/video processing
+brew "imagemagick"  # Image manipulation
+
+# System Tools
+brew "coreutils"    # GNU core utilities
+brew "findutils"    # GNU find, xargs, locate
+brew "gnu-tar"      # GNU tar
+brew "grep"         # GNU grep
+brew "flock"        # File locking utility
+
+# Documentation & Help
+brew "help2man"     # Generate man pages
+brew "tlrc"         # tldr client (command examples)
+
+# Misc Utilities
+brew "aspell"       # Spell checker
+brew "gum"          # Shell script styling tool
+brew "usage"        # Tool for usage-spec CLIs
+brew "terminal-notifier"  # macOS notifications from CLI
+
+# Development Libraries
+brew "capstone"     # Disassembly framework
+brew "graphviz"     # Graph visualization
+brew "libpq", link: true  # Postgres C API
+brew "libtool"      # Generic library support
+brew "pkgconf"      # Package compiler metadata
+brew "zlib"         # Data compression library
+
+# ==============================================================================
+# CUSTOM TAP FORMULAS
+# ==============================================================================
+brew "bartsmykla/af/af"  # Personal CLI tool
+brew "chipmk/tap/docker-mac-net-connect"  # Docker-for-Mac IP access
+brew "cyclonedx/cyclonedx/cyclonedx-cli"  # CycloneDX SBOM tool
+brew "derailed/popeye/popeye"  # Kubernetes cluster linter
+brew "mutagen-io/mutagen/mutagen"  # File sync for remote dev
+brew "pamburus/tap/hl"  # JSON/logfmt log viewer
+
+# Editors & IDEs
+brew "vim"          # Vi IMproved
+
+# Container Management (deprecated in favor of OrbStack)
+brew "overmind"     # Process manager for tmux
+
+# Bazel
+brew "bazelisk"     # User-friendly Bazel launcher
+
+# Chart Tools
+brew "chart-releaser"  # Helm Charts via GitHub
+
+# VEX (Vulnerability Exchange)
+brew "vexctl"       # VEX metadata tool
+
+# Misc
+brew "exercism"     # exercism.io CLI
+
+# ==============================================================================
+# GUI APPLICATIONS (CASKS)
+# ==============================================================================
+# Essential Apps
+cask "1password-cli"     # 1Password command-line interface
+cask "alfred"            # Application launcher and productivity
+cask "rectangle"         # Window management via keyboard
+
+# Terminals
+cask "alacritty"         # GPU-accelerated terminal (primary)
+cask "iterm2"            # Alternative terminal
+cask "kitty"             # GPU-based terminal
+
+# Browsers
+cask "brave-browser"     # Privacy-focused browser
+cask "firefox@developer-edition"  # Firefox Developer Edition
+cask "opera"             # Opera browser
+
+# Development Tools
+cask "cursor"            # AI-powered code editor
+cask "visual-studio-code"  # VS Code
+cask "jetbrains-toolbox"  # JetBrains IDE manager
+cask "insomnia"          # HTTP/GraphQL client
+
+# AI Tools
+cask "chatgpt"           # OpenAI ChatGPT desktop app
+cask "claude"            # Anthropic Claude AI desktop app
+
+# Container & Kubernetes
+cask "orbstack"          # Docker Desktop replacement (preferred)
+cask "rancher"           # Kubernetes management
+
+# Cloud Tools
+cask "gcloud-cli"        # Google Cloud SDK
+
+# Communication
+cask "discord"           # Voice and text chat
+cask "signal"            # Secure messaging
+
+# Utilities
+cask "bartender"         # Menu bar organizer
+cask "caffeine"          # Prevent system sleep
+cask "hiddenbar"         # Hide menu bar items
+cask "raycast"           # Command launcher
+cask "send-to-kindle"    # Send documents to Kindle
+
+# Productivity
+cask "obsidian"          # Knowledge base (Markdown)
+cask "omnigraffle"       # Diagramming tool
+
+# Security & Networking
+cask "gpg-suite"         # GPG tools for macOS
+cask "ngrok"             # Secure tunnels to localhost
+cask "wireshark-app"     # Network protocol analyzer
+
+# Gaming/Peripherals
+cask "steelseries-gg"    # SteelSeries peripheral settings
+
+# Development (Infrastructure)
+cask "hashicorp-vagrant"  # Development environment manager
+
+# Fonts
+cask "font-fira-code"           # Fira Code font
+cask "font-fira-code-nerd-font" # Fira Code with icons
+cask "font-fira-mono-nerd-font" # Fira Mono with icons
+
+# ==============================================================================
+# VS CODE EXTENSIONS
+# ==============================================================================
+# Note: These are auto-generated. Manage via VS Code or `code --install-extension`
+vscode "anthropic.claude-code"
+vscode "bierner.markdown-preview-github-styles"
+vscode "eamodio.gitlens"
+vscode "emmanuelbeziat.vscode-great-icons"
+vscode "file-icons.file-icons"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.vscode-github-actions"
+vscode "github.vscode-pull-request-github"
+vscode "golang.go"
+vscode "grafana.grafana-alloy"
+vscode "k--kato.intellij-idea-keybindings"
+vscode "lnav.lnav"
+vscode "mechatroner.rainbow-csv"
+vscode "monokai.theme-monokai-pro-vscode"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-sarifvscode.sarif-viewer"
+vscode "ms-vscode-remote.remote-containers"
+vscode "openai.chatgpt"
+vscode "redhat.vscode-yaml"
+vscode "repreng.csv"
+vscode "yzhang.markdown-all-in-one"
+
+# ==============================================================================
+# GO PACKAGES
+# ==============================================================================
+# Note: Prefer managing Go tools via mise instead of `go install`
+# These are tracked for reference but may be redundant
+go "cmd/go"
+go "cmd/gofmt"
+go "github.com/chrusty/protoc-gen-jsonschema/cmd/protoc-gen-jsonschema"
+go "github.com/daixiang0/gci"
+go "github.com/google/osv-scanner/cmd/osv-scanner"
+go "github.com/onsi/ginkgo/v2/ginkgo"
+go "golang.org/x/tools/gopls"
+go "honnef.co/go/tools/cmd/staticcheck"

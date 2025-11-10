@@ -190,36 +190,43 @@ Describe 'Taskfile'
         It 'test:brewfile task can be summarized'
             When call task test:brewfile --summary
             The status should be success
+            The output should be present
         End
 
         It 'test:fish task can be summarized'
             When call task test:fish --summary
             The status should be success
+            The output should be present
         End
 
         It 'test:syntax task can be summarized'
             When call task test:syntax --summary
             The status should be success
+            The output should be present
         End
 
         It 'lint:fish task can be summarized'
             When call task lint:fish --summary
             The status should be success
+            The output should be present
         End
 
         It 'lint:shell task can be summarized'
             When call task lint:shell --summary
             The status should be success
+            The output should be present
         End
 
         It 'lint:markdown task can be summarized'
             When call task lint:markdown --summary
             The status should be success
+            The output should be present
         End
 
         It 'lint:taskfile task can be summarized'
             When call task lint:taskfile --summary
             The status should be success
+            The output should be present
         End
     End
 
