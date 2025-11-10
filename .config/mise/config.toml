@@ -1,5 +1,4 @@
 [tools]
-"aqua:mrtazz/checkmake" = "0.2.2"
 chezmoi = "2.67.0"
 cosign = "3.0.2"
 go = "1.25.4"
