@@ -88,9 +88,14 @@ jobs:
             ! -path "./chezmoi/dot_vim/bundle/*" \
             -print0 | xargs -0 -r shellcheck
 
-      # Lint Markdown files
+      # Lint Markdown files (exclude third-party plugins)
       - name: Lint Markdown
-        run: find . -name "*.md" -type f -print0 | xargs -0 -r markdownlint
+        run: |
+          find . -name "*.md" -type f \
+            ! -path "./chezmoi/dot_tmux/plugins/*" \
+            ! -path "./chezmoi/dot_vim/bundle/*" \
+            ! -path "./tmp/*" \
+            -print0 | xargs -0 -r markdownlint
 
       # Validate Taskfile against schema
       - name: Validate Taskfile
