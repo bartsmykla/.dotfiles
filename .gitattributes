@@ -10,4 +10,3 @@ todos/**/* filter=age diff=age
 ansible/**/* filter=age diff=age
 helpers/**/*.secret.* filter=age diff=age
 CLAUDE.md filter=age diff=age
-Brewfile filter=age diff=age

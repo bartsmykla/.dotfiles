@@ -236,13 +236,8 @@ tasks:
       - Brewfile
     cmds:
       - echo "▶ Testing Brewfile"
-      - |
-        if head -1 Brewfile | grep -q "BEGIN AGE ENCRYPTED"; then
-          echo "⏭️  Brewfile is encrypted, skipping validation"
-        else
-          brew bundle check --file=Brewfile || echo "Some packages not installed (expected)"
-        fi
-      - echo "✓ Brewfile check complete"
+      - brew bundle check --file=Brewfile || echo "Some packages not installed (expected)"
+      - echo "✓ Brewfile valid"
 
   test:shellspec:
     desc: Run ShellSpec test suite (if tests exist)

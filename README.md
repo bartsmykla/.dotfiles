@@ -264,7 +264,7 @@ Commit updated `.config/mise/config.toml` after changes.
 ├── docs/                 # Documentation
 ├── .github/workflows/    # CI/CD
 ├── Taskfile.yaml         # Task automation
-├── Brewfile              # Homebrew packages (encrypted)
+├── Brewfile              # Homebrew packages
 └── CLAUDE.md             # Claude Code instructions (encrypted)
 ```
 

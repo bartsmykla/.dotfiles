@@ -7,7 +7,7 @@ This repository uses [age](https://age-encryption.org/) for encrypting sensitive
 We use two different age encryption approaches:
 
 1. **Chezmoi-managed files**: Files in your home directory managed by chezmoi (like `~/.claude`, `~/.config/fish/conf.d/abbreviations.fish`)
-2. **Repository files**: Files that stay in `.dotfiles` directory (like `Brewfile`, `CLAUDE.md`, `todos/`)
+2. **Repository files**: Files that stay in `.dotfiles` directory (like `CLAUDE.md`, `secrets/`, `todos/`)
 
 ## How It Works
 
@@ -128,7 +128,6 @@ The following patterns are encrypted (configured in `.gitattributes`):
 
 ### Repository Files (Git filter encryption)
 
-- `Brewfile` - Homebrew packages list
 - `CLAUDE.md` - Claude Code instructions
 - `secrets/**` - API tokens and credentials
 - `todos/**` - Personal todo files
