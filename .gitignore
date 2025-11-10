@@ -10,3 +10,4 @@ tmp
 .config/k9s/clusters
 .tmux/plugins/tmux-resurrect
 .tmux/plugins/tmux-sensible
+.task
