@@ -11,6 +11,11 @@
   set --export FORTRESS_PATH /Volumes/fortress-carima
   set --export SECRETS_PATH $DOTFILES_PATH/secrets
 
+# mise tool completions (auto-generated, run: task completions:setup)
+  if test -f "$DOTFILES_PATH/tmp/mise-completions.fish"
+    source "$DOTFILES_PATH/tmp/mise-completions.fish"
+  end
+
 # fzf
   # History search is handled by Atuin, so fzf's history binding is disabled
   # (empty shortcut)
