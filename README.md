@@ -77,40 +77,19 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 
 ### Chezmoi Workflow
 
-#### Adding Files
+Basic commands:
 
 ```bash
-chezmoi add --encrypt ~/.config/secret-file    # Add encrypted
-chezmoi add ~/.config/normal-file              # Add plain
+chezmoi add ~/.config/file              # Add file to chezmoi
+chezmoi diff                            # Preview changes
+chezmoi apply                           # Apply to home directory
 ```
 
-#### Editing Files
+For detailed workflow, encryption, and advanced usage:
 
-```bash
-chezmoi edit ~/.config/secret-file             # Edit encrypted file
-chezmoi edit ~/.config/fish/config.fish        # Edit plain file
-```
-
-#### Applying Changes
-
-```bash
-chezmoi diff                                   # Preview changes
-chezmoi apply                                  # Apply to home directory
-chezmoi apply --verbose                        # Verbose output
-```
-
-#### Syncing Changes
-
-After modifying files in the chezmoi source directory:
-
-```bash
-cd ~/Projects/github.com/bartsmykla/.dotfiles
-git add -A
-git commit -sS -m "type(scope): description"
-git push upstream master
-```
-
-See [chezmoi documentation](https://chezmoi.io/user-guide/command-overview/) for more commands.
+- See [docs/AGE-ENCRYPTION.md](docs/AGE-ENCRYPTION.md) for encryption workflow
+- See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow
+- See [chezmoi documentation](https://chezmoi.io/user-guide/command-overview/)
 
 ## Configuration
 
@@ -133,7 +112,7 @@ Key location: `~/.config/chezmoi/key.txt`
 
 **Important**: Keep this key secure and backed up to a password manager or encrypted storage.
 
-See [docs/age-encryption.md](docs/age-encryption.md) for detailed encryption documentation.
+See [docs/AGE-ENCRYPTION.md](docs/AGE-ENCRYPTION.md) for detailed encryption documentation.
 
 ### Environment Variables
 
@@ -273,7 +252,7 @@ See [TESTING.md](TESTING.md#troubleshooting) for testing troubleshooting.
 ## Documentation
 
 - [TESTING.md](TESTING.md) - Testing approach, commands, CI integration
-- [docs/age-encryption.md](docs/age-encryption.md) - Age encryption guide
+- [docs/AGE-ENCRYPTION.md](docs/AGE-ENCRYPTION.md) - Age encryption guide
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture and design
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Contributing guidelines
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging guide

@@ -75,16 +75,16 @@ Footer (optional)
 
 Use specific types for infrastructure changes:
 
-| Type | Use Case | Example |
-|------|----------|---------|
-| `feat` | New user-facing feature | `feat(fish): add git helper function` |
-| `fix` | Bug fix | `fix(chezmoi): correct age encryption path` |
-| `docs` | Documentation only | `docs(readme): add installation steps` |
-| `ci` | CI/CD changes | `ci(workflow): add macos-14 to test matrix` |
-| `test` | Test changes | `test(fish): add syntax validation` |
-| `chore` | Maintenance tasks | `chore(deps): update shellcheck to 0.10.0` |
-| `refactor` | Code refactoring | `refactor(fish): simplify git push functions` |
-| `build` | Build system changes | `build(taskfile): add new lint task` |
+| Type       | Use Case                | Example                                       |
+|------------|-------------------------|-----------------------------------------------|
+| `feat`     | New user-facing feature | `feat(fish): add git helper function`         |
+| `fix`      | Bug fix                 | `fix(chezmoi): correct age encryption path`   |
+| `docs`     | Documentation only      | `docs(readme): add installation steps`        |
+| `ci`       | CI/CD changes           | `ci(workflow): add macos-14 to test matrix`   |
+| `test`     | Test changes            | `test(fish): add syntax validation`           |
+| `chore`    | Maintenance tasks       | `chore(deps): update shellcheck to 0.10.0`    |
+| `refactor` | Code refactoring        | `refactor(fish): simplify git push functions` |
+| `build`    | Build system changes    | `build(taskfile): add new lint task`          |
 
 **Important**: Use `ci(...)` not `fix(ci)`, `test(...)` not `feat(test)`, etc.
 
@@ -196,15 +196,15 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 
 ```text
 .dotfiles/
-├── chezmoi/                    # Chezmoi source directory
+├── chezmoi/                   # Chezmoi source directory
 │   ├── .chezmoi.toml.tmpl     # Chezmoi config template
 │   ├── .chezmoiignore         # Ignore patterns
 │   └── private_dot_config/    # Config files (~/.config/)
 │       └── fish/              # Fish shell config
 │           ├── config.fish
 │           └── functions/     # Custom functions
-├── docs/                       # Documentation
-│   ├── age-encryption.md      # Age encryption guide
+├── docs/                      # Documentation
+│   ├── AGE-ENCRYPTION.md      # Age encryption guide
 │   └── DEBUGGING.md           # Debugging guide
 ├── .github/
 │   └── workflows/
@@ -223,25 +223,17 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 
 Files encrypted with age should not expose sensitive data in commits.
 
-**Adding encrypted files**:
+See [docs/AGE-ENCRYPTION.md](docs/AGE-ENCRYPTION.md) for:
 
-```bash
-chezmoi add --encrypt ~/.config/secret-file
-```
-
-**Editing encrypted files**:
-
-```bash
-chezmoi edit ~/.config/secret-file
-```
+- Adding and editing encrypted files
+- Age key management
+- Encryption workflow
 
 **Never commit**:
 
 - Plain-text secrets
-- Age private keys
+- Age private keys (`~/.config/chezmoi/key.txt`)
 - Personal API tokens
-
-See [docs/age-encryption.md](docs/age-encryption.md) for details.
 
 ## Getting Help
 

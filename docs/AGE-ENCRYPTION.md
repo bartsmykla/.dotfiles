@@ -34,7 +34,7 @@ For files that stay in the `.dotfiles` directory, we use Git clean/smudge filter
 
 The age encryption key is stored at:
 
-```
+```text
 ~/.config/chezmoi/key.txt
 ```
 
@@ -74,6 +74,7 @@ chezmoi add --encrypt ~/.config/secret-file
 ```
 
 This will:
+
 - Copy the file to chezmoi source directory
 - Encrypt it with age
 - Store it as `chezmoi/private_dot_config/encrypted_secret-file.age`
@@ -95,6 +96,7 @@ chezmoi edit ~/.config/secret-file
 ```
 
 This will:
+
 - Decrypt the file temporarily
 - Open it in your editor (configured in chezmoi.toml)
 - Re-encrypt it when you save
@@ -156,6 +158,7 @@ age --decrypt --identity ~/.config/chezmoi/key.txt \
 To use these encrypted dotfiles on a new machine:
 
 1. **Copy your age key** to the new machine:
+
    ```bash
    mkdir -p ~/.config/chezmoi
    # Copy key.txt to ~/.config/chezmoi/key.txt
@@ -163,17 +166,20 @@ To use these encrypted dotfiles on a new machine:
    ```
 
 2. **Install age** via mise:
+
    ```bash
    mise install age
    ```
 
 3. **Clone the repository**:
+
    ```bash
    git clone https://github.com/bartsmykla/.dotfiles ~/Projects/github.com/bartsmykla/.dotfiles
    cd ~/Projects/github.com/bartsmykla/.dotfiles
    ```
 
 4. **Initialize chezmoi**:
+
    ```bash
    chezmoi init
    ```
@@ -203,16 +209,19 @@ To use these encrypted dotfiles on a new machine:
 If decryption fails when checking out or applying files:
 
 1. Check that your age key exists:
+
    ```bash
    ls -la ~/.config/chezmoi/key.txt
    ```
 
 2. Verify the key permissions (should be 600):
+
    ```bash
    chmod 600 ~/.config/chezmoi/key.txt
    ```
 
 3. Check that age is installed:
+
    ```bash
    age --version
    ```
@@ -223,12 +232,14 @@ If files aren't being encrypted:
 
 1. Check `.gitattributes` has the correct patterns
 2. Verify git filter configuration:
+
    ```bash
    git config filter.age.clean
    git config filter.age.smudge
    ```
 
 3. Force git to re-apply filters:
+
    ```bash
    git rm --cached -r .
    git reset --hard HEAD
