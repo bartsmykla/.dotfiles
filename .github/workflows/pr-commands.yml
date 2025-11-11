@@ -33,7 +33,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Run Smyklot
-        uses: bartsmykla/smyklot@feat/go-rewrite-github-app
+        uses: bartsmykla/smyklot@224c4932d4941b29723c162acf4836b3b1ee3ae0 # v0.1.0
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           COMMENT_BODY: ${{ github.event.comment.body }}
