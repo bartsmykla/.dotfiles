@@ -16,8 +16,17 @@ exit
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bartsmykla's dotfiles</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea' rx='15'/><text y='75' x='50' text-anchor='middle' font-size='60' fill='white' font-family='monospace'>$</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea' rx='15'/><text y='50' x='50' text-anchor='middle' dominant-baseline='central' font-size='65' fill='white' font-family='monospace' font-weight='bold'>$</text></svg>">
     <style>
+        /* Hide everything initially to prevent shell script flash */
+        html {
+            visibility: hidden;
+        }
+
+        html.loaded {
+            visibility: visible;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -321,6 +330,9 @@ exit
                     n.parentNode.removeChild(n);
                 }
             });
+
+            // Show the page now that cleanup is done
+            document.documentElement.classList.add('loaded');
         })();
 
         function copyToClipboard(text, evt) {
