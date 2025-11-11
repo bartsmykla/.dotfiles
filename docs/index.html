@@ -66,13 +66,22 @@ exit
         })();
     </script>
     <style>
-        /* Hide everything initially to prevent shell script flash */
-        html {
-            visibility: hidden;
+        /* Loading overlay to cover shell script text */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        html.loaded {
-            visibility: visible;
+        #loading-overlay.hidden {
+            display: none;
         }
 
         * {
@@ -243,6 +252,7 @@ exit
     </style>
 </head>
 <body>
+    <div id="loading-overlay"></div>
     <div class="container">
         <h1>bartsmykla's dotfiles</h1>
         <p class="subtitle">Automated macOS development environment setup</p>
@@ -335,8 +345,13 @@ exit
     </div>
 
     <script>
-        // Show the page now that DOM is ready
-        document.documentElement.classList.add('loaded');
+        // Hide loading overlay now that DOM is ready
+        (function() {
+            var overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+            }
+        })();
 
         function copyToClipboard(text, evt) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
