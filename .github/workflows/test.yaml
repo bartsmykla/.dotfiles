@@ -66,13 +66,32 @@ jobs:
       # Test chezmoi can initialize with encrypted files
       - name: Test chezmoi init
         run: |
-          # Set up chezmoi config with CI key
+          # Set up chezmoi config with CI key (bypass template prompts)
           mkdir -p ~/.config/chezmoi
           cp ~/.config/age/ci-key.txt ~/.config/chezmoi/key.txt
-          # Initialize chezmoi
-          chezmoi init --source "$PWD/chezmoi"
+          cat > ~/.config/chezmoi/chezmoi.toml <<EOF
+          encryption = "age"
+
+          [data]
+              email = "ci@example.com"
+              name = "CI Test"
+              osid = "linux"
+
+          [age]
+              identity = "~/.config/chezmoi/key.txt"
+              recipients = [
+                  "age1c459u9ehvrjrsh6v2sun69mw3p6apuku8cjh9q8eeax2etr439pshvnn4z",
+                  "age1h3cwe6tflreqda3dqkv2qucgzswkwp8w39nqt7089tw6kmpfn9sqmln47m"
+              ]
+          EOF
+          # Initialize chezmoi with existing config (skip template processing)
+          chezmoi init --source "$PWD/chezmoi" --config-path ~/.config/chezmoi/chezmoi.toml
           # Verify chezmoi can read encrypted files
           chezmoi verify || echo "Chezmoi verification completed"
+
+      # Install mise tools (actionlint) from chezmoi-managed config
+      - name: Install mise tools
+        uses: jdx/mise-action@be3be2260bc02bc3fbf94c5e2fed8b7964baf074  # v3.4.0
 
       # Run all tests using Taskfile
       - name: Run tests
