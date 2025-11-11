@@ -53,8 +53,11 @@ sourceDir = "~/Projects/github.com/bartsmykla/.dotfiles/chezmoi"
 [age]
     # Identity file for decryption
     identity = "~/.config/chezmoi/key.txt"
-    # Recipient for encryption
-    recipient = "age1c459u9ehvrjrsh6v2sun69mw3p6apuku8cjh9q8eeax2etr439pshvnn4z"
+    # Recipients for encryption (personal + CI)
+    recipients = [
+        "age1c459u9ehvrjrsh6v2sun69mw3p6apuku8cjh9q8eeax2etr439pshvnn4z",
+        "age1h3cwe6tflreqda3dqkv2qucgzswkwp8w39nqt7089tw6kmpfn9sqmln47m"
+    ]
 
 # Merge configuration
 [merge]
