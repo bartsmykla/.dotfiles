@@ -66,22 +66,19 @@ exit
         })();
     </script>
     <style>
-        /* Loading overlay to cover shell script text */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        /* Hide all text nodes by default */
+        html, body {
+            font-size: 0;
+            line-height: 0;
+            color: transparent;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        #loading-overlay.hidden {
-            display: none;
+        /* Show content inside container */
+        .container, .container * {
+            font-size: initial;
+            line-height: initial;
+            color: initial;
         }
 
         * {
