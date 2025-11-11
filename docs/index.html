@@ -208,13 +208,20 @@ exit
             margin-top: 30px;
             padding-top: 30px;
             border-top: 2px solid #eee;
+            text-align: center;
         }
 
         .links a {
             color: #667eea;
             text-decoration: none;
-            margin-right: 20px;
             font-weight: 500;
+            padding: 0 10px;
+        }
+
+        .links a:not(:last-child)::after {
+            content: " |";
+            color: #999;
+            margin-left: 10px;
         }
 
         .links a:hover {
