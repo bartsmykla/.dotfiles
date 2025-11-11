@@ -10,17 +10,17 @@ on:
   push:
     branches: [master]
 
-permissions: read-all
+permissions: read-all  # Default read access for all scopes
 
 jobs:
   analysis:
     name: Scorecards analysis
     runs-on: ubuntu-24.04
     permissions:
-      security-events: write  # Upload results to code-scanning dashboard
-      id-token: write         # Publish results
-      contents: read          # Read repository contents
-      actions: read           # Read repository actions
+      security-events: write  # Upload SARIF results to code-scanning dashboard
+      id-token: write         # Publish results and sign attestations
+      contents: read          # Checkout repository code
+      actions: read           # Analyze workflow security practices
 
     steps:
       - name: Checkout repository

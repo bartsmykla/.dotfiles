@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: read  # Checkout repository code
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -93,9 +93,11 @@ jobs:
           # Verify chezmoi can read encrypted files
           chezmoi verify || echo "Chezmoi verification completed"
 
-      # Install mise tools (actionlint) from chezmoi-managed config
+      # Install mise tools from chezmoi-managed config
       - name: Install mise tools
         uses: jdx/mise-action@be3be2260bc02bc3fbf94c5e2fed8b7964baf074  # v3.4.0
+        with:
+          install_args: age chezmoi task shellcheck markdownlint-cli
 
       # Run all tests using Taskfile
       - name: Run tests
