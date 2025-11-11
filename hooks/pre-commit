@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Pre-commit hook - Run linters before committing
+#
+# Ensures code quality by running all configured linters via Taskfile.
+# Install: task hooks:install
+
+set -euo pipefail
+
+echo "▶ Running pre-commit checks..."
+
+# Check if task is available
+if ! command -v task &>/dev/null; then
+    echo "⚠️  Task not found. Skipping pre-commit checks."
+    echo "   Install via: brew install go-task"
+    exit 0
+fi
+
+# Run linters
+if ! task lint; then
+    echo ""
+    echo "❌ Pre-commit checks failed!"
+    echo "   Fix the errors above and try again."
+    echo "   Or skip with: git commit --no-verify"
+    exit 1
+fi
+
+echo "✓ Pre-commit checks passed"
+exit 0

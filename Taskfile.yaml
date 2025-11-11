@@ -587,6 +587,58 @@ tasks:
       - echo "✓ tmp directory cleaned"
 
   # ==========================================================================
+  # Git Hooks
+  # ==========================================================================
+
+  hooks:install:
+    desc: Install git hooks (pre-commit, pre-push)
+    summary: |
+      Install git hooks to automate quality checks:
+      - pre-commit: Runs 'task lint' before each commit
+      - pre-push: Runs 'task test' before each push
+
+      Hooks can be bypassed with --no-verify flag.
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - hooks/pre-commit
+      - hooks/pre-push
+    generates:
+      - .git/hooks/pre-commit
+      - .git/hooks/pre-push
+    cmds:
+      - echo "▶ Installing git hooks"
+      - cp hooks/pre-commit .git/hooks/pre-commit
+      - cp hooks/pre-push .git/hooks/pre-push
+      - chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+      - echo "✓ Git hooks installed"
+      - echo ""
+      - echo "  pre-commit - Runs task lint"
+      - echo "  pre-push - Runs task test"
+      - echo ""
+      - echo "  Bypass with --no-verify flag"
+
+  hooks:uninstall:
+    desc: Remove installed git hooks
+    dir: '{{.G_DOTFILES}}'
+    cmds:
+      - echo "▶ Removing git hooks"
+      - rm -f .git/hooks/pre-commit .git/hooks/pre-push
+      - echo "✓ Git hooks removed"
+
+  hooks:status:
+    desc: Check git hooks installation status
+    dir: '{{.G_DOTFILES}}'
+    vars:
+      PRE_COMMIT_STATUS:
+        sh: test -f .git/hooks/pre-commit && echo "✓ pre-commit installed" || echo "✗ pre-commit not installed"
+      PRE_PUSH_STATUS:
+        sh: test -f .git/hooks/pre-push && echo "✓ pre-push installed" || echo "✗ pre-push not installed"
+    cmds:
+      - echo "▶ Git hooks status:"
+      - echo "  {{.PRE_COMMIT_STATUS}}"
+      - echo "  {{.PRE_PUSH_STATUS}}"
+
+  # ==========================================================================
   # Debugging & Information
   # ==========================================================================
 

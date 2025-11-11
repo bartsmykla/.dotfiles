@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Pre-push hook - Run tests before pushing
+#
+# Ensures all tests pass before pushing to remote.
+# Install: task hooks:install
+
+set -euo pipefail
+
+echo "▶ Running pre-push checks..."
+
+# Check if task is available
+if ! command -v task &>/dev/null; then
+    echo "⚠️  Task not found. Skipping pre-push checks."
+    echo "   Install via: brew install go-task"
+    exit 0
+fi
+
+# Run tests
+if ! task test; then
+    echo ""
+    echo "❌ Pre-push checks failed!"
+    echo "   Fix the errors above and try again."
+    echo "   Or skip with: git push --no-verify"
+    exit 1
+fi
+
+echo "✓ Pre-push checks passed"
+exit 0
