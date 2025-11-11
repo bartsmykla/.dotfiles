@@ -65,30 +65,26 @@ exit
             }
         })();
     </script>
-    <script>
-        // Prevent Chrome from scrolling to middle of page
-        (function() {
-            'use strict';
-            if ('scrollRestoration' in history) {
-                history.scrollRestoration = 'manual';
-            }
-        })();
-    </script>
     <style>
-        /* Hide all text nodes by default */
+        /* Force everything to render from top */
         html {
+            display: block;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+        }
+
+        /* Hide bash script text nodes */
+        html, html * {
             font-size: 0;
             line-height: 0;
             color: transparent;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
-            min-height: 100%;
         }
 
         body {
-            font-size: 0;
-            line-height: 0;
-            color: transparent;
-            background: transparent;
+            display: block;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
         }
 
@@ -701,20 +697,6 @@ exit
 
     <script>
         'use strict';
-
-        // Force page to start at top - multiple approaches for Chrome
-        // Immediate scroll
-        setTimeout(() => window.scrollTo(0, 0), 0);
-
-        // On load
-        window.addEventListener('load', () => {
-            window.scrollTo(0, 0);
-        });
-
-        // On DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            window.scrollTo(0, 0);
-        });
 
         // Hide loading overlay now that DOM is ready
         (() => {
