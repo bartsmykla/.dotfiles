@@ -43,6 +43,8 @@ Describe 'Brewfile'
         The status should not equal 2
         # Allow informational output (stdout and stderr from brew)
         The stdout should be present
+        # Brew outputs JSON API messages to stderr (informational, not errors)
+        The stderr should be defined
     End
 
     Describe 'Essential packages are declared'

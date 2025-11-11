@@ -32,7 +32,7 @@ Describe 'Fish Functions'
     # Test: git_clone_to_projects function
     Describe 'git_clone_to_projects'
         It 'exists as a Fish function'
-            When call fish -c "type -q git_clone_to_projects"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git_clone_to_projects.fish; type -q git_clone_to_projects"
             The status should be success
         End
 
@@ -42,7 +42,7 @@ Describe 'Fish Functions'
         End
 
         It 'fails with invalid repository URL'
-            When call fish -c "git_clone_to_projects 'invalid-url'"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git_clone_to_projects.fish; git_clone_to_projects 'invalid-url'"
             The status should be failure
             The stderr should include "Invalid"
         End
@@ -51,17 +51,17 @@ Describe 'Fish Functions'
     # Test: git-push-* family of functions
     Describe 'git-push functions'
         It 'git-push-origin exists'
-            When call fish -c "type -q git-push-origin"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git-push-origin.fish; type -q git-push-origin"
             The status should be success
         End
 
         It 'git-push-upstream exists'
-            When call fish -c "type -q git-push-upstream"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git-push-upstream.fish; type -q git-push-upstream"
             The status should be success
         End
 
         It 'git-push-origin-force-with-lease exists'
-            When call fish -c "type -q git-push-origin-force-with-lease"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/git-push-origin-force-with-lease.fish; type -q git-push-origin-force-with-lease"
             The status should be success
         End
     End
@@ -69,7 +69,7 @@ Describe 'Fish Functions'
     # Test: klg and kls kubernetes functions
     Describe 'Kubernetes log functions'
         It 'klg function exists'
-            When call fish -c "type -q klg"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/klg.fish; type -q klg"
             The status should be success
         End
 
@@ -79,7 +79,7 @@ Describe 'Fish Functions'
         End
 
         It 'kls function exists'
-            When call fish -c "type -q kls"
+            When call fish --no-config -c "source ${DOTFILES_PATH}/chezmoi/private_dot_config/fish/functions/kls.fish; type -q kls"
             The status should be success
         End
 
