@@ -29,8 +29,9 @@ cd ~/Projects/github.com/bartsmykla/.dotfiles
 # Install Homebrew packages
 brew bundle install --file=Brewfile
 
-# Generate age key
-age-keygen -o ~/.config/chezmoi/key.txt
+# Get age key from 1Password
+mkdir -p ~/.config/chezmoi
+op document get dyhxf4wgavxqwqt23wbsl5my2m > ~/.config/chezmoi/key.txt
 chmod 600 ~/.config/chezmoi/key.txt
 
 # Initialize chezmoi
