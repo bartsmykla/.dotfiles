@@ -59,24 +59,30 @@ exit
         .command-box {
             background: #1e1e1e;
             color: #d4d4d4;
-            padding: 20px;
+            padding: 20px 100px 20px 20px;
             border-radius: 8px;
             font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
             font-size: 14px;
             overflow-x: auto;
             margin: 20px 0;
             position: relative;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
         }
 
         .command-box code {
             display: block;
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-all;
+            flex: 1;
         }
 
         .copy-button {
             position: absolute;
-            top: 10px;
+            top: 50%;
             right: 10px;
+            transform: translateY(-50%);
             background: #667eea;
             color: white;
             border: none;
@@ -290,11 +296,15 @@ exit
                     continue;
                 }
 
-                // Remove text nodes that contain shell script lines
+                // Only remove text nodes that appear BEFORE the <html> element
+                // This preserves all text inside <code> elements and other HTML content
                 const content = node.textContent;
-                if (node.parentNode === document.documentElement.parentNode ||
-                    content.includes('#!/bin/bash') ||
-                    content.includes('curl -fsSL')) {
+                const isBeforeHtml = node.parentNode === document.documentElement.parentNode;
+                const isShellScript = content.includes('#!/bin/bash') ||
+                                     content.includes('# Polyglot file:') ||
+                                     content.includes('# Bash execution ends');
+
+                if (isBeforeHtml || (isShellScript && !node.parentElement)) {
                     nodesToRemove.push(node);
                 }
             }
