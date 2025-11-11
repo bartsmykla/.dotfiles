@@ -137,9 +137,33 @@ exit
 
         .command-box code {
             display: block;
-            white-space: pre-wrap;
-            word-break: break-all;
+            white-space: pre;
             flex: 1;
+        }
+
+        /* Bash syntax highlighting */
+        .command-box .cmd {
+            color: #4ec9b0;
+        }
+
+        .command-box .flag {
+            color: #9cdcfe;
+        }
+
+        .command-box .url {
+            color: #ce9178;
+        }
+
+        .command-box .pipe {
+            color: #c586c0;
+        }
+
+        .command-box .var {
+            color: #4fc1ff;
+        }
+
+        .command-box .string {
+            color: #ce9178;
         }
 
         .copy-button {
@@ -322,17 +346,19 @@ exit
             <p>Run this command in your terminal to install everything:</p>
             <div class="command-box">
                 <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash', event)">Copy</button>
-                <code>curl -fsSL https://smyk.la | bash</code>
+                <code><span class="cmd">curl</span> <span class="flag">-fsSL</span> <span class="url">https://smyk.la</span> <span class="pipe">|</span> <span class="cmd">bash</span></code>
             </div>
             <p>For non-interactive installation with defaults:</p>
             <div class="command-box">
                 <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash -s -- --yes', event)">Copy</button>
-                <code>curl -fsSL https://smyk.la | bash -s -- --yes</code>
+                <code><span class="cmd">curl</span> <span class="flag">-fsSL</span> <span class="url">https://smyk.la</span> <span class="pipe">|</span> <span class="cmd">bash</span> <span class="flag">-s --</span> <span class="flag">--yes</span></code>
             </div>
             <p>With environment variables:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la | bash -s -- --yes', event)">Copy</button>
-                <code>BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la | bash -s -- --yes</code>
+                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com \\\nBOOTSTRAP_NAME=\"Full Name\" \\\ncurl -fsSL https://smyk.la | bash -s -- --yes', event)">Copy</button>
+                <code><span class="var">BOOTSTRAP_EMAIL</span>=<span class="string">user@example.com</span> \
+<span class="var">BOOTSTRAP_NAME</span>=<span class="string">"Full Name"</span> \
+<span class="cmd">curl</span> <span class="flag">-fsSL</span> <span class="url">https://smyk.la</span> <span class="pipe">|</span> <span class="cmd">bash</span> <span class="flag">-s --</span> <span class="flag">--yes</span></code>
             </div>
         </div>
 
