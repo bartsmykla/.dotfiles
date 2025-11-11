@@ -36,3 +36,6 @@
 
 # Ignore tmux plugins (managed by TPM)
 .tmux/plugins/
+
+# Ignore Claude Code plugin marketplaces (managed by Claude Code)
+.claude/plugins/marketplaces/
