@@ -42,6 +42,12 @@ For non-interactive installation:
 curl -fsSL https://smyk.la | bash -s -- --yes
 ```
 
+With custom installation directory:
+
+```bash
+curl -fsSL https://smyk.la | bash -s -- --dir ~/dotfiles
+```
+
 With environment variables:
 
 ```bash
@@ -49,7 +55,7 @@ BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" \
   curl -fsSL https://smyk.la | bash -s -- --yes
 ```
 
-See [https://smyk.la](https://smyk.la) for more options.
+See [https://smyk.la](https://smyk.la) for more options. The default installation directory is `~/Projects/github.com/bartsmykla/.dotfiles`, but this can be customized using `--dir` flag or `BOOTSTRAP_DIR` environment variable.
 
 ### Manual Installation
 

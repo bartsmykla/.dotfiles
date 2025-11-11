@@ -3,6 +3,7 @@
 # Bootstrap script for bartsmykla's dotfiles
 # Usage: curl -fsSL https://smyk.la | bash
 #        curl -fsSL https://smyk.la | bash -s -- --yes
+#        curl -fsSL https://smyk.la | bash -s -- --dir ~/my-dotfiles
 #        BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la | bash -s -- --yes
 
 # shellcheck disable=SC2310  # Functions in conditions with set -e is expected behavior
@@ -13,7 +14,6 @@ set -euo pipefail
 readonly REPO_ORG="bartsmykla"
 readonly REPO_NAME=".dotfiles"
 readonly REPO_URL="https://github.com/${REPO_ORG}/${REPO_NAME}.git"
-readonly TARGET_DIR="${HOME}/Projects/github.com/${REPO_ORG}/${REPO_NAME}"
 readonly AGE_KEY_PATH="${HOME}/.config/chezmoi/key.txt"
 readonly AGE_KEY_OP_ID="dyhxf4wgavxqwt23wbsl5my2m"
 
@@ -24,10 +24,12 @@ readonly YELLOW='\033[1;33m'
 readonly BLUE='\033[0;34m'
 readonly NC='\033[0m' # No Color
 
-# Flags
+# Flags and configurable options
 YES_FLAG=false
 BOOTSTRAP_EMAIL="${BOOTSTRAP_EMAIL:-}"
 BOOTSTRAP_NAME="${BOOTSTRAP_NAME:-}"
+BOOTSTRAP_DIR="${BOOTSTRAP_DIR:-${HOME}/Projects/github.com/${REPO_ORG}/${REPO_NAME}}"
+TARGET_DIR="${BOOTSTRAP_DIR}"
 
 #
 # Helper functions
@@ -463,6 +465,11 @@ parse_args() {
                 BOOTSTRAP_NAME="$2"
                 shift 2
                 ;;
+            --dir)
+                BOOTSTRAP_DIR="$2"
+                TARGET_DIR="${BOOTSTRAP_DIR}"
+                shift 2
+                ;;
             --help|-h)
                 echo "Bootstrap script for bartsmykla's dotfiles"
                 echo ""
@@ -474,14 +481,17 @@ parse_args() {
                 echo "  --yes, -y          Skip confirmation prompts"
                 echo "  --email EMAIL      Set email (overrides git config)"
                 echo "  --name NAME        Set full name (overrides git config)"
+                echo "  --dir DIRECTORY    Installation directory (default: ~/Projects/github.com/bartsmykla/.dotfiles)"
                 echo "  --help, -h         Show this help"
                 echo ""
                 echo "Environment variables:"
                 echo "  BOOTSTRAP_EMAIL    Set email address"
                 echo "  BOOTSTRAP_NAME     Set full name"
+                echo "  BOOTSTRAP_DIR      Installation directory"
                 echo ""
                 echo "Examples:"
                 echo "  curl -fsSL https://smyk.la | bash -s -- --yes"
+                echo "  curl -fsSL https://smyk.la | bash -s -- --dir ~/dotfiles"
                 echo "  BOOTSTRAP_EMAIL=user@example.com curl -fsSL https://smyk.la | bash"
                 exit 0
                 ;;
