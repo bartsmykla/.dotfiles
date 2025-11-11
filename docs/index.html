@@ -187,17 +187,17 @@ exit
             <h2>Quick Install</h2>
             <p>Run this command in your terminal to install everything:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash')">Copy</button>
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash', event)">Copy</button>
                 <code>curl -fsSL https://smyk.la | bash</code>
             </div>
             <p>For non-interactive installation with defaults:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash -s -- --yes')">Copy</button>
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash -s -- --yes', event)">Copy</button>
                 <code>curl -fsSL https://smyk.la | bash -s -- --yes</code>
             </div>
             <p>With environment variables:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la | bash -s -- --yes')">Copy</button>
+                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la | bash -s -- --yes', event)">Copy</button>
                 <code>BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la | bash -s -- --yes</code>
             </div>
         </div>
@@ -306,10 +306,10 @@ exit
             });
         })();
 
-        function copyToClipboard(text) {
+        function copyToClipboard(text, evt) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(function() {
-                    const button = event.target;
+                    const button = evt.target;
                     const originalText = button.textContent;
                     button.textContent = 'Copied!';
                     setTimeout(function() {
@@ -317,14 +317,14 @@ exit
                     }, 2000);
                 }).catch(function(err) {
                     console.error('Failed to copy:', err);
-                    fallbackCopy(text);
+                    fallbackCopy(text, evt);
                 });
             } else {
-                fallbackCopy(text);
+                fallbackCopy(text, evt);
             }
         }
 
-        function fallbackCopy(text) {
+        function fallbackCopy(text, evt) {
             const textArea = document.createElement('textarea');
             textArea.value = text;
             textArea.style.position = 'fixed';
@@ -333,7 +333,7 @@ exit
             textArea.select();
             try {
                 document.execCommand('copy');
-                const button = event.target;
+                const button = evt.target;
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
                 setTimeout(function() {
