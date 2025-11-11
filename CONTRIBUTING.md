@@ -219,27 +219,42 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 
 ## Encryption
 
-### Working with Encrypted Files
+The dotfiles use age encryption for sensitive files. There are two encryption systems:
 
-Files encrypted with age should not expose sensitive data in commits.
+### Chezmoi-Managed Files
 
-See [docs/AGE-ENCRYPTION.md](docs/AGE-ENCRYPTION.md) for:
+Files prefixed with `encrypted_` and `.age` extension in `chezmoi/` source:
 
-- Adding and editing encrypted files
-- Age key management
-- Encryption workflow
+```bash
+chezmoi add --encrypt ~/.config/sensitive-file    # Add encrypted file
+chezmoi edit ~/.config/sensitive-file             # Edit encrypted file
+```
+
+### Git-Filter Files
+
+Files automatically encrypted via `.gitattributes` (CLAUDE.md, secrets/, todos/):
+
+- Encrypted transparently on `git add`
+- Decrypted automatically on checkout
+- Uses `.git/age-clean.sh` (encrypt) and age smudge filter (decrypt)
+
+### Key Management
+
+- **Personal key**: `~/.config/chezmoi/key.txt` (never commit)
+- **CI key**: Stored in `AGE_CI_KEY` GitHub Secret
+- Both keys can decrypt files (multi-recipient encryption)
 
 **Never commit**:
 
 - Plain-text secrets
-- Age private keys (`~/.config/chezmoi/key.txt`)
+- Age private keys
 - Personal API tokens
 
 ## Getting Help
 
-- Check [TESTING.md](TESTING.md) for testing issues
-- Check [docs/DEBUGGING.md](docs/DEBUGGING.md) for debugging
-- Check [ARCHITECTURE.md](ARCHITECTURE.md) for design decisions
+- [TESTING.md](TESTING.md) - Testing and CI/CD
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Debugging and common issues
+- [README.md](README.md) - Quick start and overview
 - Open an issue for bugs or feature requests
 
 ## License
