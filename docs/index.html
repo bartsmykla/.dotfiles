@@ -140,27 +140,27 @@ exit
             display: none;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
+            .ascii-full {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 950px) {
             .ascii-full {
                 font-size: 9px;
             }
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 850px) {
             .ascii-full {
                 font-size: 8px;
             }
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 750px) {
             .ascii-full {
                 font-size: 7px;
-            }
-        }
-
-        @media (max-width: 650px) {
-            .ascii-full {
-                font-size: 6px;
             }
         }
 
@@ -366,6 +366,70 @@ exit
             color: #856404;
         }
 
+        @media (max-width: 768px) {
+            /* Convert table to list on tablet/mobile */
+            .options-table,
+            .options-table thead,
+            .options-table tbody,
+            .options-table tr,
+            .options-table th,
+            .options-table td {
+                display: block;
+            }
+
+            .options-table thead {
+                display: none;
+            }
+
+            .options-table tr {
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 15px;
+                background: white;
+            }
+
+            .options-table tbody tr:nth-child(even) {
+                background: white;
+            }
+
+            .options-table tbody tr:hover {
+                background: white;
+            }
+
+            .options-table td {
+                border: none;
+                padding: 5px 0;
+                text-align: left;
+            }
+
+            .options-table td:nth-child(1)::before {
+                content: "Option: ";
+                font-weight: bold;
+                color: #667eea;
+            }
+
+            .options-table td:nth-child(2) {
+                padding: 5px 0;
+            }
+
+            .options-table td:nth-child(2):not(:empty)::before {
+                content: "Short: ";
+                font-weight: bold;
+                color: #667eea;
+            }
+
+            .options-table td:nth-child(2):empty {
+                display: none;
+            }
+
+            .options-table td:nth-child(3)::before {
+                content: "Description: ";
+                font-weight: bold;
+                color: #667eea;
+            }
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -453,68 +517,6 @@ exit
             .command-box.copied::after {
                 content: 'Copied!';
                 display: flex;
-            }
-
-            /* Convert table to list on mobile */
-            .options-table,
-            .options-table thead,
-            .options-table tbody,
-            .options-table tr,
-            .options-table th,
-            .options-table td {
-                display: block;
-            }
-
-            .options-table thead {
-                display: none;
-            }
-
-            .options-table tr {
-                margin-bottom: 20px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 15px;
-                background: white;
-            }
-
-            .options-table tbody tr:nth-child(even) {
-                background: white;
-            }
-
-            .options-table tbody tr:hover {
-                background: white;
-            }
-
-            .options-table td {
-                border: none;
-                padding: 5px 0;
-                text-align: left;
-            }
-
-            .options-table td:nth-child(1)::before {
-                content: "Option: ";
-                font-weight: bold;
-                color: #667eea;
-            }
-
-            .options-table td:nth-child(2) {
-                padding: 5px 0;
-            }
-
-            .options-table td:nth-child(2):not(:empty)::before {
-                content: "Short: ";
-                font-weight: bold;
-                color: #667eea;
-            }
-
-            .options-table td:nth-child(2):empty {
-                display: none;
-            }
-
-            .options-table td:nth-child(3)::before {
-                content: "Description: ";
-                font-weight: bold;
-                color: #667eea;
             }
         }
     </style>
