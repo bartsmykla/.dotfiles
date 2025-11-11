@@ -341,6 +341,66 @@ Describe 'Bootstrap Script'
             The stdout should include "Use --help for usage information"
             The stderr should be present
         End
+
+        It 'rejects --email without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email
+            The status should be failure
+            The stderr should include "--email requires a value"
+        End
+
+        It 'rejects --email with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email --name
+            The status should be failure
+            The stderr should include "--email requires a value"
+        End
+
+        It 'rejects --name without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --name
+            The status should be failure
+            The stderr should include "--name requires a value"
+        End
+
+        It 'rejects --name with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --name --email
+            The status should be failure
+            The stderr should include "--name requires a value"
+        End
+
+        It 'rejects --dir without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --dir
+            The status should be failure
+            The stderr should include "--dir requires a value"
+        End
+
+        It 'rejects --dir with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --dir --yes
+            The status should be failure
+            The stderr should include "--dir requires a value"
+        End
+
+        It 'rejects invalid email format'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email "invalid-email" --help
+            The status should be failure
+            The stderr should include "--email must be a valid email address"
+        End
+
+        It 'rejects email without domain'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email "user@" --help
+            The status should be failure
+            The stderr should include "--email must be a valid email address"
+        End
+
+        It 'rejects email without @'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email "userdomain.com" --help
+            The status should be failure
+            The stderr should include "--email must be a valid email address"
+        End
+
+        It 'accepts valid email format'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email "user@example.com" --help
+            The status should be success
+            The output should include "Bootstrap script for bartsmykla's dotfiles"
+        End
     End
 
     Describe 'Clone repository function'
@@ -371,6 +431,163 @@ Describe 'Bootstrap Script'
         It 'shows --dir option in usage examples'
             When call head -10 "${BOOTSTRAP_SCRIPT}"
             The output should include "--dir"
+        End
+    End
+
+    Describe 'Age key setup'
+        It 'has improved age key instructions'
+            When call grep -A 2 "Please paste your age key" "${BOOTSTRAP_SCRIPT}"
+            The output should include "then press Ctrl-D (without pressing Enter first)"
+        End
+
+        It 'has trim helper function'
+            When call grep -c "^trim()" "${BOOTSTRAP_SCRIPT}"
+            The output should not equal "0"
+        End
+
+        It 'trims whitespace from age key input'
+            When call grep "key_content=.*trim" "${BOOTSTRAP_SCRIPT}"
+            The status should be success
+            The output should be present
+        End
+
+        It 'validates age key format'
+            When call grep "AGE-SECRET-KEY-" "${BOOTSTRAP_SCRIPT}"
+            The status should be success
+            The output should be present
+        End
+
+        It 'fails fast with --yes flag when age key unavailable'
+            When call grep -A 3 "Fallback to manual paste" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
+        End
+    End
+
+    Describe 'User input validation with --yes flag'
+        It 'fails fast when email is required with --yes flag'
+            When call grep -B 2 -A 2 "Email is required" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
+        End
+
+        It 'fails fast when name is required with --yes flag'
+            When call grep -B 2 -A 2 "Full name is required" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
+        End
+    End
+
+    Describe 'Integration tests for --yes flag fail-fast behavior'
+        setup_test_env() {
+            # Create temporary test directory
+            # shellcheck disable=SC2154  # SHELLSPEC_TMPBASE is a ShellSpec built-in variable
+            export TEST_HOME="${SHELLSPEC_TMPBASE}/test-home"
+            export HOME="${TEST_HOME}"
+            mkdir -p "${TEST_HOME}"
+
+            # Mock git to return no config
+            # shellcheck disable=SC2329  # Function is invoked indirectly via export -f
+            git() {
+                if [[ "$*" == *"config"* ]]; then
+                    return 1
+                fi
+                command git "$@"
+            }
+            export -f git
+
+            # Mock op command to simulate 1Password unavailable
+            # shellcheck disable=SC2329  # Function is invoked indirectly via export -f
+            op() {
+                return 1
+            }
+            export -f op
+        }
+
+        cleanup_test_env() {
+            # Restore original HOME
+            unset TEST_HOME
+            unset -f git 2>/dev/null || true
+            unset -f op 2>/dev/null || true
+        }
+
+        Before 'setup_test_env'
+        After 'cleanup_test_env'
+
+        It 'fails immediately with --yes when age key is unavailable'
+            # Unset environment variables
+            unset BOOTSTRAP_EMAIL
+            unset BOOTSTRAP_NAME
+
+            When run bash "${BOOTSTRAP_SCRIPT}" --yes --dir "${TEST_HOME}/.dotfiles"
+            The status should be failure
+            The stderr should include "Age key is required"
+            The output should include "bartsmykla's dotfiles bootstrap"
+        End
+
+        It 'accepts email from environment variable with --yes flag'
+            export BOOTSTRAP_EMAIL="test@example.com"
+            export BOOTSTRAP_NAME="Test User"
+
+            When run bash "${BOOTSTRAP_SCRIPT}" --yes --help
+            The status should be success
+            The output should include "Bootstrap script for bartsmykla's dotfiles"
+        End
+
+        It 'accepts email from --email flag with --yes'
+            export BOOTSTRAP_NAME="Test User"
+
+            When run bash "${BOOTSTRAP_SCRIPT}" --yes --email "test@example.com" --help
+            The status should be success
+            The output should include "Bootstrap script for bartsmykla's dotfiles"
+        End
+    End
+
+    Describe 'Trim function behavior'
+        # Define trim function directly for testing
+        # This is the same implementation as in bootstrap.sh
+        setup_trim() {
+            # shellcheck disable=SC2329  # Function is invoked indirectly via ShellSpec test framework
+            trim() {
+                local var="$1"
+                # Remove leading whitespace
+                var="${var#"${var%%[![:space:]]*}"}"
+                # Remove trailing whitespace
+                var="${var%"${var##*[![:space:]]}"}"
+                echo "${var}"
+            }
+        }
+
+        Before 'setup_trim'
+
+        It 'trims leading whitespace'
+            When call trim "  hello"
+            The output should equal "hello"
+        End
+
+        It 'trims trailing whitespace'
+            When call trim "hello  "
+            The output should equal "hello"
+        End
+
+        It 'trims both leading and trailing whitespace'
+            When call trim "  hello  "
+            The output should equal "hello"
+        End
+
+        It 'preserves internal whitespace'
+            When call trim "  hello world  "
+            The output should equal "hello world"
+        End
+
+        It 'handles empty string'
+            When call trim ""
+            The output should equal ""
+        End
+
+        It 'handles string with only whitespace'
+            When call trim "   "
+            The output should equal ""
         End
     End
 End
