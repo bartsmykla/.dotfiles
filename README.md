@@ -7,6 +7,8 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 [![Dependency Review](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml)
 [![OpenSSF Scorecard](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml)
 
+<!-- Test: Smyklot PR command automation -->
+
 ## Features
 
 - **Dotfile Management**: chezmoi for cross-machine synchronization
@@ -185,3 +187,5 @@ See [TESTING.md](TESTING.md) for details.
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+<!-- Test: Smyklot PR commands -->
