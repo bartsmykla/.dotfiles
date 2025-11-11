@@ -11,8 +11,8 @@
 # Encryption method
 encryption = "age"
 
-# Source directory (where dotfiles are stored)
-sourceDir = "~/Projects/github.com/bartsmykla/.dotfiles/chezmoi"
+# Source directory (set from chezmoi init --source flag)
+sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 # Data available in templates
 [data]
