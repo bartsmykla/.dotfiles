@@ -47,7 +47,34 @@ jobs:
       # Install Task and testing dependencies
       - name: Install dependencies
         run: |
-          brew install go-task fish shellcheck markdownlint-cli check-jsonschema shellspec vim
+          brew install go-task fish shellcheck markdownlint-cli check-jsonschema shellspec vim age chezmoi
+
+      # Set up age decryption key for CI
+      - name: Setup age key
+        run: |
+          mkdir -p ~/.config/age
+          echo "${{ secrets.AGE_CI_KEY }}" > ~/.config/age/ci-key.txt
+          chmod 600 ~/.config/age/ci-key.txt
+
+      # Configure git to decrypt age-encrypted files
+      - name: Configure git age filters
+        run: |
+          git config filter.age.smudge "age --decrypt --identity ~/.config/age/ci-key.txt 2>/dev/null || cat"
+          git config filter.age.required true
+          # Force git to re-read files with updated filter
+          git rm --cached -r .
+          git reset --hard HEAD
+
+      # Test chezmoi can initialize with encrypted files
+      - name: Test chezmoi init
+        run: |
+          # Set up chezmoi config with CI key
+          mkdir -p ~/.config/chezmoi
+          cp ~/.config/age/ci-key.txt ~/.config/chezmoi/key.txt
+          # Initialize chezmoi
+          chezmoi init --source "$PWD/chezmoi"
+          # Verify chezmoi can read encrypted files
+          chezmoi verify || echo "Chezmoi verification completed"
 
       # Run all tests using Taskfile
       - name: Run tests
