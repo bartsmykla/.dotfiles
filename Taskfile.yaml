@@ -260,11 +260,13 @@ tasks:
       - Fish syntax validation
       - markdownlint on documentation
       - Taskfile schema validation
+      - GitHub Actions workflow linting
     deps:
       - lint:shell
       - lint:fish
       - lint:markdown
       - lint:taskfile
+      - lint:actions
     cmds:
       - echo "✅ All linters passed!"
 
@@ -324,6 +326,17 @@ tasks:
       - echo "▶ Validating Taskfile.yaml"
       - check-jsonschema --schemafile https://taskfile.dev/schema.json Taskfile.yaml
       - echo "✓ Taskfile.yaml valid"
+
+  lint:actions:
+    desc: Lint GitHub Actions workflows with actionlint
+    dir: '{{.G_DOTFILES}}'
+    sources:
+      - '.github/workflows/*.yaml'
+      - '.github/workflows/*.yml'
+    cmds:
+      - echo "▶ Linting GitHub Actions workflows"
+      - actionlint .github/workflows/*.yaml .github/workflows/*.yml 2>/dev/null || actionlint .github/workflows/*.yaml
+      - echo "✓ GitHub Actions workflows pass linting"
 
   # ==========================================================================
   # Maintenance
