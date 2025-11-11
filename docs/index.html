@@ -248,6 +248,19 @@ exit
             font-weight: 600;
         }
 
+        .options-table th:nth-child(1),
+        .options-table td:nth-child(1) {
+            white-space: nowrap;
+            width: 30%;
+        }
+
+        .options-table th:nth-child(2),
+        .options-table td:nth-child(2) {
+            white-space: nowrap;
+            width: 10%;
+            text-align: center;
+        }
+
         .options-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #eee;
@@ -378,28 +391,34 @@ exit
                 <thead>
                     <tr>
                         <th>Option</th>
+                        <th>Short</th>
                         <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>--yes</code>, <code>-y</code></td>
+                        <td><code>--yes</code></td>
+                        <td><code>-y</code></td>
                         <td>Skip confirmation prompts and use defaults</td>
                     </tr>
                     <tr>
                         <td><code>--email EMAIL</code></td>
+                        <td></td>
                         <td>Set email address (overrides git config)</td>
                     </tr>
                     <tr>
                         <td><code>--name NAME</code></td>
+                        <td></td>
                         <td>Set full name (overrides git config)</td>
                     </tr>
                     <tr>
                         <td><code>--dir DIRECTORY</code></td>
+                        <td></td>
                         <td>Installation directory (default: <code>~/Projects/github.com/bartsmykla/.dotfiles</code>)</td>
                     </tr>
                     <tr>
-                        <td><code>--help</code>, <code>-h</code></td>
+                        <td><code>--help</code></td>
+                        <td><code>-h</code></td>
                         <td>Show help message</td>
                     </tr>
                 </tbody>
