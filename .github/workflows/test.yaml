@@ -63,8 +63,8 @@ jobs:
           git config filter.age.clean "cat"
           git config filter.age.required true
 
-      # Test chezmoi can initialize with encrypted files
-      - name: Test chezmoi init
+      # Test chezmoi can initialize and apply dotfiles with encrypted files
+      - name: Test chezmoi init and apply
         run: |
           # Set up chezmoi config with CI key (bypass template prompts)
           mkdir -p ~/.config/chezmoi
@@ -86,6 +86,8 @@ jobs:
           EOF
           # Initialize chezmoi with existing config (skip template processing)
           chezmoi init --source "$PWD/chezmoi" --config-path ~/.config/chezmoi/chezmoi.toml
+          # Apply dotfiles to deploy mise config and other dotfiles
+          chezmoi apply
           # Verify chezmoi can read encrypted files
           chezmoi verify || echo "Chezmoi verification completed"
 
