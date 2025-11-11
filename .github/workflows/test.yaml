@@ -44,10 +44,12 @@ jobs:
           echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
           echo "/home/linuxbrew/.linuxbrew/sbin" >> "$GITHUB_PATH"
 
-      # Install Task and testing dependencies
+      # Install dependencies
+      # age/chezmoi needed for setup steps before mise-action
+      # Tools installed later by mise: task, shellcheck, markdownlint, actionlint
       - name: Install dependencies
         run: |
-          brew install go-task fish shellcheck markdownlint-cli check-jsonschema shellspec vim age chezmoi
+          brew install fish check-jsonschema shellspec vim age chezmoi
 
       # Set up age decryption key for CI
       - name: Setup age key
