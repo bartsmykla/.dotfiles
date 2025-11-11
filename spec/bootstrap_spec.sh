@@ -341,6 +341,42 @@ Describe 'Bootstrap Script'
             The stdout should include "Use --help for usage information"
             The stderr should be present
         End
+
+        It 'rejects --email without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email
+            The status should be failure
+            The stderr should include "--email requires a value"
+        End
+
+        It 'rejects --email with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --email --name
+            The status should be failure
+            The stderr should include "--email requires a value"
+        End
+
+        It 'rejects --name without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --name
+            The status should be failure
+            The stderr should include "--name requires a value"
+        End
+
+        It 'rejects --name with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --name --email
+            The status should be failure
+            The stderr should include "--name requires a value"
+        End
+
+        It 'rejects --dir without value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --dir
+            The status should be failure
+            The stderr should include "--dir requires a value"
+        End
+
+        It 'rejects --dir with flag as value'
+            When run bash "${BOOTSTRAP_SCRIPT}" --dir --yes
+            The status should be failure
+            The stderr should include "--dir requires a value"
+        End
     End
 
     Describe 'Clone repository function'
@@ -371,6 +407,45 @@ Describe 'Bootstrap Script'
         It 'shows --dir option in usage examples'
             When call head -10 "${BOOTSTRAP_SCRIPT}"
             The output should include "--dir"
+        End
+    End
+
+    Describe 'Age key setup'
+        It 'has improved age key instructions'
+            When call grep -A 2 "Please paste your age key" "${BOOTSTRAP_SCRIPT}"
+            The output should include "then press Ctrl-D (without pressing Enter first)"
+        End
+
+        It 'trims whitespace from age key input'
+            When call grep "key_content=.*xargs" "${BOOTSTRAP_SCRIPT}"
+            The status should be success
+            The output should be present
+        End
+
+        It 'validates age key format'
+            When call grep "AGE-SECRET-KEY-" "${BOOTSTRAP_SCRIPT}"
+            The status should be success
+            The output should be present
+        End
+
+        It 'fails fast with --yes flag when age key unavailable'
+            When call grep -A 3 "Fallback to manual paste" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
+        End
+    End
+
+    Describe 'User input validation with --yes flag'
+        It 'fails fast when email is required with --yes flag'
+            When call grep -B 2 -A 2 "Email is required" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
+        End
+
+        It 'fails fast when name is required with --yes flag'
+            When call grep -B 2 -A 2 "Full name is required" "${BOOTSTRAP_SCRIPT}"
+            The output should include "YES_FLAG"
+            The output should include "die"
         End
     End
 End
