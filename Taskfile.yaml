@@ -21,7 +21,7 @@ set: [pipefail]
 
 output: prefixed
 
-silent: false
+silent: true
 
 vars:
   G_DOTFILES: '{{.USER_WORKING_DIR}}'
@@ -39,7 +39,6 @@ tasks:
 
   default:
     desc: Show available tasks
-    silent: true
     aliases: [ls, list]
     cmd: task --list
 
@@ -516,7 +515,6 @@ tasks:
     desc: Verify completions loaded in Fish
     aliases: [comp:check]
     dir: '{{.G_DOTFILES}}'
-    silent: true
     vars:
       LOADED_COUNT:
         sh: fish -c 'echo $fish_complete_path' | tr ' ' '\n' | grep -c 'mise/installs' || echo "0"
@@ -533,7 +531,6 @@ tasks:
   completions:check:report:
     desc: Report completion status
     internal: true
-    silent: true
     dir: '{{.G_DOTFILES}}'
     cmd: |
       if [[ "{{.LOADED_COUNT}}" -gt 0 ]]; then
@@ -582,7 +579,6 @@ tasks:
 
   show:vars:
     desc: Show all Taskfile variables (debugging)
-    silent: true
     cmds:
       - echo "Taskfile Variables:"
       - echo "  DOTFILES={{.G_DOTFILES}}"
