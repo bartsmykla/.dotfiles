@@ -66,25 +66,20 @@ exit
         })();
     </script>
     <style>
-        /* Force everything to render from top */
+        /* Hide all text nodes by default */
         html {
-            display: block;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
-        }
-
-        /* Hide bash script text nodes */
-        html, html * {
             font-size: 0;
             line-height: 0;
             color: transparent;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+            min-height: 100%;
         }
 
         body {
-            display: block;
-            margin: 0;
-            padding: 0;
+            font-size: 0;
+            line-height: 0;
+            color: transparent;
+            background: transparent;
             min-height: 100vh;
         }
 
@@ -450,8 +445,7 @@ exit
             }
 
             .command-box:hover {
-                background: #353845;
-                box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.6);
+                background: rgba(102, 126, 234, 0.05);
             }
 
             .copy-button {
@@ -474,10 +468,6 @@ exit
                 font-weight: bold;
                 border-radius: 8px;
                 pointer-events: none;
-            }
-
-            .command-box.copied {
-                overflow: hidden;
             }
 
             .command-box.copied::after {
