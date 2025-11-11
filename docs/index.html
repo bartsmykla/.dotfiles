@@ -352,6 +352,58 @@ exit
             .command-box {
                 font-size: 12px;
             }
+
+            /* Convert table to list on mobile */
+            .options-table,
+            .options-table thead,
+            .options-table tbody,
+            .options-table tr,
+            .options-table th,
+            .options-table td {
+                display: block;
+            }
+
+            .options-table thead {
+                display: none;
+            }
+
+            .options-table tr {
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 15px;
+                background: white;
+            }
+
+            .options-table tbody tr:nth-child(even) {
+                background: white;
+            }
+
+            .options-table tbody tr:hover {
+                background: white;
+            }
+
+            .options-table td {
+                border: none;
+                padding: 5px 0;
+                text-align: left;
+            }
+
+            .options-table td:nth-child(1)::before {
+                content: "Option: ";
+                font-weight: bold;
+                color: #667eea;
+            }
+
+            .options-table td:nth-child(2) {
+                display: none;
+            }
+
+            .options-table td:nth-child(3)::before {
+                content: "Description: ";
+                font-weight: bold;
+                color: #667eea;
+            }
         }
     </style>
 </head>
@@ -429,7 +481,7 @@ exit
             <ol style="margin-left: 20px; margin-top: 10px;">
                 <li>Check prerequisites (macOS, internet, git)</li>
                 <li>Install Homebrew if not present</li>
-                <li>Clone the dotfiles repository to <code>~/Projects/github.com/bartsmykla/.dotfiles</code></li>
+                <li>Clone the dotfiles repository</li>
                 <li>Set up age encryption key (via 1Password CLI or manual input)</li>
                 <li>Configure git filters for transparent encryption</li>
                 <li>Install all Homebrew packages and dependencies</li>
@@ -469,7 +521,7 @@ exit
                     <tr>
                         <td><code>--dir DIRECTORY</code></td>
                         <td></td>
-                        <td>Installation directory (default: <code>~/Projects/github.com/bartsmykla/.dotfiles</code>)</td>
+                        <td>Installation directory</td>
                     </tr>
                     <tr>
                         <td><code>--help</code></td>
