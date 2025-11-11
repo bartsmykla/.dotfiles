@@ -15,7 +15,7 @@ exit
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bartsmykla's dotfiles</title>
+    <title>Bart's Dotfiles</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea' rx='15'/><text y='50' x='50' text-anchor='middle' dominant-baseline='central' font-size='65' fill='white' font-family='monospace' font-weight='bold'>$</text></svg>">
     <script>
         // Remove shell script text immediately (runs synchronously in head)
@@ -351,6 +351,35 @@ exit
 
             .command-box {
                 font-size: 12px;
+                cursor: pointer;
+                padding: 20px;
+            }
+
+            .copy-button {
+                display: none;
+            }
+
+            .command-box::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(102, 126, 234, 0.9);
+                color: white;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                pointer-events: none;
+            }
+
+            .command-box.copied::after {
+                content: 'Copied!';
+                display: flex;
             }
 
             /* Convert table to list on mobile */
@@ -541,24 +570,73 @@ exit
     </div>
 
     <script>
+        'use strict';
+
         // Hide loading overlay now that DOM is ready
-        (function() {
-            var overlay = document.getElementById('loading-overlay');
+        (() => {
+            const overlay = document.getElementById('loading-overlay');
             if (overlay) {
                 overlay.classList.add('hidden');
             }
         })();
 
+        // Mobile: make command boxes clickable
+        (() => {
+            if (window.innerWidth <= 600) {
+                const commandBoxes = document.querySelectorAll('.command-box');
+                commandBoxes.forEach((box) => {
+                    box.addEventListener('click', (e) => {
+                        // Don't interfere with button clicks on desktop
+                        if (e.target.classList.contains('copy-button')) {
+                            return;
+                        }
+
+                        const code = box.querySelector('code');
+                        const text = code.textContent;
+
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(text).then(() => {
+                                box.classList.add('copied');
+                                setTimeout(() => {
+                                    box.classList.remove('copied');
+                                }, 2000);
+                            }).catch((err) => {
+                                console.error('Failed to copy:', err);
+                            });
+                        } else {
+                            // Fallback
+                            const textArea = document.createElement('textarea');
+                            textArea.value = text;
+                            textArea.style.position = 'fixed';
+                            textArea.style.left = '-999999px';
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            try {
+                                document.execCommand('copy');
+                                box.classList.add('copied');
+                                setTimeout(() => {
+                                    box.classList.remove('copied');
+                                }, 2000);
+                            } catch (err) {
+                                console.error('Fallback copy failed:', err);
+                            }
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                });
+            }
+        })();
+
         function copyToClipboard(text, evt) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(function() {
+                navigator.clipboard.writeText(text).then(() => {
                     const button = evt.target;
                     const originalText = button.textContent;
                     button.textContent = 'Copied!';
-                    setTimeout(function() {
+                    setTimeout(() => {
                         button.textContent = originalText;
                     }, 2000);
-                }).catch(function(err) {
+                }).catch((err) => {
                     console.error('Failed to copy:', err);
                     fallbackCopy(text, evt);
                 });
@@ -579,7 +657,7 @@ exit
                 const button = evt.target;
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
-                setTimeout(function() {
+                setTimeout(() => {
                     button.textContent = originalText;
                 }, 2000);
             } catch (err) {
