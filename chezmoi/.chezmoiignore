@@ -30,3 +30,9 @@
 
 # Ignore plugin .git directories (can be large)
 .claude/plugins/marketplaces/**/.git/
+
+# Ignore vim plugins and cache (managed by Vundle)
+.vim/
+
+# Ignore tmux plugins (managed by TPM)
+.tmux/plugins/

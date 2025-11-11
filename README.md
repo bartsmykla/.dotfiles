@@ -39,6 +39,12 @@ chezmoi init --source "$PWD/chezmoi"
 
 # Apply dotfiles
 chezmoi apply
+
+# Install vim plugins (Vundle)
+vim +PluginInstall +qall
+
+# Install tmux plugins (TPM) - run inside tmux session
+# Press: <prefix> + I (default prefix is Ctrl-b)
 ```
 
 ### Development
