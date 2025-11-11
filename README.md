@@ -3,6 +3,8 @@
 Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted with [age](https://age-encryption.org/), and automated with [Task](https://taskfile.dev).
 
 [![Test Dotfiles](https://github.com/bartsmykla/.dotfiles/actions/workflows/test.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/test.yaml)
+[![Dependency Review](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml)
+[![OpenSSF Scorecard](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml)
 
 ## Features
 
