@@ -281,7 +281,8 @@ exit
         (function() {
             'use strict';
 
-            // Remove text nodes that appear before the HTML element
+            // Remove all text nodes that are NOT inside the <body> element
+            // This removes the shell script while preserving all HTML content
             const walker = document.createTreeWalker(
                 document,
                 NodeFilter.SHOW_TEXT,
@@ -296,15 +297,20 @@ exit
                     continue;
                 }
 
-                // Only remove text nodes that appear BEFORE the <html> element
-                // This preserves all text inside <code> elements and other HTML content
-                const content = node.textContent;
-                const isBeforeHtml = node.parentNode === document.documentElement.parentNode;
-                const isShellScript = content.includes('#!/bin/bash') ||
-                                     content.includes('# Polyglot file:') ||
-                                     content.includes('# Bash execution ends');
+                // Check if this node is inside the body element
+                let parent = node.parentNode;
+                let isInBody = false;
 
-                if (isBeforeHtml || (isShellScript && !node.parentElement)) {
+                while (parent) {
+                    if (parent.nodeName === 'BODY') {
+                        isInBody = true;
+                        break;
+                    }
+                    parent = parent.parentNode;
+                }
+
+                // Remove text nodes that are NOT in the body
+                if (!isInBody) {
                     nodesToRemove.push(node);
                 }
             }
