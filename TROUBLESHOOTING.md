@@ -11,6 +11,117 @@ chezmoi verify      # Verify chezmoi state
 chezmoi doctor      # Check chezmoi setup
 ```
 
+## Bootstrap Script Issues
+
+### Bootstrap Script Fails to Download
+
+**Check connectivity:**
+
+```bash
+curl -I https://smyk.la/bootstrap.sh    # Should return 200 OK
+ping github.com                          # Verify GitHub access
+```
+
+**Download and inspect script manually:**
+
+```bash
+curl -fsSL https://smyk.la/bootstrap.sh > /tmp/bootstrap.sh
+less /tmp/bootstrap.sh
+bash /tmp/bootstrap.sh
+```
+
+### Age Key Retrieval Fails
+
+**1Password CLI not authenticated:**
+
+```bash
+op signin                                # Sign in to 1Password
+op document get dyhxf4wgavxqwt23wbsl5my2m > ~/.config/chezmoi/key.txt
+chmod 600 ~/.config/chezmoi/key.txt
+```
+
+**Manual key entry:**
+
+If 1Password CLI fails, the script will prompt for manual key entry. Copy your age key (starts with `AGE-SECRET-KEY-`) and paste when prompted.
+
+### Homebrew Installation Hangs
+
+**Kill and restart:**
+
+```bash
+# Ctrl+C to cancel
+# Run bootstrap again - it will detect existing Homebrew
+curl -fsSL https://smyk.la/bootstrap.sh | bash
+```
+
+### Repository Already Exists
+
+The bootstrap script will detect existing repositories and offer to update them. If you want a fresh clone:
+
+```bash
+mv ~/Projects/github.com/bartsmykla/.dotfiles ~/Projects/github.com/bartsmykla/.dotfiles.backup
+curl -fsSL https://smyk.la/bootstrap.sh | bash
+```
+
+### Git Filter Configuration Fails
+
+**Verify scripts exist:**
+
+```bash
+ls -la ~/Projects/github.com/bartsmykla/.dotfiles/.git/age-*.sh
+```
+
+**Reconfigure manually:**
+
+```bash
+cd ~/Projects/github.com/bartsmykla/.dotfiles
+git config filter.age.clean "$PWD/.git/age-clean.sh"
+git config filter.age.smudge "$PWD/.git/age-smudge.sh"
+```
+
+### Task Install Fails
+
+**Check Task availability:**
+
+```bash
+which task                               # Should show path
+brew install go-task                     # Install if missing
+```
+
+**Run manually:**
+
+```bash
+cd ~/Projects/github.com/bartsmykla/.dotfiles
+task install
+```
+
+### Chezmoi Init Hangs
+
+If chezmoi init hangs waiting for input:
+
+```bash
+# Ctrl+C to cancel
+# Run with environment variables
+BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" \
+  curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+```
+
+### Bootstrap Completes but Shell Not Changed
+
+**Restart terminal:**
+
+```bash
+# Or manually switch to Fish:
+exec $(which fish)
+```
+
+**Verify Fish is default shell:**
+
+```bash
+echo $SHELL                              # Should show Fish path
+chsh -s $(which fish)                    # Set if not default
+```
+
 ## Chezmoi Issues
 
 ### Files Not Syncing
