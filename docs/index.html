@@ -425,6 +425,16 @@ exit
             }
 
             .options-table td:nth-child(2) {
+                padding: 5px 0;
+            }
+
+            .options-table td:nth-child(2):not(:empty)::before {
+                content: "Short: ";
+                font-weight: bold;
+                color: #667eea;
+            }
+
+            .options-table td:nth-child(2):empty {
                 display: none;
             }
 
@@ -581,51 +591,54 @@ exit
         })();
 
         // Mobile: make command boxes clickable
-        (() => {
-            if (window.innerWidth <= 600) {
-                const commandBoxes = document.querySelectorAll('.command-box');
-                commandBoxes.forEach((box) => {
-                    box.addEventListener('click', (e) => {
-                        // Don't interfere with button clicks on desktop
-                        if (e.target.classList.contains('copy-button')) {
-                            return;
-                        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const commandBoxes = document.querySelectorAll('.command-box');
+            commandBoxes.forEach((box) => {
+                box.addEventListener('click', (e) => {
+                    // Only handle on mobile (let buttons work on desktop)
+                    if (window.innerWidth > 600 && e.target.classList.contains('copy-button')) {
+                        return;
+                    }
 
-                        const code = box.querySelector('code');
-                        const text = code.textContent;
+                    // Don't trigger if clicking the button on desktop
+                    if (e.target.classList.contains('copy-button')) {
+                        return;
+                    }
 
-                        if (navigator.clipboard && navigator.clipboard.writeText) {
-                            navigator.clipboard.writeText(text).then(() => {
-                                box.classList.add('copied');
-                                setTimeout(() => {
-                                    box.classList.remove('copied');
-                                }, 2000);
-                            }).catch((err) => {
-                                console.error('Failed to copy:', err);
-                            });
-                        } else {
-                            // Fallback
-                            const textArea = document.createElement('textarea');
-                            textArea.value = text;
-                            textArea.style.position = 'fixed';
-                            textArea.style.left = '-999999px';
-                            document.body.appendChild(textArea);
-                            textArea.select();
-                            try {
-                                document.execCommand('copy');
-                                box.classList.add('copied');
-                                setTimeout(() => {
-                                    box.classList.remove('copied');
-                                }, 2000);
-                            } catch (err) {
-                                console.error('Fallback copy failed:', err);
-                            }
-                            document.body.removeChild(textArea);
+                    const code = box.querySelector('code');
+                    const text = code.textContent;
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            box.classList.add('copied');
+                            setTimeout(() => {
+                                box.classList.remove('copied');
+                            }, 2000);
+                        }).catch((err) => {
+                            console.error('Failed to copy:', err);
+                        });
+                    } else {
+                        // Fallback
+                        const textArea = document.createElement('textarea');
+                        textArea.value = text;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            box.classList.add('copied');
+                            setTimeout(() => {
+                                box.classList.remove('copied');
+                            }, 2000);
+                        } catch (err) {
+                            console.error('Fallback copy failed:', err);
                         }
-                    });
+                        document.body.removeChild(textArea);
+                    }
                 });
-            }
-        })();
+            });
+        });
 
         function copyToClipboard(text, evt) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
