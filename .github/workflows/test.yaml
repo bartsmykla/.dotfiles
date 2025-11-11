@@ -60,10 +60,8 @@ jobs:
       - name: Configure git age filters
         run: |
           git config filter.age.smudge "age --decrypt --identity ~/.config/age/ci-key.txt 2>/dev/null || cat"
+          git config filter.age.clean "cat"
           git config filter.age.required true
-          # Force git to re-read files with updated filter
-          git rm --cached -r .
-          git reset --hard HEAD
 
       # Test chezmoi can initialize with encrypted files
       - name: Test chezmoi init
