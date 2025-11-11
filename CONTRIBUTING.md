@@ -18,7 +18,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 Use the bootstrap script for quick setup:
 
 ```bash
-curl -fsSL https://smyk.la/bootstrap.sh | bash
+curl -fsSL https://smyk.la | bash
 ```
 
 This automatically handles all dependencies, encryption setup, and configuration. See [https://smyk.la](https://smyk.la) for options.

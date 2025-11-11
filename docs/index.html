@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+#!/bin/bash
+# Polyglot file: works as both HTML (browsers) and shell script (curl | bash)
+# When piped to bash: downloads and executes bootstrap.sh
+# When loaded in browser: renders the HTML page below
+curl -fsSL https://smyk.la/bootstrap.sh | bash
+exit
+#
+# ============================================================================
+# HTML PAGE STARTS BELOW (browsers will show the lines above as plain text)
+# ============================================================================
+<!DOCTYPE html><!--
+# Bash execution ends above, HTML rendering starts here
+# -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -175,18 +187,18 @@
             <h2>Quick Install</h2>
             <p>Run this command in your terminal to install everything:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la/bootstrap.sh | bash')">Copy</button>
-                <code>curl -fsSL https://smyk.la/bootstrap.sh | bash</code>
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash')">Copy</button>
+                <code>curl -fsSL https://smyk.la | bash</code>
             </div>
             <p>For non-interactive installation with defaults:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes')">Copy</button>
-                <code>curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes</code>
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la | bash -s -- --yes')">Copy</button>
+                <code>curl -fsSL https://smyk.la | bash -s -- --yes</code>
             </div>
             <p>With environment variables:</p>
             <div class="command-box">
-                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes')">Copy</button>
-                <code>BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes</code>
+                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la | bash -s -- --yes')">Copy</button>
+                <code>BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la | bash -s -- --yes</code>
             </div>
         </div>
 
@@ -258,6 +270,41 @@
     </div>
 
     <script>
+        // Hide shell script text that browsers show before <!DOCTYPE html>
+        (function() {
+            'use strict';
+
+            // Remove text nodes that appear before the HTML element
+            const walker = document.createTreeWalker(
+                document,
+                NodeFilter.SHOW_TEXT,
+                null
+            );
+            const nodesToRemove = [];
+            let node;
+
+            // eslint-disable-next-line no-cond-assign
+            while ((node = walker.nextNode())) {
+                if (!node || !node.parentNode || !node.textContent) {
+                    continue;
+                }
+
+                // Remove text nodes that contain shell script lines
+                const content = node.textContent;
+                if (node.parentNode === document.documentElement.parentNode ||
+                    content.includes('#!/bin/bash') ||
+                    content.includes('curl -fsSL')) {
+                    nodesToRemove.push(node);
+                }
+            }
+
+            nodesToRemove.forEach(function(n) {
+                if (n && n.parentNode) {
+                    n.parentNode.removeChild(n);
+                }
+            });
+        })();
+
         function copyToClipboard(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(function() {

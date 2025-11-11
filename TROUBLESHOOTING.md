@@ -18,14 +18,14 @@ chezmoi doctor      # Check chezmoi setup
 **Check connectivity:**
 
 ```bash
-curl -I https://smyk.la/bootstrap.sh    # Should return 200 OK
+curl -I https://smyk.la                  # Should return 200 OK
 ping github.com                          # Verify GitHub access
 ```
 
 **Download and inspect script manually:**
 
 ```bash
-curl -fsSL https://smyk.la/bootstrap.sh > /tmp/bootstrap.sh
+curl -fsSL https://smyk.la > /tmp/bootstrap.sh
 less /tmp/bootstrap.sh
 bash /tmp/bootstrap.sh
 ```
@@ -51,7 +51,7 @@ If 1Password CLI fails, the script will prompt for manual key entry. Copy your a
 ```bash
 # Ctrl+C to cancel
 # Run bootstrap again - it will detect existing Homebrew
-curl -fsSL https://smyk.la/bootstrap.sh | bash
+curl -fsSL https://smyk.la | bash
 ```
 
 ### Repository Already Exists
@@ -60,7 +60,7 @@ The bootstrap script will detect existing repositories and offer to update them.
 
 ```bash
 mv ~/Projects/github.com/bartsmykla/.dotfiles ~/Projects/github.com/bartsmykla/.dotfiles.backup
-curl -fsSL https://smyk.la/bootstrap.sh | bash
+curl -fsSL https://smyk.la | bash
 ```
 
 ### Git Filter Configuration Fails
@@ -103,7 +103,7 @@ If chezmoi init hangs waiting for input:
 # Ctrl+C to cancel
 # Run with environment variables
 BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" \
-  curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+  curl -fsSL https://smyk.la | bash -s -- --yes
 ```
 
 ### Bootstrap Completes but Shell Not Changed

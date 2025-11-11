@@ -24,7 +24,7 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 **One-line installation for fresh macOS machines:**
 
 ```bash
-curl -fsSL https://smyk.la/bootstrap.sh | bash
+curl -fsSL https://smyk.la | bash
 ```
 
 This will automatically:
@@ -39,14 +39,14 @@ This will automatically:
 For non-interactive installation:
 
 ```bash
-curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+curl -fsSL https://smyk.la | bash -s -- --yes
 ```
 
 With environment variables:
 
 ```bash
 BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" \
-  curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+  curl -fsSL https://smyk.la | bash -s -- --yes
 ```
 
 See [https://smyk.la](https://smyk.la) for more options.
