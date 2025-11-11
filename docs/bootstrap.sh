@@ -196,12 +196,16 @@ setup_age_key() {
     fi
 
     # Fallback to manual paste
+    if [[ "${YES_FLAG}" == "true" ]]; then
+        die "Age key is required. Install and configure 1Password CLI, or run without --yes flag to enter key manually"
+    fi
+
     log_warn "Age encryption key required"
-    echo "Please paste your age key (it should start with 'AGE-SECRET-KEY-'):"
-    echo "Press Enter when done, then Ctrl-D on a new line"
+    echo "Please paste your age key (it should start with 'AGE-SECRET-KEY-'),"
+    echo "then press Ctrl-D (without pressing Enter first):"
 
     local key_content
-    key_content=$(cat)
+    key_content=$(cat | xargs)  # Trim leading/trailing whitespace
 
     if [[ ! "${key_content}" =~ ^AGE-SECRET-KEY- ]]; then
         die "Invalid age key format"
@@ -284,6 +288,9 @@ get_user_email() {
         read -rp "Email address [${git_email}]: " input_email
         echo "${input_email:-${git_email}}"
     else
+        if [[ "${YES_FLAG}" == "true" ]]; then
+            die "Email is required. Set BOOTSTRAP_EMAIL environment variable or git config user.email"
+        fi
         read -rp "Email address: " input_email
         echo "${input_email}"
     fi
@@ -308,6 +315,9 @@ get_user_name() {
         read -rp "Full name [${git_name}]: " input_name
         echo "${input_name:-${git_name}}"
     else
+        if [[ "${YES_FLAG}" == "true" ]]; then
+            die "Full name is required. Set BOOTSTRAP_NAME environment variable or git config user.name"
+        fi
         read -rp "Full name: " input_name
         echo "${input_name}"
     fi
@@ -458,14 +468,26 @@ parse_args() {
                 shift
                 ;;
             --email)
+                if [[ -z "${2:-}" || "${2:-}" == -* ]]; then
+                    log_error "--email requires a value"
+                    exit 1
+                fi
                 BOOTSTRAP_EMAIL="$2"
                 shift 2
                 ;;
             --name)
+                if [[ -z "${2:-}" || "${2:-}" == -* ]]; then
+                    log_error "--name requires a value"
+                    exit 1
+                fi
                 BOOTSTRAP_NAME="$2"
                 shift 2
                 ;;
             --dir)
+                if [[ -z "${2:-}" || "${2:-}" == -* ]]; then
+                    log_error "--dir requires a value"
+                    exit 1
+                fi
                 BOOTSTRAP_DIR="$2"
                 TARGET_DIR="${BOOTSTRAP_DIR}"
                 shift 2
