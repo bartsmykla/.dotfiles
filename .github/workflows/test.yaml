@@ -9,7 +9,7 @@ on:
   push:
     branches: ['**']
   pull_request:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -97,7 +97,7 @@ jobs:
       - name: Install mise tools
         uses: jdx/mise-action@be3be2260bc02bc3fbf94c5e2fed8b7964baf074  # v3.4.0
         with:
-          install_args: age chezmoi task shellcheck npm:markdownlint-cli
+          install_args: actionlint age chezmoi npm:markdownlint-cli shellcheck task
 
       # Run all tests using Taskfile
       - name: Run tests
