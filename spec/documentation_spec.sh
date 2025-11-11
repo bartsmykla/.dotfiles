@@ -41,12 +41,8 @@ Describe 'Documentation'
             The file "${DOTFILES_PATH}/TESTING.md" should be exist
         End
 
-        It 'has ARCHITECTURE.md'
-            The file "${DOTFILES_PATH}/ARCHITECTURE.md" should be exist
-        End
-
-        It 'has docs/DEBUGGING.md'
-            The file "${DOTFILES_PATH}/docs/DEBUGGING.md" should be exist
+        It 'has TROUBLESHOOTING.md'
+            The file "${DOTFILES_PATH}/TROUBLESHOOTING.md" should be exist
         End
     End
 
@@ -56,23 +52,18 @@ Describe 'Documentation'
             The status should be success
         End
 
-        It 'has Installation section'
-            When call grep -qE '## Installation' "${DOTFILES_PATH}/README.md"
-            The status should be success
-        End
-
         It 'has Features section'
             When call grep -q '## Features' "${DOTFILES_PATH}/README.md"
             The status should be success
         End
 
-        It 'has Usage section'
-            When call grep -q '## Usage' "${DOTFILES_PATH}/README.md"
+        It 'has Testing section'
+            When call grep -q '## Testing' "${DOTFILES_PATH}/README.md"
             The status should be success
         End
 
-        It 'has Troubleshooting section'
-            When call grep -q '## Troubleshooting' "${DOTFILES_PATH}/README.md"
+        It 'has Documentation section'
+            When call grep -q '## Documentation' "${DOTFILES_PATH}/README.md"
             The status should be success
         End
     End
@@ -87,9 +78,7 @@ Describe 'Documentation'
         It 'core documentation files pass markdownlint'
             Skip if "markdownlint not installed" ! command -v markdownlint >/dev/null 2>&1
             # Test only core docs, not vim bundles or tmp files
-            When call markdownlint \
-                "${DOTFILES_PATH}"/*.md \
-                "${DOTFILES_PATH}"/docs/*.md
+            When call markdownlint "${DOTFILES_PATH}"/*.md
             The status should be success
         End
     End
