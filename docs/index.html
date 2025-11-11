@@ -65,6 +65,15 @@ exit
             }
         })();
     </script>
+    <script>
+        // Prevent Chrome from scrolling to middle of page
+        (function() {
+            'use strict';
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+        })();
+    </script>
     <style>
         /* Hide all text nodes by default */
         html {
@@ -445,8 +454,8 @@ exit
             }
 
             .command-box:hover {
-                background: #2a2d3a;
-                box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.5);
+                background: #353845;
+                box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.6);
             }
 
             .copy-button {
@@ -469,6 +478,10 @@ exit
                 font-weight: bold;
                 border-radius: 8px;
                 pointer-events: none;
+            }
+
+            .command-box.copied {
+                overflow: hidden;
             }
 
             .command-box.copied::after {
@@ -689,8 +702,16 @@ exit
     <script>
         'use strict';
 
-        // Force page to start at top (fixes Chrome scroll position)
-        window.scrollTo(0, 0);
+        // Force page to start at top - multiple approaches for Chrome
+        // Immediate scroll
+        setTimeout(() => window.scrollTo(0, 0), 0);
+
+        // On load
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
+
+        // On DOM ready
         document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo(0, 0);
         });
