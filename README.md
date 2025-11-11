@@ -19,12 +19,48 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 
 ## Quick Start
 
-### Prerequisites
+### Automated Installation (Recommended)
+
+**One-line installation for fresh macOS machines:**
+
+```bash
+curl -fsSL https://smyk.la/bootstrap.sh | bash
+```
+
+This will automatically:
+
+- Install Homebrew and all dependencies
+- Clone the repository to the correct location
+- Set up age encryption
+- Configure chezmoi and apply dotfiles
+- Install Vim and Tmux plugins
+- Set up git hooks
+
+For non-interactive installation:
+
+```bash
+curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+```
+
+With environment variables:
+
+```bash
+BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" \
+  curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes
+```
+
+See [https://smyk.la](https://smyk.la) for more options.
+
+### Manual Installation
+
+If you prefer manual control over the installation process:
+
+**Prerequisites:**
 
 - macOS (tested on macOS 15)
 - [Homebrew](https://brew.sh)
 
-### Installation
+**Steps:**
 
 ```bash
 # Clone repository

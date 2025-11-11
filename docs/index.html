@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bartsmykla's dotfiles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .command-box code {
+            display: block;
+            white-space: pre;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .copy-button:hover {
+            background: #5568d3;
+        }
+
+        .copy-button:active {
+            background: #4451b8;
+        }
+
+        .section {
+            margin: 30px 0;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .section p {
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature h3 {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .feature p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .links {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .command-box {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>bartsmykla's dotfiles</h1>
+        <p class="subtitle">Automated macOS development environment setup</p>
+
+        <div class="section">
+            <h2>Quick Install</h2>
+            <p>Run this command in your terminal to install everything:</p>
+            <div class="command-box">
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la/bootstrap.sh | bash')">Copy</button>
+                <code>curl -fsSL https://smyk.la/bootstrap.sh | bash</code>
+            </div>
+            <p>For non-interactive installation with defaults:</p>
+            <div class="command-box">
+                <button class="copy-button" onclick="copyToClipboard('curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes')">Copy</button>
+                <code>curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes</code>
+            </div>
+            <p>With environment variables:</p>
+            <div class="command-box">
+                <button class="copy-button" onclick="copyToClipboard('BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME=\"Full Name\" curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes')">Copy</button>
+                <code>BOOTSTRAP_EMAIL=user@example.com BOOTSTRAP_NAME="Full Name" curl -fsSL https://smyk.la/bootstrap.sh | bash -s -- --yes</code>
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ macOS only:</strong> This setup script is designed for macOS systems only.
+        </div>
+
+        <div class="section">
+            <h2>What Gets Installed</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🐚 Shell</h3>
+                    <p>Fish shell with custom configurations</p>
+                </div>
+                <div class="feature">
+                    <h3>📦 Package Manager</h3>
+                    <p>Homebrew with 150+ packages</p>
+                </div>
+                <div class="feature">
+                    <h3>🛠️ Development Tools</h3>
+                    <p>Git, Docker, Kubernetes, Terraform</p>
+                </div>
+                <div class="feature">
+                    <h3>✏️ Editors</h3>
+                    <p>Vim and Tmux with plugins</p>
+                </div>
+                <div class="feature">
+                    <h3>☁️ Cloud CLIs</h3>
+                    <p>AWS, GCP, Azure tooling</p>
+                </div>
+                <div class="feature">
+                    <h3>🔒 Security</h3>
+                    <p>Age encryption, 1Password integration</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>What Happens</h2>
+            <p>The bootstrap script will:</p>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li>Check prerequisites (macOS, internet, git)</li>
+                <li>Install Homebrew if not present</li>
+                <li>Clone the dotfiles repository to <code>~/Projects/github.com/bartsmykla/.dotfiles</code></li>
+                <li>Set up age encryption key (via 1Password CLI or manual input)</li>
+                <li>Configure git filters for transparent encryption</li>
+                <li>Install all Homebrew packages and dependencies</li>
+                <li>Initialize and apply chezmoi configurations</li>
+                <li>Install Vim and Tmux plugins</li>
+                <li>Set up git hooks for quality checks</li>
+                <li>Run verification tests</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Options</h2>
+            <p><strong>--yes, -y</strong> - Skip confirmation prompts and use defaults</p>
+            <p><strong>--email EMAIL</strong> - Set email address (overrides git config)</p>
+            <p><strong>--name NAME</strong> - Set full name (overrides git config)</p>
+            <p><strong>--help, -h</strong> - Show help message</p>
+        </div>
+
+        <div class="links">
+            <a href="https://github.com/bartsmykla/.dotfiles" target="_blank">GitHub Repository</a>
+            <a href="https://github.com/bartsmykla/.dotfiles/blob/main/README.md" target="_blank">Documentation</a>
+            <a href="https://github.com/bartsmykla/.dotfiles/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+            <a href="https://github.com/bartsmykla/.dotfiles/blob/main/TROUBLESHOOTING.md" target="_blank">Troubleshooting</a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    const button = event.target;
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    setTimeout(function() {
+                        button.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(function() {
+                    button.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>

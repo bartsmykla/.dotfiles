@@ -13,6 +13,25 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ### Setup Development Environment
 
+#### Option 1: Automated Setup (Recommended for Fresh Machines)
+
+Use the bootstrap script for quick setup:
+
+```bash
+curl -fsSL https://smyk.la/bootstrap.sh | bash
+```
+
+This automatically handles all dependencies, encryption setup, and configuration. See [https://smyk.la](https://smyk.la) for options.
+
+After bootstrap completes, add the upstream remote if working from a fork:
+
+```bash
+cd ~/Projects/github.com/bartsmykla/.dotfiles
+git remote add upstream https://github.com/bartsmykla/.dotfiles
+```
+
+#### Option 2: Manual Setup
+
 1. Fork and clone the repository:
 
    ```bash
