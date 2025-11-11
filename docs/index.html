@@ -228,6 +228,47 @@ exit
             text-decoration: underline;
         }
 
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .options-table thead {
+            background: #667eea;
+            color: white;
+        }
+
+        .options-table th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .options-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .options-table tbody tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+
+        .options-table tbody tr:hover {
+            background: #f0f0f0;
+        }
+
+        .options-table code {
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
         .warning {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -333,11 +374,36 @@ exit
 
         <div class="section">
             <h2>Options</h2>
-            <p><strong>--yes, -y</strong> - Skip confirmation prompts and use defaults</p>
-            <p><strong>--email EMAIL</strong> - Set email address (overrides git config)</p>
-            <p><strong>--name NAME</strong> - Set full name (overrides git config)</p>
-            <p><strong>--dir DIRECTORY</strong> - Installation directory (default: <code>~/Projects/github.com/bartsmykla/.dotfiles</code>)</p>
-            <p><strong>--help, -h</strong> - Show help message</p>
+            <table class="options-table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>--yes</code>, <code>-y</code></td>
+                        <td>Skip confirmation prompts and use defaults</td>
+                    </tr>
+                    <tr>
+                        <td><code>--email EMAIL</code></td>
+                        <td>Set email address (overrides git config)</td>
+                    </tr>
+                    <tr>
+                        <td><code>--name NAME</code></td>
+                        <td>Set full name (overrides git config)</td>
+                    </tr>
+                    <tr>
+                        <td><code>--dir DIRECTORY</code></td>
+                        <td>Installation directory (default: <code>~/Projects/github.com/bartsmykla/.dotfiles</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>--help</code>, <code>-h</code></td>
+                        <td>Show help message</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="links">
