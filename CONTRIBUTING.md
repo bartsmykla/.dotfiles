@@ -33,6 +33,16 @@ Thank you for your interest in contributing! This document provides guidelines f
    brew bundle install --file=Brewfile
    ```
 
+4. Install git hooks (recommended):
+
+   ```bash
+   task hooks:install
+   ```
+
+   This installs:
+   - **pre-commit**: Runs `task lint` before each commit
+   - **pre-push**: Runs `task test` before each push
+
 ## Development Workflow
 
 ### Making Changes
@@ -203,18 +213,21 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 │       └── fish/              # Fish shell config
 │           ├── config.fish
 │           └── functions/     # Custom functions
-├── docs/                      # Documentation
-│   ├── AGE-ENCRYPTION.md      # Age encryption guide
-│   └── DEBUGGING.md           # Debugging guide
 ├── .github/
 │   └── workflows/
+│       ├── codeql.yaml        # CodeQL security analysis
+│       ├── scorecards.yaml    # OpenSSF Scorecard
 │       └── test.yaml          # CI/CD pipeline
+├── hooks/                     # Git hooks
+│   ├── pre-commit             # Lint check
+│   └── pre-push               # Test check
+├── spec/                      # ShellSpec tests
 ├── Taskfile.yaml              # Task automation
-├── Brewfile                   # Homebrew packages (encrypted)
+├── Brewfile                   # Homebrew packages
 ├── README.md                  # Project overview
-├── TESTING.md                 # Testing documentation
-├── ARCHITECTURE.md            # Architecture docs
-└── CONTRIBUTING.md            # This file
+├── CONTRIBUTING.md            # This file
+├── SECURITY.md                # Security policy
+└── TESTING.md                 # Testing documentation
 ```
 
 ## Encryption
@@ -254,6 +267,7 @@ Files automatically encrypted via `.gitattributes` (CLAUDE.md, secrets/, todos/)
 
 - [TESTING.md](TESTING.md) - Testing and CI/CD
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Debugging and common issues
+- [SECURITY.md](SECURITY.md) - Security policy and vulnerability reporting
 - [README.md](README.md) - Quick start and overview
 - Open an issue for bugs or feature requests
 

@@ -3,6 +3,7 @@
 Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted with [age](https://age-encryption.org/), and automated with [Task](https://taskfile.dev).
 
 [![Test Dotfiles](https://github.com/bartsmykla/.dotfiles/actions/workflows/test.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/test.yaml)
+[![CodeQL](https://github.com/bartsmykla/.dotfiles/actions/workflows/codeql.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/codeql.yaml)
 [![Dependency Review](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/dependency-review.yaml)
 [![OpenSSF Scorecard](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml/badge.svg)](https://github.com/bartsmykla/.dotfiles/actions/workflows/scorecards.yaml)
 
@@ -11,6 +12,8 @@ Personal macOS dotfiles managed with [chezmoi](https://chezmoi.io), encrypted wi
 - **Dotfile Management**: chezmoi for cross-machine synchronization
 - **Encryption**: age for secrets (multi-recipient: personal + CI keys)
 - **Testing**: Automated syntax checks and linting via Task
+- **Security**: CodeQL analysis, dependency scanning, OpenSSF Scorecard
+- **Git Hooks**: Automated quality checks (lint on commit, test on push)
 - **CI/CD**: GitHub Actions validates changes on Ubuntu & macOS
 - **Tool Management**: mise for version-pinned development tools
 
@@ -52,6 +55,9 @@ vim +PluginInstall +qall
 ### Development
 
 ```bash
+# Install git hooks (recommended)
+task hooks:install
+
 # Run tests
 task test
 
@@ -61,6 +67,12 @@ task lint
 # List all tasks
 task --list
 ```
+
+Git hooks automate quality checks:
+
+- **pre-commit**: Runs `task lint` before each commit
+- **pre-push**: Runs `task test` before each push
+- Skip with `--no-verify` flag if needed
 
 ## Repository Structure
 
@@ -72,6 +84,7 @@ task --list
 │       ├── fish/              # Fish shell
 │       └── mise/              # Tool versions
 ├── .github/workflows/         # CI/CD workflows
+├── hooks/                     # Git hooks (pre-commit, pre-push)
 ├── spec/                      # ShellSpec tests
 ├── Taskfile.yaml              # Task automation
 └── Brewfile                   # Homebrew dependencies
@@ -114,6 +127,7 @@ Both systems use multi-recipient encryption (personal + CI keys).
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Development workflow and guidelines
 - **[TESTING.md](TESTING.md)** - Testing and CI/CD
 - **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and debugging
+- **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
 
 ## Testing
 
