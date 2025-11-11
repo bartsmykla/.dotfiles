@@ -17,6 +17,54 @@ exit
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bartsmykla's dotfiles</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea' rx='15'/><text y='50' x='50' text-anchor='middle' dominant-baseline='central' font-size='65' fill='white' font-family='monospace' font-weight='bold'>$</text></svg>">
+    <script>
+        // Remove shell script text immediately (runs synchronously in head)
+        (function() {
+            'use strict';
+
+            // Wait for DOM to be ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', cleanup);
+            } else {
+                cleanup();
+            }
+
+            function cleanup() {
+                var walker = document.createTreeWalker(
+                    document.documentElement.parentNode || document,
+                    NodeFilter.SHOW_TEXT,
+                    null
+                );
+                var nodesToRemove = [];
+                var node;
+
+                while ((node = walker.nextNode())) {
+                    if (!node || !node.parentNode || !node.textContent) continue;
+
+                    var parent = node.parentNode;
+                    var isInBody = false;
+
+                    while (parent) {
+                        if (parent.nodeName === 'BODY') {
+                            isInBody = true;
+                            break;
+                        }
+                        parent = parent.parentNode;
+                    }
+
+                    if (!isInBody) {
+                        nodesToRemove.push(node);
+                    }
+                }
+
+                nodesToRemove.forEach(function(n) {
+                    if (n && n.parentNode) {
+                        n.parentNode.removeChild(n);
+                    }
+                });
+            }
+        })();
+    </script>
     <style>
         /* Hide everything initially to prevent shell script flash */
         html {
@@ -287,53 +335,8 @@ exit
     </div>
 
     <script>
-        // Hide shell script text that browsers show before <!DOCTYPE html>
-        (function() {
-            'use strict';
-
-            // Remove all text nodes that are NOT inside the <body> element
-            // This removes the shell script while preserving all HTML content
-            const walker = document.createTreeWalker(
-                document,
-                NodeFilter.SHOW_TEXT,
-                null
-            );
-            const nodesToRemove = [];
-            let node;
-
-            // eslint-disable-next-line no-cond-assign
-            while ((node = walker.nextNode())) {
-                if (!node || !node.parentNode || !node.textContent) {
-                    continue;
-                }
-
-                // Check if this node is inside the body element
-                let parent = node.parentNode;
-                let isInBody = false;
-
-                while (parent) {
-                    if (parent.nodeName === 'BODY') {
-                        isInBody = true;
-                        break;
-                    }
-                    parent = parent.parentNode;
-                }
-
-                // Remove text nodes that are NOT in the body
-                if (!isInBody) {
-                    nodesToRemove.push(node);
-                }
-            }
-
-            nodesToRemove.forEach(function(n) {
-                if (n && n.parentNode) {
-                    n.parentNode.removeChild(n);
-                }
-            });
-
-            // Show the page now that cleanup is done
-            document.documentElement.classList.add('loaded');
-        })();
+        // Show the page now that DOM is ready
+        document.documentElement.classList.add('loaded');
 
         function copyToClipboard(text, evt) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
