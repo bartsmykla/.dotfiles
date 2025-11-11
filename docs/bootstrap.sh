@@ -236,15 +236,26 @@ configure_git_filters() {
 
     local clean_script="${TARGET_DIR}/.git/age-clean.sh"
     local smudge_script="${TARGET_DIR}/.git/age-smudge.sh"
+    local cache_script="${TARGET_DIR}/.git/age-cache-populate.sh"
 
-    if [[ ! -f "${clean_script}" ]] || [[ ! -f "${smudge_script}" ]]; then
+    # Copy age filter scripts from repository
+    if [[ ! -f "${TARGET_DIR}/scripts/git-filters/age-clean.sh" ]] || \
+       [[ ! -f "${TARGET_DIR}/scripts/git-filters/age-smudge.sh" ]]; then
         die "Age filter scripts not found in repository"
     fi
 
-    chmod +x "${clean_script}" "${smudge_script}"
+    cp "${TARGET_DIR}/scripts/git-filters/age-clean.sh" "${clean_script}"
+    cp "${TARGET_DIR}/scripts/git-filters/age-smudge.sh" "${smudge_script}"
+    cp "${TARGET_DIR}/scripts/git-filters/age-cache-populate.sh" "${cache_script}"
+
+    chmod +x "${clean_script}" "${smudge_script}" "${cache_script}"
 
     git config filter.age.clean "${clean_script}"
     git config filter.age.smudge "${smudge_script}"
+    git config diff.age.textconv "bash ${smudge_script}"
+
+    # Populate age encryption cache
+    bash "${cache_script}"
 
     log_success "Git age filters configured"
 }

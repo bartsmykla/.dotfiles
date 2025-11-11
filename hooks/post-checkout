@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Post-checkout hook: repopulate age encryption cache
+# Ensures encrypted files don't show as modified after checkout
+
+# Get script directory
+GIT_DIR="$(git rev-parse --git-dir)"
+
+# Run cache population script if it exists
+if [[ -x "${GIT_DIR}/age-cache-populate.sh" ]]; then
+  "${GIT_DIR}/age-cache-populate.sh" >/dev/null 2>&1 || true
+fi

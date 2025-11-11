@@ -441,6 +441,12 @@ exit
         @media (max-width: 768px) {
             .command-box {
                 cursor: pointer;
+                transition: opacity 0.2s ease, background 0.2s ease;
+            }
+
+            .command-box:hover {
+                opacity: 0.8;
+                background: #f5f5f5;
             }
 
             .copy-button {

@@ -591,25 +591,32 @@ tasks:
   # ==========================================================================
 
   hooks:install:
-    desc: Install git hooks (pre-commit, pre-push)
+    desc: Install git hooks (pre-commit, pre-push, post-checkout)
     summary: |
       Install git hooks to automate quality checks:
       - pre-commit: Runs 'task lint' before each commit
       - pre-push: Runs 'task test' before each push
+      - post-checkout: Repopulates age encryption cache after branch changes
+      - post-merge: Repopulates age encryption cache after pulls/merges
 
-      Hooks can be bypassed with --no-verify flag.
+      Hooks can be bypassed with --no-verify flag (except post-checkout/post-merge).
     dir: '{{.G_DOTFILES}}'
     sources:
       - hooks/pre-commit
       - hooks/pre-push
+      - hooks/post-checkout
     generates:
       - .git/hooks/pre-commit
       - .git/hooks/pre-push
+      - .git/hooks/post-checkout
+      - .git/hooks/post-merge
     cmds:
       - echo "▶ Installing git hooks"
       - cp hooks/pre-commit .git/hooks/pre-commit
       - cp hooks/pre-push .git/hooks/pre-push
-      - chmod +x .git/hooks/pre-commit .git/hooks/pre-push
+      - cp hooks/post-checkout .git/hooks/post-checkout
+      - chmod +x .git/hooks/pre-commit .git/hooks/pre-push .git/hooks/post-checkout
+      - ln -sf post-checkout .git/hooks/post-merge
       - echo "✓ Git hooks installed"
       - echo ""
       - echo "  pre-commit - Runs task lint"
