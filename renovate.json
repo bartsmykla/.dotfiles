@@ -24,12 +24,12 @@
       "commitMessageTopic": "{{depName}} action"
     },
     {
-      "description": "Automerge non-major mise updates",
+      "description": "Automerge non-major mise updates via PR",
       "matchManagers": ["mise"],
       "matchUpdateTypes": ["minor", "patch"],
       "addLabels": ["mise"],
       "automerge": true,
-      "automergeType": "branch"
+      "automergeType": "pr"
     }
   ],
   "ignorePaths": [
