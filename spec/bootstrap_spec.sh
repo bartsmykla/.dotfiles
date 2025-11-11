@@ -515,6 +515,8 @@ Describe 'Bootstrap Script'
         After 'cleanup_test_env'
 
         It 'fails immediately with --yes when age key is unavailable'
+            Skip if "Test requires macOS" test "$(uname)" != "Darwin"
+
             # Unset environment variables
             unset BOOTSTRAP_EMAIL
             unset BOOTSTRAP_NAME
