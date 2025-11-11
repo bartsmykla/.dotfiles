@@ -73,7 +73,6 @@ exit
             color: transparent;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
             min-height: 100%;
-            overflow-anchor: none;
         }
 
         body {
@@ -82,7 +81,6 @@ exit
             color: transparent;
             background: transparent;
             min-height: 100vh;
-            overflow-anchor: none;
         }
 
         /* Show content inside container */
@@ -447,8 +445,8 @@ exit
             }
 
             .command-box:hover {
-                background: #252830;
-                box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.3);
+                background: #2a2d3a;
+                box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.5);
             }
 
             .copy-button {
@@ -690,6 +688,12 @@ exit
 
     <script>
         'use strict';
+
+        // Force page to start at top (fixes Chrome scroll position)
+        window.scrollTo(0, 0);
+        document.addEventListener('DOMContentLoaded', () => {
+            window.scrollTo(0, 0);
+        });
 
         // Hide loading overlay now that DOM is ready
         (() => {
