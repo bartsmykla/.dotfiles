@@ -124,14 +124,44 @@ exit
 
         .ascii-title {
             font-family: 'Courier New', monospace;
-            font-size: 11px;
             line-height: 1.1;
             color: #667eea;
             margin-bottom: 20px;
             white-space: pre;
             font-weight: normal;
-            overflow-x: auto;
             text-align: center;
+        }
+
+        .ascii-full {
+            font-size: 11px;
+        }
+
+        .ascii-split {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .ascii-full {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .ascii-full {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .ascii-full {
+                font-size: 7px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .ascii-full {
+                font-size: 6px;
+            }
         }
 
         .subtitle {
@@ -345,8 +375,51 @@ exit
                 font-size: 2em;
             }
 
-            .ascii-title {
+            .ascii-full {
+                display: none;
+            }
+
+            .ascii-split {
+                display: block;
+            }
+
+            .ascii-barts {
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+
+            .ascii-dotfiles {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .ascii-barts {
+                font-size: 11px;
+            }
+
+            .ascii-dotfiles {
+                font-size: 7.5px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .ascii-barts {
+                font-size: 9px;
+            }
+
+            .ascii-dotfiles {
+                font-size: 6.5px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .ascii-barts {
                 font-size: 8px;
+            }
+
+            .ascii-dotfiles {
+                font-size: 5.5px;
             }
 
             .command-box {
@@ -449,7 +522,7 @@ exit
 <body>
     <div id="loading-overlay"></div>
     <div class="container">
-        <pre class="ascii-title">
+        <pre class="ascii-title ascii-full">
 ██████╗  █████╗ ██████╗ ████████╗███████╗    ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
 ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
 ██████╔╝███████║██████╔╝   ██║   ███████╗    ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
@@ -457,6 +530,24 @@ exit
 ██████╔╝██║  ██║██║  ██║   ██║   ███████║    ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
 ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
         </pre>
+        <div class="ascii-split">
+            <pre class="ascii-title ascii-barts">
+██████╗  █████╗ ██████╗ ████████╗███████╗
+██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝
+██████╔╝███████║██████╔╝   ██║   ███████╗
+██╔══██╗██╔══██║██╔══██╗   ██║   ╚════██║
+██████╔╝██║  ██║██║  ██║   ██║   ███████║
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+            </pre>
+            <pre class="ascii-title ascii-dotfiles">
+██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
+██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
+██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
+██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
+██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
+╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
+            </pre>
+        </div>
         <p class="subtitle">Automated macOS development environment setup</p>
 
         <div class="section">
