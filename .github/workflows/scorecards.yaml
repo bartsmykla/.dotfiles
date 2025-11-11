@@ -8,7 +8,7 @@ on:
     - cron: '30 1 * * 0'  # Weekly on Sunday at 01:30 UTC
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [main]
 
 permissions: read-all  # Default read access for all scopes
 

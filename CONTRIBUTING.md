@@ -37,12 +37,12 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ### Making Changes
 
-1. Create a new branch from master:
+1. Create a new branch from main:
 
    ```bash
-   git checkout master
+   git checkout main
    git fetch upstream
-   git rebase upstream/master
+   git rebase upstream/main
    git checkout -b your-feature-branch
    ```
 
@@ -157,7 +157,7 @@ See [TESTING.md](TESTING.md) for comprehensive testing documentation.
 3. Create a pull request:
 
    ```bash
-   gh pr create --base master --head YOUR_USERNAME:your-feature-branch
+   gh pr create --base main --head YOUR_USERNAME:your-feature-branch
    ```
 
 4. Fill in the PR template:
