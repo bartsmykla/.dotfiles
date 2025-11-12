@@ -691,7 +691,7 @@ tasks:
       - echo "✓ Git hooks installed"
       - echo ""
       - echo "  pre-commit - Runs task lint"
-      - echo "  pre-push - Runs task test"
+      - echo "  pre-push - Runs task test:changed (smart tests)"
       - echo ""
       - echo "  Bypass with --no-verify flag"
 
