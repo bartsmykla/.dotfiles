@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Pre-push hook - Run tests before pushing
 #
-# Ensures all tests pass before pushing to remote.
+# Runs smart test suite that only tests changed files for faster feedback.
+# Use 'task test' to run full test suite manually.
 # Install: task hooks:install
 
 set -euo pipefail
@@ -15,8 +16,8 @@ if ! command -v task &>/dev/null; then
     exit 0
 fi
 
-# Run tests
-if ! task test; then
+# Run smart tests (only tests for changed files)
+if ! task test:changed; then
     echo ""
     echo "❌ Pre-push checks failed!"
     echo "   Fix the errors above and try again."
