@@ -28,7 +28,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Run Smyklot
-        uses: bartsmykla/smyklot@f18213e1c831233e433b805cd9811a5efb1eb69e # v0.3.2
+        uses: bartsmykla/smyklot@9ac8f3be1a1c41519af6be40981b5a9890e98bc7 # v0.3.3
         with:
           token: ${{ steps.generate-token.outputs.token }}
           comment-body: ${{ github.event.comment.body }}
