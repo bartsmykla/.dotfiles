@@ -502,6 +502,13 @@ Describe 'Bootstrap Script'
                 return 1
             }
             export -f op
+
+            # Mock ping to always succeed (avoid flaky network checks in CI)
+            # shellcheck disable=SC2329  # Function is invoked indirectly via export -f
+            ping() {
+                return 0
+            }
+            export -f ping
         }
 
         cleanup_test_env() {
@@ -509,6 +516,7 @@ Describe 'Bootstrap Script'
             unset TEST_HOME
             unset -f git 2>/dev/null || true
             unset -f op 2>/dev/null || true
+            unset -f ping 2>/dev/null || true
         }
 
         Before 'setup_test_env'
