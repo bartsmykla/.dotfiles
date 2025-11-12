@@ -197,12 +197,22 @@ tasks:
       - spec/ directory → test:shellspec
 
       Falls back to full test suite if unable to detect changes.
-    deps:
-      - test:changed:fish
-      - test:changed:shell
-      - test:changed:brewfile
-      - test:changed:shellspec
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+      CAN_DETECT_CHANGES:
+        sh: git rev-parse --verify origin/{{.DEFAULT_BRANCH}} >/dev/null 2>&1 && echo "true" || echo "false"
     cmds:
+      - |
+        if [[ "{{.CAN_DETECT_CHANGES}}" == "false" ]]; then
+          echo "⚠️  Unable to detect remote branch origin/{{.DEFAULT_BRANCH}}, running full test suite"
+          task test
+          exit $?
+        fi
+      - task: test:changed:fish
+      - task: test:changed:shell
+      - task: test:changed:brewfile
+      - task: test:changed:shellspec
       - echo "✅ Changed file tests passed!"
 
   test:changed:fish:
