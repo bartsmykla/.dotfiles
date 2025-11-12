@@ -184,6 +184,86 @@ tasks:
     cmds:
       - echo "✅ All tests passed!"
 
+  test:changed:
+    desc: Run tests only for changed files (optimized for pre-push)
+    summary: |
+      Smart test runner that only executes tests for modified files.
+      Compares current branch against main/master to detect changes.
+
+      Tests run based on file types changed:
+      - Fish files → test:fish
+      - Shell scripts → test:syntax:shell
+      - Brewfile → test:brewfile
+      - spec/ directory → test:shellspec
+
+      Falls back to full test suite if unable to detect changes.
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+      CAN_DETECT_CHANGES:
+        sh: git rev-parse --verify origin/{{.DEFAULT_BRANCH}} >/dev/null 2>&1 && echo "true" || echo "false"
+    cmds:
+      - |
+        if [[ "{{.CAN_DETECT_CHANGES}}" == "false" ]]; then
+          echo "⚠️  Unable to detect remote branch origin/{{.DEFAULT_BRANCH}}, running full test suite"
+          task test
+          exit $?
+        fi
+      - task: test:changed:fish
+      - task: test:changed:shell
+      - task: test:changed:brewfile
+      - task: test:changed:shellspec
+      - echo "✅ Changed file tests passed!"
+
+  test:changed:fish:
+    desc: Test Fish files if changed
+    internal: true
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+    status:
+      - test -z "$(git diff --name-only origin/{{.DEFAULT_BRANCH}}...HEAD 2>/dev/null | grep '\.fish$')"
+    cmds:
+      - echo "▶ Fish files changed, running tests"
+      - task test:fish
+
+  test:changed:shell:
+    desc: Test shell scripts if changed
+    internal: true
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+    status:
+      - test -z "$(git diff --name-only origin/{{.DEFAULT_BRANCH}}...HEAD 2>/dev/null | grep '\.sh$')"
+    cmds:
+      - echo "▶ Shell scripts changed, running shellcheck"
+      - task test:syntax:shell
+
+  test:changed:brewfile:
+    desc: Test Brewfile if changed
+    internal: true
+    platforms: [darwin]
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+    status:
+      - test -z "$(git diff --name-only origin/{{.DEFAULT_BRANCH}}...HEAD 2>/dev/null | grep '^Brewfile$')"
+    cmds:
+      - echo "▶ Brewfile changed, validating"
+      - task test:brewfile
+
+  test:changed:shellspec:
+    desc: Run ShellSpec if specs changed
+    internal: true
+    vars:
+      DEFAULT_BRANCH:
+        sh: git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"
+    status:
+      - test -z "$(git diff --name-only origin/{{.DEFAULT_BRANCH}}...HEAD 2>/dev/null | grep '^spec/')"
+    cmds:
+      - echo "▶ Test specs changed, running ShellSpec"
+      - task test:shellspec
+
   test:syntax:
     desc: Check syntax of all shell and Fish scripts
     deps:
@@ -595,11 +675,12 @@ tasks:
     summary: |
       Install git hooks to automate quality checks:
       - pre-commit: Runs 'task lint' before each commit
-      - pre-push: Runs 'task test' before each push
+      - pre-push: Runs 'task test:changed' (smart tests for changed files only)
       - post-checkout: Repopulates age encryption cache after branch changes
       - post-merge: Repopulates age encryption cache after pulls/merges
 
       Hooks can be bypassed with --no-verify flag (except post-checkout/post-merge).
+      Use 'task test' manually to run full test suite.
     dir: '{{.G_DOTFILES}}'
     sources:
       - hooks/pre-commit
@@ -620,7 +701,7 @@ tasks:
       - echo "✓ Git hooks installed"
       - echo ""
       - echo "  pre-commit - Runs task lint"
-      - echo "  pre-push - Runs task test"
+      - echo "  pre-push - Runs task test:changed (smart tests)"
       - echo ""
       - echo "  Bypass with --no-verify flag"
 
