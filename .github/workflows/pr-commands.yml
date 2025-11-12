@@ -14,12 +14,7 @@ jobs:
     name: Handle PR Command
     if: |
       github.event.issue.pull_request &&
-      github.event.comment.user.type != 'Bot' &&
-      (
-        startsWith(github.event.comment.body, '/approve') ||
-        startsWith(github.event.comment.body, '/merge') ||
-        contains(github.event.comment.body, '@smyklot')
-      )
+      github.event.comment.user.type != 'Bot'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
@@ -33,7 +28,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Run Smyklot
-        uses: bartsmykla/smyklot@0edbdef8157592c99525f155cc6e5177b35a9b7b # v0.2.0
+        uses: bartsmykla/smyklot@3276642612295871a210a08517a4c330c4a0103c # v0.3.1
         with:
           token: ${{ steps.generate-token.outputs.token }}
           comment-body: ${{ github.event.comment.body }}
@@ -42,3 +37,4 @@ jobs:
           repo-owner: ${{ github.repository_owner }}
           repo-name: ${{ github.event.repository.name }}
           comment-author: ${{ github.event.comment.user.login }}
+          config: ${{ vars.SMYKLOT_CONFIG }}
