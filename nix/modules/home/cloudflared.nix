@@ -20,6 +20,11 @@
       # request returns 502 with "connection refused" in the tunnel log.
       - hostname: benchee.smykla.com
         service: http://[::1]:5173
+      # A fixed remote for Forge development deploys, so a restarted backend needs no redeploy.
+      # Only the paths Forge calls pass; anything else on the local backend stays private.
+      - hostname: forge-dev.smykla.com
+        path: ^/(a2a|jira)/
+        service: http://127.0.0.1:5282
       - service: http_status:404
   '';
 in {
@@ -32,7 +37,7 @@ in {
         "/opt/homebrew/opt/cloudflared/bin/cloudflared"
         "tunnel"
         "--config"
-        "${config.xdg.configHome}/cloudflared/config.yml"
+        "${cloudflaredConfig}"
         "run"
         "my-smykla"
       ];
