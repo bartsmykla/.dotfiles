@@ -115,6 +115,12 @@ in
     awscli2             # AWS CLI v2
     azure-cli           # Azure CLI
     okta-aws-cli        # AWS login via Okta (replaces saml2aws at Kong)
+    # One shared, cached Okta login per credential_process profile
+    (writeShellApplication {
+      name = "okta-aws-cached";
+      runtimeInputs = [ coreutils flock gnugrep gnused jq okta-aws-cli ];
+      text = builtins.readFile ./okta-aws-cached.sh;
+    })
     eksctl              # Amazon EKS CLI
     scaleway-cli        # Scaleway CLI
     # gcloud - managed as cask via Homebrew
