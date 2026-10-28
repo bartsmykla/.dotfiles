@@ -75,8 +75,9 @@ in {
       # Window configuration
       window-decoration = "auto";
       macos-option-as-alt = true;
-      macos-titlebar-style = "hidden";
+      # Keep the default titlebar style: "hidden" disallows native tabs.
       initial-window = true;
+      fullscreen = true;
 
       # Scrollback
       scrollback-limit = 10000;
@@ -148,6 +149,11 @@ in {
 
         # Inspector for debugging keybindings
         "super+i=inspector:toggle"
+
+        # Ghostty always un-tabs new_window (ignores AppleWindowTabbingMode),
+        # so Cmd+N opens a native tab instead. With no window open, new_tab
+        # falls back to creating a window.
+        "cmd+n=new_tab"
 
         # === Tmux-first pane workflow ===
         # Create panes
