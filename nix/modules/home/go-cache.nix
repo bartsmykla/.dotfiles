@@ -17,7 +17,7 @@
     for dir in "${home}/Library/Caches/go-build" "${home}/Library/Caches/golangci-lint"; do
       [ -d "$dir" ] && /usr/bin/find "$dir" -type f -mtime +2 -delete
     done
-    for root in /Users/Shared/codex-home/worktrees "${home}/orca/workspaces" "${home}/Projects"; do
+    for root in /Users/Shared/codex-home/worktrees "${home}/Projects"; do
       [ -d "$root" ] || continue
       /usr/bin/find "$root" -maxdepth 6 -type d \( -name node_modules -o -name .git \) -prune -o \
         -type d -path '*/.cache/go-build' -print 2>/dev/null |

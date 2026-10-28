@@ -28,7 +28,7 @@ let
       fetch_remote_versions_timeout = "2s";
       cache_prune_age = "90d";
       lockfile = true;
-      # Claude and Orca put every session in a new worktree of these repos;
+      # Claude puts every session in a new worktree of these repos;
       # trust them up front instead of running `mise trust` in each one
       trusted_config_paths = map (dir: "${config.home.homeDirectory}/${dir}") [
         "Projects/github.com/bartsmykla"
@@ -36,7 +36,6 @@ let
         "Projects/github.com/kong-konnect"
         "Projects/github.com/kumahq"
         "Projects/github.com/smykla-skalski"
-        "orca/workspaces"
       ];
     };
   };
