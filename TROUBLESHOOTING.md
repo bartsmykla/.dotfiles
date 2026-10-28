@@ -73,8 +73,10 @@ ls -la $DOTFILES_PATH/.git/age-*.sh
 
 ```bash
 cd $DOTFILES_PATH
-git config filter.age.clean "$PWD/.git/age-clean.sh"
-git config filter.age.smudge "$PWD/.git/age-smudge.sh"
+git config filter.age.clean '"$(git rev-parse --git-common-dir)"/age-clean.sh'
+git config filter.age.smudge '"$(git rev-parse --git-common-dir)"/age-smudge.sh'
+git config filter.age.required true
+git config diff.age.textconv 'bash "$(git rev-parse --git-common-dir)"/age-smudge.sh'
 ```
 
 ### Task Install Fails
@@ -147,8 +149,10 @@ git config filter.age.smudge    # Should show decryption command
 **Re-configure filters:**
 
 ```bash
-git config filter.age.clean "~/.git/age-clean.sh"
-git config filter.age.smudge "age --decrypt --identity ~/.config/age/key.txt 2>/dev/null || cat"
+git config filter.age.clean '"$(git rev-parse --git-common-dir)"/age-clean.sh'
+git config filter.age.smudge '"$(git rev-parse --git-common-dir)"/age-smudge.sh'
+git config filter.age.required true
+git config diff.age.textconv 'bash "$(git rev-parse --git-common-dir)"/age-smudge.sh'
 ```
 
 **Force re-encryption:**
