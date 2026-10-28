@@ -29,7 +29,7 @@ brew search
 # Abbr: bs
 
 # Change to dotfiles directory
-cd $HOME/Projects/github.com/smykla-skalski/.dotfiles/
+cd $DOTFILES_PATH/
 # Abbr: b.
 
 # Change to smykla-skalski directory

@@ -412,7 +412,7 @@ parse_args() {
                 echo ""
                 echo "Options:"
                 echo "  --yes, -y          Skip confirmation prompts"
-                echo "  --dir DIRECTORY    Installation directory (default: ~/Projects/github.com/smykla-skalski/.dotfiles)"
+                echo "  --dir DIRECTORY    Installation directory (default: ~/Projects/github.com/${REPO_ORG}/${REPO_NAME})"
                 echo "  --help, -h         Show this help"
                 echo ""
                 echo "Environment variables:"

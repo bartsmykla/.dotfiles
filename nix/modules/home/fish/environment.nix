@@ -70,7 +70,11 @@ in
     set --export PYTHONWARNINGS "ignore::UserWarning"
     set --export PROJECTS_PATH $HOME/Projects/github.com
     set --export MY_PROJECTS_PATH $PROJECTS_PATH/smykla-skalski
-    set --export DOTFILES_PATH $PROJECTS_PATH/smykla-skalski/.dotfiles
+    # Found at startup because the checkout moves between GitHub owners
+    set --local dotfiles_flakes $PROJECTS_PATH/*/.dotfiles/nix/flake.nix
+    if set --query dotfiles_flakes[1]
+      set --export DOTFILES_PATH (path dirname (path dirname $dotfiles_flakes[1]))
+    end
     set --export FORTRESS_PATH /Volumes/fortress-carima
     set --export SECRETS_PATH $DOTFILES_PATH/secrets
     set --export PYTHON_SHELL_NIX $DOTFILES_PATH/nix/python-env/shell.nix
