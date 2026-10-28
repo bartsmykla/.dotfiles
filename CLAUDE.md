@@ -88,7 +88,7 @@ See `CONTRIBUTING.md` for detailed commit guidelines.
 **Key variables**:
 
 - `$PROJECTS_PATH` = `$HOME/Projects/github.com`
-- `$DOTFILES_PATH` = `$PROJECTS_PATH/smykla-skalski/.dotfiles`
+- `$DOTFILES_PATH` = the `$PROJECTS_PATH/*/.dotfiles` checkout, found at shell startup
 - `$SECRETS_PATH` = `$DOTFILES_PATH/secrets`
 
 **Custom Fish functions** (in `nix/modules/home/fish/functions/`): `git_clone_to_projects`, `git-checkout-default-fetch-fast-forward`, `git-push-upstream-first-force-with-lease`. All must include `--description` flag.

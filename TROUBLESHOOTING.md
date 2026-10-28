@@ -57,7 +57,7 @@ curl -fsSL https://smyk.la | bash
 The bootstrap script will detect existing repositories and offer to update them. If you want a fresh clone:
 
 ```bash
-mv ~/Projects/github.com/smykla-skalski/.dotfiles ~/Projects/github.com/smykla-skalski/.dotfiles.backup
+mv $DOTFILES_PATH $DOTFILES_PATH.backup
 curl -fsSL https://smyk.la | bash
 ```
 
@@ -66,15 +66,17 @@ curl -fsSL https://smyk.la | bash
 **Verify scripts exist:**
 
 ```bash
-ls -la ~/Projects/github.com/smykla-skalski/.dotfiles/.git/age-*.sh
+ls -la $DOTFILES_PATH/.git/age-*.sh
 ```
 
 **Reconfigure manually:**
 
 ```bash
-cd ~/Projects/github.com/smykla-skalski/.dotfiles
-git config filter.age.clean "$PWD/.git/age-clean.sh"
-git config filter.age.smudge "$PWD/.git/age-smudge.sh"
+cd $DOTFILES_PATH
+git config filter.age.clean '"$(git rev-parse --git-common-dir)"/age-clean.sh'
+git config filter.age.smudge '"$(git rev-parse --git-common-dir)"/age-smudge.sh'
+git config filter.age.required true
+git config diff.age.textconv 'bash "$(git rev-parse --git-common-dir)"/age-smudge.sh'
 ```
 
 ### Task Install Fails
@@ -89,7 +91,7 @@ brew install go-task                     # Install if missing
 **Run manually:**
 
 ```bash
-cd ~/Projects/github.com/smykla-skalski/.dotfiles
+cd $DOTFILES_PATH
 task install
 ```
 
@@ -147,8 +149,10 @@ git config filter.age.smudge    # Should show decryption command
 **Re-configure filters:**
 
 ```bash
-git config filter.age.clean "~/.git/age-clean.sh"
-git config filter.age.smudge "age --decrypt --identity ~/.config/age/key.txt 2>/dev/null || cat"
+git config filter.age.clean '"$(git rev-parse --git-common-dir)"/age-clean.sh'
+git config filter.age.smudge '"$(git rev-parse --git-common-dir)"/age-smudge.sh'
+git config filter.age.required true
+git config diff.age.textconv 'bash "$(git rev-parse --git-common-dir)"/age-smudge.sh'
 ```
 
 **Force re-encryption:**

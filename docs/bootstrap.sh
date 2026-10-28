@@ -247,9 +247,15 @@ configure_git_filters() {
 
     chmod +x "${clean_script}" "${smudge_script}" "${cache_script}"
 
-    git config filter.age.clean "${clean_script}"
-    git config filter.age.smudge "${smudge_script}"
-    git config diff.age.textconv "bash ${smudge_script}"
+    # Git runs filters through sh in the worktree root, so resolve the scripts
+    # there. An absolute path breaks every encrypted file once the checkout moves.
+    # shellcheck disable=SC2016
+    local filter_dir='"$(git rev-parse --git-common-dir)"'
+    git config filter.age.clean "${filter_dir}/age-clean.sh"
+    git config filter.age.smudge "${filter_dir}/age-smudge.sh"
+    # Without this, git stores the plaintext when the clean filter fails
+    git config filter.age.required true
+    git config diff.age.textconv "bash ${filter_dir}/age-smudge.sh"
 
     # Populate age encryption cache
     bash "${cache_script}"
@@ -412,7 +418,7 @@ parse_args() {
                 echo ""
                 echo "Options:"
                 echo "  --yes, -y          Skip confirmation prompts"
-                echo "  --dir DIRECTORY    Installation directory (default: ~/Projects/github.com/smykla-skalski/.dotfiles)"
+                echo "  --dir DIRECTORY    Installation directory (default: ~/Projects/github.com/${REPO_ORG}/${REPO_NAME})"
                 echo "  --help, -h         Show this help"
                 echo ""
                 echo "Environment variables:"

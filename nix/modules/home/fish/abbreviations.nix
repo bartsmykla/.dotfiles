@@ -10,7 +10,7 @@
     bi = "brew install";
     bic = "brew install --cask";
     msync = "set name (basename (pwd)); mutagen sync create --name=$name (pwd) bart@smyk.la:~/$name";
-    "b." = "cd $HOME/Projects/github.com/smykla-skalski/.dotfiles/";
+    "b." = "cd $DOTFILES_PATH/";
     binf = "brew info";
     bs = "brew search";
     cdl = "cd $__LAST_CLONED_REPO_PATH";

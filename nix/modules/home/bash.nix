@@ -176,7 +176,14 @@
       export BASH_ENV="$HOME/.bash_env"
 
       # Python shell.nix location for direnv
-      export DOTFILES_PATH="$HOME/Projects/github.com/smykla-skalski/.dotfiles"
+      # Found at startup because the checkout moves between GitHub owners
+      for dotfiles_flake in "$HOME"/Projects/github.com/*/.dotfiles/nix/flake.nix; do
+        if [ -f "$dotfiles_flake" ]; then
+          export DOTFILES_PATH="''${dotfiles_flake%/nix/flake.nix}"
+          break
+        fi
+      done
+      unset dotfiles_flake
       export PYTHON_SHELL_NIX="$DOTFILES_PATH/nix/python-env/shell.nix"
 
       # Codex home (shared across users)
