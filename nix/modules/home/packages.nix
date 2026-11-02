@@ -9,7 +9,7 @@ let
         fi
       done
 
-      echo "${name} is managed outside Nix. ${installHint}" >&2
+      echo ${pkgs.lib.escapeShellArg "${name} is managed outside Nix. ${installHint}"} >&2
       exit 1
     '';
 
@@ -192,6 +192,10 @@ in
       "/opt/homebrew/bin/uv"
       "/usr/local/bin/uv"
     ] "Install it with Homebrew (`brew install uv`) or run `darwin-rebuild switch`.")
+    # golt is the global golangci-lint from mise (see mise.nix), so this follows its pin
+    (mkExternalToolWrapper "golt" [
+      "$HOME/.local/share/mise/shims/golangci-lint"
+    ] "Install it with `mise install`.")
 
     # ============================================================================
     # Python
