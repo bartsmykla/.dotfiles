@@ -25,6 +25,9 @@
       # PROMPT_COMMAND is typically set by interactive shells but not in non-interactive mode
       : "''${PROMPT_COMMAND:=}"
 
+      # Fish sets this, but a zsh started outside fish has none
+      export LANG="''${LANG:-en_US.UTF-8}"
+
       # Suppress pkg_resources deprecation warning from kathara_lab_checker
       export PYTHONWARNINGS="ignore::UserWarning"
 
@@ -122,11 +125,8 @@
       path=("$HOME/.local/bin" $path)
       export PATH
 
-      # opencode completion (yargs-generated bash completion loaded via bashcompinit)
       if command -v opencode >/dev/null 2>&1; then
-        autoload -U bashcompinit
-        bashcompinit
-        eval "$(opencode completion)"
+        eval "$(opencode --completions zsh)"
       fi
     ''
     ];
