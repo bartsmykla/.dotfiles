@@ -32,4 +32,17 @@
       exec /opt/homebrew/bin/brew "$@"
     '';
   };
+
+  # Pin hot, name-resolved binaries at the front of PATH. libuv (Node/Electron)
+  # and libc posix_spawnp try posix_spawn once per PATH entry; each miss from a
+  # provenance-tracked app (T3 Code, Claude Code) costs a short-lived process and
+  # a syspolicyd "Unable to initialize qtn_proc: 3" error. git/lsof/ps sat 19-31
+  # entries deep and T3 polls them constantly. Targets match what PATH already
+  # resolves, so behavior is unchanged.
+  home.file.".local/bin/git" = { source = config.lib.file.mkOutOfStoreSymlink "/run/current-system/sw/bin/git"; force = true; };
+  home.file.".local/bin/lsof" = { source = config.lib.file.mkOutOfStoreSymlink "/usr/sbin/lsof"; force = true; };
+  home.file.".local/bin/ps" = { source = config.lib.file.mkOutOfStoreSymlink "/bin/ps"; force = true; };
+  home.file.".local/bin/bash" = { source = config.lib.file.mkOutOfStoreSymlink "/run/current-system/sw/bin/bash"; force = true; };
+  home.file.".local/bin/sh" = { source = config.lib.file.mkOutOfStoreSymlink "/run/current-system/sw/bin/sh"; force = true; };
+  home.file.".local/bin/tar" = { source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nix-profile/bin/tar"; force = true; };
 }

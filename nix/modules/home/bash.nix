@@ -37,9 +37,6 @@
       # Claude Code skills CLI wrapper
       export PATH="$HOME/Projects/github.com/smykla-skalski/research/claude-code/skills/_bin:$PATH"
 
-      # klab - Kubernetes networking labs
-      export PATH="$HOME/Projects/github.com/smykla-skalski/klab/.bin:$PATH"
-
       # Bun
       export BUN_INSTALL="$HOME/.bun"
       export PATH="$BUN_INSTALL/bin:$PATH"
@@ -177,9 +174,6 @@
 
       # Claude Code skills CLI wrapper
       export PATH="$HOME/Projects/github.com/smykla-skalski/research/claude-code/skills/_bin:$PATH"
-
-      # klab - Kubernetes networking labs
-      export PATH="$HOME/Projects/github.com/smykla-skalski/klab/.bin:$PATH"
 
       # Set BASH_ENV for non-interactive subshells (needed by make)
       export BASH_ENV="$HOME/.bash_env"

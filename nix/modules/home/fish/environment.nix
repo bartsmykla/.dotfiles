@@ -156,7 +156,11 @@ in
     fish_add_path --global --append "$HOME/.krew/bin"
     fish_add_path --global --append "$HOME/.opencode/bin"
     fish_add_path --global --append "$PROJECTS_PATH/smykla-skalski/research/claude-code/skills/_bin"
-    fish_add_path --global --append "$PROJECTS_PATH/smykla-skalski/klab/.bin"
+
+    # Drop PATH entries that don't exist. Node/Electron (libuv) and posix_spawnp
+    # try posix_spawn once per PATH entry for name-resolved commands; each miss
+    # from a provenance-tracked app logs a syspolicyd qtn_proc error.
+    set --export --global PATH (path filter -d -- $PATH)
 
     # Activate mise from the external binary, not from any Nix profile wrapper
     set -l mise_bin
@@ -192,6 +196,11 @@ in
     else
       set -gx PATH (string match -v -- "$home_local_bin" $PATH)
     end
+
+    # Filter again after mise/gcloud: Homebrew fish's vendor mise-activate.fish
+    # snapshots PATH before this config runs, and `mise activate` above
+    # rebuilds PATH from that snapshot, re-adding missing /etc/paths.d dirs.
+    set --export --global PATH (path filter -d -- $PATH)
 
     # Note: Direnv hook handled by programs.direnv in direnv.nix
     # Manual hook disabled since direnv.nix handles integration
