@@ -34,9 +34,6 @@
       # Claude Code skills CLI wrapper
       export PATH="$HOME/Projects/github.com/smykla-skalski/research/claude-code/skills/_bin:$PATH"
 
-      # klab - Kubernetes networking labs
-      export PATH="$HOME/Projects/github.com/smykla-skalski/klab/.bin:$PATH"
-
       # Python shell.nix location for direnv
       # Found at startup because the checkout moves between GitHub owners
       for dotfiles_flake in "$HOME"/Projects/github.com/*/.dotfiles/nix/flake.nix(N); do
