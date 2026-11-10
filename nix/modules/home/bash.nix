@@ -144,6 +144,10 @@
 
     # .bashrc content (interactive shells)
     initExtra = ''
+      # Fish sets this, but a bash started outside fish has none, and
+      # bash-completion then prints setlocale warnings on every start.
+      export LANG="''${LANG:-en_US.UTF-8}"
+
       # Suppress pkg_resources deprecation warning from kathara_lab_checker
       export PYTHONWARNINGS="ignore::UserWarning"
 
@@ -160,9 +164,14 @@
           fi
         fi
 
-        # opencode completion (yargs-generated, requires mapfile/bash 4+)
         if command -v opencode >/dev/null 2>&1; then
-          eval "$(opencode completion)"
+          eval "$(opencode --completions bash)"
+        fi
+
+        # Homebrew's bash completions load only eagerly, and all of them add
+        # ~170ms to each start, so source just the ones in use.
+        if [[ -r /opt/homebrew/etc/bash_completion.d/kong-harnesses ]]; then
+          . /opt/homebrew/etc/bash_completion.d/kong-harnesses
         fi
       fi
 
