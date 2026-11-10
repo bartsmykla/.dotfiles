@@ -736,4 +736,12 @@ in
     # Note: broot integration (br.fish) is handled by programs.broot in broot.nix
     # with enableFishIntegration = true
   };
+
+  # Nix fish ignores XDG_DATA_DIRS, so it never reads the completions that
+  # Homebrew formulae install. Appended, so Nix and own completions win.
+  programs.fish.interactiveShellInit = ''
+    if test -d /opt/homebrew/share/fish/vendor_completions.d
+        set --global --append fish_complete_path /opt/homebrew/share/fish/vendor_completions.d
+    end
+  '';
 }

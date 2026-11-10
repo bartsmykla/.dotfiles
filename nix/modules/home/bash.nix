@@ -164,6 +164,12 @@
         if command -v opencode >/dev/null 2>&1; then
           eval "$(opencode completion)"
         fi
+
+        # Homebrew's bash completions load only eagerly, and all of them add
+        # ~170ms to each start, so source just the ones in use.
+        if [[ -r /opt/homebrew/etc/bash_completion.d/kong-harnesses ]]; then
+          . /opt/homebrew/etc/bash_completion.d/kong-harnesses
+        fi
       fi
 
       # Claude Code skills CLI wrapper

@@ -92,7 +92,15 @@
     '';
 
     # .zshrc content (interactive shells only)
-    initContent = ''
+    initContent = lib.mkMerge [
+      # Homebrew formulae install completions here, outside the Nix fpath.
+      # Order 550 runs before compinit. Appended, so Nix completions win.
+      (lib.mkOrder 550 ''
+        if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
+          fpath+=(/opt/homebrew/share/zsh/site-functions)
+        fi
+      '')
+      ''
       # fzf integration
       [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -120,6 +128,7 @@
         bashcompinit
         eval "$(opencode completion)"
       fi
-    '';
+    ''
+    ];
   };
 }
