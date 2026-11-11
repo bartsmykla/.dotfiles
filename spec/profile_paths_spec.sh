@@ -42,6 +42,11 @@ Describe 'Home Manager executable profile paths'
         The status should be success
     End
 
+    It 'does not add /usr/local/sbin to the launchd path'
+        When call grep -qF '"/usr/local/sbin"' "${DARWIN_MODULE}"
+        The status should be failure
+    End
+
     It 'prefers the nix-darwin system profile in the launchd path'
         launchd_profile_order_is_stable() {
             system_line=$(grep -nF '"/run/current-system/sw/bin"' "${DARWIN_MODULE}" | cut -d: -f1)

@@ -32,7 +32,9 @@ in
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
     "/usr/local/bin"
-    "/usr/local/sbin"
+    # /usr/local/sbin is not created on this Mac (Apple Silicon Homebrew
+    # lives in /opt/homebrew/sbin) and a missing launchd PATH entry makes
+    # provenance-tracked apps log syspolicyd qtn_proc errors.
     "/usr/bin"
     "/bin"
     "/usr/sbin"
