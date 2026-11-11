@@ -37,19 +37,25 @@ in
     fi
   '';
 
-  home.activation.npmrc = lib.hm.dag.entryAfter [ "writeBoundary" "sops-nix" "preserveNpmrc" ] ''
+  home.activation.npmrc = lib.hm.dag.entryAfter [
+    "writeBoundary"
+    "sops-nix"
+    "preserveNpmrc"
+    "setupLaunchAgents"
+  ] ''
     # On Darwin, sops-nix only bootstraps a launchd agent and does not wait
     # for decryption. Stop that in-flight agent and run the same program in
     # the foreground so the current secret generation is installed before
-    # we copy ~/.npmrc.
-    sops_plist="$HOME/Library/LaunchAgents/org.nix-community.home.sops-nix.plist"
-    if [ -f "$sops_plist" ] && [ -x /bin/launchctl ] && [ -x /usr/bin/plutil ]; then
-      sops_program=$(/usr/bin/plutil -extract Program raw "$sops_plist" 2>/dev/null || true)
-      domain_target="gui/$(id -u)"
-      $DRY_RUN_CMD /bin/launchctl bootout "$domain_target/org.nix-community.home.sops-nix" >/dev/null 2>&1 || true
-      if [ -n "$sops_program" ] && [ -x "$sops_program" ]; then
-        $DRY_RUN_CMD "$sops_program"
+    # we copy ~/.npmrc. Read Program from the Home Manager config: the
+    # generated plist uses ProgramArguments, not Program.
+    sops_program='${config.launchd.agents.sops-nix.config.Program}'
+    sops_path='${config.sops.environment.PATH}'
+    if [ -n "$sops_program" ] && [ -x "$sops_program" ]; then
+      if [ -x /bin/launchctl ]; then
+        domain_target="gui/$(id -u)"
+        $DRY_RUN_CMD /bin/launchctl bootout "$domain_target/org.nix-community.home.sops-nix" >/dev/null 2>&1 || true
       fi
+      $DRY_RUN_CMD env PATH="$sops_path" "$sops_program"
     fi
 
     if [ -x /usr/bin/getconf ]; then

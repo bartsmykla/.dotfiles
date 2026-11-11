@@ -68,7 +68,22 @@ Describe 'npm registry auth file'
         The status should be success
     End
 
-    It 'runs sops-install-secrets in the foreground on Darwin before copying'
+    It 'runs the sops-nix program from the Home Manager config, not the plist Program key'
+        When call grep -qF 'config.launchd.agents.sops-nix.config.Program' "${NPM_MODULE}"
+        The status should be success
+    End
+
+    It 'gives the foreground decryptor the sops-nix PATH so getconf can be found'
+        When call grep -qF 'config.sops.environment.PATH' "${NPM_MODULE}"
+        The status should be success
+    End
+
+    It 'orders the npmrc hook after setupLaunchAgents'
+        When call grep -qF '"setupLaunchAgents"' "${NPM_MODULE}"
+        The status should be success
+    End
+
+    It 'stops the in-flight Darwin sops-nix agent before decrypting in the foreground'
         When call grep -qF 'launchctl bootout' "${NPM_MODULE}"
         The status should be success
     End
