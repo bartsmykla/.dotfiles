@@ -25,6 +25,7 @@
     force = true;
     text = ''
       #!/bin/sh
+      export HOMEBREW_NO_ENV_HINTS=1
       if [ -z "''${HOMEBREW_GITHUB_API_TOKEN:-}" ] && token=$(gh auth token 2>/dev/null) && [ -n "$token" ]; then
         HOMEBREW_GITHUB_API_TOKEN=$token
         export HOMEBREW_GITHUB_API_TOKEN
