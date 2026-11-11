@@ -91,8 +91,13 @@ Describe 'filter_existing_path'
         The status should be success
     End
 
+    zsh_is_missing() {
+        ! command -v zsh >/dev/null 2>&1
+    }
+
     It 'filters the same way when sourced from zsh'
-        Skip if "zsh is not installed" ! command -v zsh >/dev/null 2>&1
+        # Skip if cannot take a raw `! command` pipeline; use a helper.
+        Skip if "zsh is not installed" zsh_is_missing
         run_filter_zsh() {
             PATH="$1" "$TEST_ZSH" -f -c '. "$FILTER_SCRIPT"; printf %s "$PATH"' 
         }
