@@ -13,8 +13,14 @@ Describe 'npm registry auth file'
     Before 'setup'
 
     It 'does not materialize ~/.npmrc as a Home Manager store file'
-        When call grep -qF 'home.file.".npmrc"' "${NPM_MODULE}"
-        The status should be failure
+        no_home_file_npmrc_declaration() {
+            # Comments may mention the old declaration; a real assignment would
+            # start a line of Nix with home.file.".npmrc".
+            ! grep -Eq '^[[:space:]]*home\.file\."\.npmrc"' "${NPM_MODULE}"
+        }
+
+        When call no_home_file_npmrc_declaration
+        The status should be success
     End
 
     It 'declares a sops-nix secret for the user npmrc'
@@ -54,6 +60,21 @@ Describe 'npm registry auth file'
         }
 
         When call secrets_file_has_npm_npmrc
+        The status should be success
+    End
+
+    It 'snapshots ~/.npmrc before Home Manager deletes the old store symlink'
+        When call grep -qF 'entryBefore [ "writeBoundary" ]' "${NPM_MODULE}"
+        The status should be success
+    End
+
+    It 'runs sops-install-secrets in the foreground on Darwin before copying'
+        When call grep -qF 'launchctl bootout' "${NPM_MODULE}"
+        The status should be success
+    End
+
+    It 'restores the preserved npmrc when the sops secret is still the placeholder'
+        When call grep -qF '.npmrc.hm-switch-preserve' "${NPM_MODULE}"
         The status should be success
     End
 End
