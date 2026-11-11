@@ -127,6 +127,13 @@
       }
       path_prepend_home_local_bin
       unset -f path_prepend_home_local_bin
+
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
+      fi
     '';
     force = true;  # Overwrite existing .bash_env
   };
@@ -252,6 +259,13 @@
       }
       path_prepend_home_local_bin
       unset -f path_prepend_home_local_bin
+
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
+      fi
     '';
 
     # .profile content (login shells)
@@ -308,6 +322,13 @@
       }
       path_prepend_home_local_bin
       unset -f path_prepend_home_local_bin
+
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
+      fi
     '';
   };
 }
