@@ -19,6 +19,12 @@ in
       source ${nixDarwinEnvironment}
       set --export --global PATH $inherited (for dir in $PATH; contains -- $dir $inherited; or echo $dir; end)
     end
+
+    # Drop missing PATH dirs in non-interactive shells too (login fish still
+    # inherits macOS path_helper entries such as cryptexd and /pkg). The
+    # interactive copy of this filter is later in interactiveShellInit,
+    # after mise/gcloud may have rebuilt PATH.
+    set --export --global PATH (path filter -d -- $PATH)
   '';
 
   # nix-darwin writes that file from programs.fish with useBabelfish (see

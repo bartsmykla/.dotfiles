@@ -25,7 +25,6 @@
       "grafana/grafana"                       # Monitoring
       "pamburus/tap"                          # Log viewer
       "stacklok/tap"                          # Stacklok tools (thv)
-      "homebrew/services"                     # Service management
     ];
 
     # Formulas not available in nixpkgs
@@ -69,6 +68,7 @@
       "orbstack"                              # Docker/Linux VMs
       "stacklok/tap/thv"                      # ToolHive MCP server manager (tap ships it as a cask)
       "gcloud-cli"                            # Google Cloud CLI
+      "azure-cli"                             # Azure CLI (migrated from homebrew-core to a cask)
       "discord"                               # Voice/text chat
       "signal"                                # Secure messaging
       "hiddenbar"                             # Menu bar management
