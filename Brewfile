@@ -27,7 +27,6 @@ tap "smykla-skalski/tap", "git@github.com:smykla-skalski/homebrew-tap.git"
 
 # Development tools
 tap "bufbuild/buf"           # Protocol Buffers tooling
-tap "chipmk/tap"             # Docker networking utilities
 tap "speakeasy-api/tap"      # API development tools
 
 # Infrastructure & Security
@@ -214,7 +213,6 @@ brew "zlib"         # Data compression library
 # CUSTOM TAP FORMULAS
 # ==============================================================================
 brew "smykla-skalski/tap/af"  # Personal CLI tool
-brew "chipmk/tap/docker-mac-net-connect"  # Docker-for-Mac IP access
 brew "cyclonedx/cyclonedx/cyclonedx-cli"  # CycloneDX SBOM tool
 brew "derailed/popeye/popeye"  # Kubernetes cluster linter
 brew "mutagen-io/mutagen/mutagen"  # File sync for remote dev

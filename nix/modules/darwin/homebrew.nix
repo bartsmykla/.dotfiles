@@ -14,7 +14,6 @@
     # Third-party taps
     taps = [
       "bufbuild/buf"                          # Protocol buffers
-      "chipmk/tap"                            # Docker networking
       "speakeasy-api/tap"                     # API tooling
       "aquaproj/aqua"                         # Version manager
       "aquasecurity/trivy"                    # Security scanner
@@ -35,7 +34,6 @@
       "derailed/popeye/popeye"                # Kubernetes cluster linter
       "mutagen-io/mutagen/mutagen"            # File sync
       "pamburus/tap/hl"                       # JSON log viewer
-      "stacklok/tap/thv"                      # ToolHive MCP server manager
       "lnav"                                  # Log viewer
       "kumactl"                               # Kuma service mesh CLI
       "swiftlint"                             # Swift linter
@@ -69,6 +67,7 @@
       "chatgpt"                               # OpenAI ChatGPT
       "claude"                                # Anthropic Claude
       "orbstack"                              # Docker/Linux VMs
+      "stacklok/tap/thv"                      # ToolHive MCP server manager (tap ships it as a cask)
       "gcloud-cli"                            # Google Cloud CLI
       "discord"                               # Voice/text chat
       "signal"                                # Secure messaging
