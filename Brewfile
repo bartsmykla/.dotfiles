@@ -44,10 +44,9 @@ tap "grafana/grafana"        # Observability platform
 # Log analysis
 tap "pamburus/tap"           # JSON log viewer
 
-# Official Homebrew taps
-tap "homebrew/cask-fonts"    # Fonts as casks
-tap "homebrew/cask-versions" # Beta/development versions
-tap "homebrew/services"      # Service management (brew services)
+# Official taps homebrew/cask-fonts, homebrew/cask-versions, and
+# homebrew/services are deprecated; their contents live in homebrew/cask
+# and in Homebrew itself (`brew services` is built in).
 
 # ==============================================================================
 # CLI TOOLS - Core utilities and replacements
@@ -117,7 +116,6 @@ brew "skopeo"       # Work with remote image registries
 
 # Cloud CLIs
 brew "awscli"       # AWS CLI
-brew "azure-cli"    # Azure CLI
 brew "eksctl"       # Amazon EKS CLI
 
 # Infrastructure as Code
@@ -260,6 +258,7 @@ cask "rancher"           # Kubernetes management
 
 # Cloud Tools
 cask "gcloud-cli"        # Google Cloud SDK
+cask "azure-cli"         # Azure CLI (migrated from homebrew-core to a cask)
 
 # Communication
 cask "discord"           # Voice and text chat

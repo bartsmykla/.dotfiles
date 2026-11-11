@@ -23,9 +23,10 @@ in
 
   launchd.user.envVariables.CODEX_HOME = "/Users/Shared/codex-home";
 
+  # Home Manager is standalone, so /etc/profiles/per-user never exists.
+  # Do not put that path here: launchd would hand it to every GUI app.
   launchd.user.envVariables.PATH = [
     "${userHome}/.local/bin"
-    "/etc/profiles/per-user/${config.system.primaryUser}/bin"
     "/run/current-system/sw/bin"
     "${userHome}/.nix-profile/bin"
     "/opt/homebrew/bin"
@@ -47,11 +48,12 @@ in
     babelfishPackage = pkgs.babelfish;
     shellInit = ''
       # Add nix-darwin managed paths
-      # Add the optional user profile first because each --prepend moves its
-      # argument to the front. The system Home Manager profile must win.
+      # Add the standalone Home Manager profile first because each --prepend
+      # moves its argument to the front. The nix-darwin system profile must
+      # win. Do not add /etc/profiles/per-user/$USER/bin: Home Manager is
+      # standalone, so that directory is never created.
       fish_add_path --prepend --move $HOME/.nix-profile/bin
       fish_add_path --prepend --move /run/current-system/sw/bin
-      fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin
 
       set -l home_local_bin "$HOME/.local/bin"
       if test -d "$home_local_bin"
