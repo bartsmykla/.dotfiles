@@ -32,22 +32,32 @@ Describe 'Home Manager executable profile paths'
         The status should be failure
     End
 
-    It 'prefers the system Home Manager profile in the launchd path'
+    It 'does not add the unused per-user profile to PATH configuration'
+        no_stale_per_user_profile_path() {
+            ! grep -qF '"/etc/profiles/per-user/${config.system.primaryUser}/bin"' "${DARWIN_MODULE}" &&
+                ! grep -qF 'fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin' "${DARWIN_MODULE}"
+        }
+
+        When call no_stale_per_user_profile_path
+        The status should be success
+    End
+
+    It 'prefers the nix-darwin system profile in the launchd path'
         launchd_profile_order_is_stable() {
-            canonical_line=$(grep -nF '"/etc/profiles/per-user/${config.system.primaryUser}/bin"' "${DARWIN_MODULE}" | cut -d: -f1)
+            system_line=$(grep -nF '"/run/current-system/sw/bin"' "${DARWIN_MODULE}" | cut -d: -f1)
             optional_line=$(grep -nF '"${userHome}/.nix-profile/bin"' "${DARWIN_MODULE}" | cut -d: -f1)
-            [ "${canonical_line}" -lt "${optional_line}" ]
+            [ -n "${system_line}" ] && [ -n "${optional_line}" ] && [ "${system_line}" -lt "${optional_line}" ]
         }
 
         When call launchd_profile_order_is_stable
         The status should be success
     End
 
-    It 'prepends the system Home Manager profile after the optional user profile'
+    It 'prepends the nix-darwin system profile after the standalone Home Manager profile'
         fish_profile_order_is_stable() {
             optional_line=$(grep -nF 'fish_add_path --prepend --move $HOME/.nix-profile/bin' "${DARWIN_MODULE}" | cut -d: -f1)
-            canonical_line=$(grep -nF 'fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin' "${DARWIN_MODULE}" | cut -d: -f1)
-            [ "${optional_line}" -lt "${canonical_line}" ]
+            system_line=$(grep -nF 'fish_add_path --prepend --move /run/current-system/sw/bin' "${DARWIN_MODULE}" | cut -d: -f1)
+            [ -n "${optional_line}" ] && [ -n "${system_line}" ] && [ "${optional_line}" -lt "${system_line}" ]
         }
 
         When call fish_profile_order_is_stable
