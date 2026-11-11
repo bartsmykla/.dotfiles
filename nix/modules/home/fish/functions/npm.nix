@@ -31,9 +31,9 @@ in
   # secret cannot leave the machine without an npmrc.
   home.activation.preserveNpmrc = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
     if [ -e "$HOME/.npmrc" ] || [ -L "$HOME/.npmrc" ]; then
-      $DRY_RUN_CMD rm -f ${preservePath}
-      $DRY_RUN_CMD cp "$HOME/.npmrc" ${preservePath}
-      $DRY_RUN_CMD chmod 600 ${preservePath}
+      $DRY_RUN_CMD rm -f "${preservePath}"
+      $DRY_RUN_CMD cp "$HOME/.npmrc" "${preservePath}"
+      $DRY_RUN_CMD chmod 600 "${preservePath}"
     fi
   '';
 
@@ -72,11 +72,11 @@ in
     if [ -n "$src" ] && ! grep -qx '${placeholder}' "$src" 2>/dev/null; then
       $DRY_RUN_CMD rm -f "$HOME/.npmrc"
       $DRY_RUN_CMD install -m 600 "$src" "$HOME/.npmrc"
-    elif [ -f ${preservePath} ]; then
+    elif [ -f "${preservePath}" ]; then
       $DRY_RUN_CMD rm -f "$HOME/.npmrc"
-      $DRY_RUN_CMD install -m 600 ${preservePath} "$HOME/.npmrc"
+      $DRY_RUN_CMD install -m 600 "${preservePath}" "$HOME/.npmrc"
     fi
 
-    $DRY_RUN_CMD rm -f ${preservePath}
+    $DRY_RUN_CMD rm -f "${preservePath}"
   '';
 }

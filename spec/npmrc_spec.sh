@@ -68,6 +68,11 @@ Describe 'npm registry auth file'
         The status should be success
     End
 
+    It 'quotes preservePath so a home directory with spaces is a single path'
+        When call grep -cF '"${preservePath}"' "${NPM_MODULE}"
+        The output should eq 6
+    End
+
     It 'runs the sops-nix program from the Home Manager config, not the plist Program key'
         When call grep -qF 'config.launchd.agents.sops-nix.config.Program' "${NPM_MODULE}"
         The status should be success
