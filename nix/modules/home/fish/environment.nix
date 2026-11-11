@@ -6,6 +6,15 @@ let
   nixDarwinEnvironment = "/etc/fish/setEnvironment.fish";
 in
 {
+  # Homebrew's mise formula installs vendor_conf.d/mise-activate.fish, which
+  # activates mise unless MISE_FISH_AUTO_ACTIVATE is 0. User conf.d runs
+  # before vendor_conf.d, so this turns that hook off; Home Manager activates
+  # mise once in interactiveShellInit.
+  # https://mise.jdx.dev/configuration/environment-variables.html
+  xdg.configFile."fish/conf.d/mise-no-auto-activate.fish".text = ''
+    set -gx MISE_FISH_AUTO_ACTIVATE 0
+  '';
+
   # The login shell is Homebrew's fish, which reads /opt/homebrew/etc/fish and
   # never nix-darwin's /etc/fish, so load nix-darwin's environment the way nix's
   # own fish does. It exports the marker that tells bash and zsh children the
@@ -23,7 +32,7 @@ in
     # Drop missing PATH dirs in non-interactive shells too (login fish still
     # inherits macOS path_helper entries such as cryptexd and /pkg). The
     # interactive copy of this filter is later in interactiveShellInit,
-    # after mise/gcloud may have rebuilt PATH.
+    # after the usual PATH additions and before mise activate.
     set --export --global PATH (path filter -d -- $PATH)
   '';
 
@@ -202,11 +211,6 @@ in
     else
       set -gx PATH (string match -v -- "$home_local_bin" $PATH)
     end
-
-    # Filter again after mise/gcloud: Homebrew fish's vendor mise-activate.fish
-    # snapshots PATH before this config runs, and `mise activate` above
-    # rebuilds PATH from that snapshot, re-adding missing /etc/paths.d dirs.
-    set --export --global PATH (path filter -d -- $PATH)
 
     # Note: Direnv hook handled by programs.direnv in direnv.nix
     # Manual hook disabled since direnv.nix handles integration
