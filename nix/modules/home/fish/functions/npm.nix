@@ -1,60 +1,49 @@
 # npm registry authentication
 #
-# The token is never written anywhere: ~/.npmrc carries a ${NPM_TOKEN}
-# reference that npm expands as it reads the file, and NPM_TOKEN is resolved
-# from 1Password the first time an npm-family command runs in a shell. A token
-# kept out of the dotfile survives rotation on its own and cannot be leaked by
-# a stray `cat ~/.npmrc` or a dotfiles backup.
+# ~/.npmrc holds the registry auth token, so it must not be a Home Manager
+# store symlink: those files are world-readable 0444 and owned by root.
+# sops-nix decrypts the npmrc at activation. We install a 0600 copy in $HOME
+# instead of symlinking into $DARWIN_USER_TEMP_DIR, which macOS can purge
+# (see claude.nix).
 #
-# Resolving it in interactiveShellInit was the obvious alternative and is the
-# wrong trade: `op read` costs about a second warm and several cold, which every
-# terminal would pay for a token most of them never use.
-{ lib, ... }:
+# Set the secret before home-manager switch, or activation leaves the existing
+# ~/.npmrc alone. Edit with:
+#   SOPS_AGE_KEY_FILE=~/.config/age/key.txt sops nix/secrets/secrets.yaml
+# and give npm.npmrc the file contents:
+#   //registry.npmjs.org/:_authToken=<token>
+{ config, lib, ... }:
 
 let
-  # Addressed by ID, since an op:// reference by name breaks on some item titles
-  tokenReference = "op://q7r4hh4465zentymwtoonxxp3m/bfojwj2lryfxdo5mn7v6uwavii/njgkb53rqjhnfc3meuoyrddmkq";
-
-  account = "team-kong.1password.com";
-
-  # Every front end that reads ~/.npmrc and is actually installed here.
-  frontEnds = [ "npm" "npx" "pnpm" "yarn" ];
+  # Decrypted sops destination; the $HOME copy is what npm reads.
+  secretPath = "%r/secrets/npmrc";
+  placeholder = "PLACEHOLDER_REPLACE_WITH_NPMRC";
 in
 {
-  # pnpm no longer expands environment variables in registry credentials that
-  # come from a project .npmrc, since that file is committed and could leak the
-  # secret to an attacker-controlled registry. The user-level file is the only
-  # place this still works.
-  home.file.".npmrc".text = ''
-    //registry.npmjs.org/:_authToken=''${NPM_TOKEN}
+  sops.secrets."npm/npmrc" = {
+    path = secretPath;
+    mode = "0400";
+  };
+
+  home.activation.npmrc = lib.hm.dag.entryAfter [ "writeBoundary" "sops-nix" ] ''
+    if [ -x /usr/bin/getconf ]; then
+      darwin_temp_dir=$(/usr/bin/getconf DARWIN_USER_TEMP_DIR 2>/dev/null)
+    else
+      darwin_temp_dir=""
+    fi
+
+    src=""
+    if [ -n "$darwin_temp_dir" ] && [ -f "$darwin_temp_dir/secrets/npmrc" ]; then
+      src="$darwin_temp_dir/secrets/npmrc"
+    fi
+
+    if [ -n "$src" ]; then
+      if grep -qx '${placeholder}' "$src" 2>/dev/null; then
+        echo "sops secret npm/npmrc is still the placeholder; not replacing ~/.npmrc" >&2
+      else
+        # Replace a previous Home Manager store symlink or an older copy.
+        $DRY_RUN_CMD rm -f "$HOME/.npmrc"
+        $DRY_RUN_CMD install -m 600 "$src" "$HOME/.npmrc"
+      fi
+    fi
   '';
-
-  programs.fish.functions = {
-    __npm_token = {
-      description = "Resolve NPM_TOKEN from 1Password, once per shell";
-      body = ''
-        if set -q NPM_TOKEN; and test -n "$NPM_TOKEN"
-          return 0
-        end
-
-        set -l token (op read '${tokenReference}' --account ${account} 2>/dev/null)
-
-        if test -z "$token"
-          echo "NPM_TOKEN: 1Password did not answer. Unlock it, or run: op signin --account ${account}" >&2
-          return 1
-        end
-
-        # Exported, so anything started from this shell - a mise task, a bash
-        # subshell, a CI-shaped script - inherits it without asking again.
-        set -gx NPM_TOKEN $token
-      '';
-    };
-  } // lib.genAttrs frontEnds (cmd: {
-    description = "Resolve the registry token before running ${cmd}";
-    wraps = cmd;
-    body = ''
-      __npm_token; or return 1
-      command ${cmd} $argv
-    '';
-  });
 }
