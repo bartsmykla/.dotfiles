@@ -73,4 +73,32 @@ Describe 'Home Manager executable profile paths'
         When call grep -qF '${config.home.profileDirectory}/bin:${config.home.homeDirectory}/.nix-profile/bin' "${TMUX_MODULE}"
         The status should be success
     End
+
+    It 'installs the shared PATH filter next to the PATH shims'
+        When call test -f "${DOTFILES_PATH}/nix/modules/home/shell/filter-existing-path.sh"
+        The status should be success
+    End
+
+    It 'sources the PATH filter from bash profile, rc, and BASH_ENV'
+        bash_sources_filter_three_times() {
+            bash_module="${DOTFILES_PATH}/nix/modules/home/bash.nix"
+            count=$(grep -cF '. "$HOME/.config/shell/filter-existing-path.sh"' "${bash_module}")
+            [ "${count}" -eq 3 ]
+        }
+
+        When call bash_sources_filter_three_times
+        The status should be success
+    End
+
+    It 'sources the PATH filter from zshenv, zprofile, and zshrc'
+        zsh_sources_filter_three_times() {
+            zsh_module="${DOTFILES_PATH}/nix/modules/home/zsh.nix"
+            grep -qF 'profileExtra' "${zsh_module}" &&
+                count=$(grep -cF '. "$HOME/.config/shell/filter-existing-path.sh"' "${zsh_module}") &&
+                [ "${count}" -eq 3 ]
+        }
+
+        When call zsh_sources_filter_three_times
+        The status should be success
+    End
 End

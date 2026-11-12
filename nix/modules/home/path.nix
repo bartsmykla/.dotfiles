@@ -3,6 +3,13 @@
 {
   home.sessionPath = [ "$HOME/.local/bin" ];
 
+  # POSIX PATH filter sourced by bash and zsh after path_helper and mise.
+  # See shell/filter-existing-path.sh.
+  home.file.".config/shell/filter-existing-path.sh" = {
+    source = ./shell/filter-existing-path.sh;
+  };
+
+
   home.file.".local/bin/python3" = {
     source = config.lib.file.mkOutOfStoreSymlink "/opt/homebrew/bin/python3";
     force = true;

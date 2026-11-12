@@ -89,6 +89,27 @@
       typeset -U path PATH
       path=("$HOME/.local/bin" $path)
       export PATH
+
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
+      fi
+    '';
+
+    # .zprofile content (login shells). Runs after /etc/zprofile, which is
+    # where path_helper would re-add /etc/paths.d entries on a stock macOS
+    # zsh. nix-darwin's /etc/zprofile currently does not call path_helper,
+    # but inherited PATH from a parent that did still needs filtering, and
+    # this keeps login zsh correct if path_helper is added later.
+    profileExtra = ''
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
+      fi
     '';
 
     # .zshrc content (interactive shells only)
@@ -124,6 +145,13 @@
 
       if command -v opencode >/dev/null 2>&1; then
         eval "$(opencode --completions zsh)"
+      fi
+
+      # Drop missing PATH directories after path_helper and mise. libuv and
+      # posix_spawnp try each PATH entry; a miss from a provenance-tracked
+      # app logs a syspolicyd qtn_proc error.
+      if [ -f "$HOME/.config/shell/filter-existing-path.sh" ]; then
+        . "$HOME/.config/shell/filter-existing-path.sh"
       fi
     ''
     ];
