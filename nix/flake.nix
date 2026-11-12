@@ -71,6 +71,7 @@
       ./modules/home/go-cache.nix
       ./modules/home/grype.nix
       ./modules/home/hammerspoon.nix
+      ./modules/home/hindsight.nix
       ./modules/home/k9s.nix
       ./modules/home/lnav.nix
       ./modules/home/mise.nix
