@@ -99,4 +99,26 @@ Describe 'Homebrew PATH shim'
         The output should include "PATH=${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin"
         The output should include 'ARGS=update'
     End
+
+    It 'unsets BASH_ENV so Homebrew bash does not restore the shim during doctor'
+        run_shim() {
+            bash_env="${FAKE_BIN}/bash_env"
+            bash_brew="${FAKE_BIN}/brew-bash"
+            printf '%s\n' 'export PATH="${HOME}/.local/bin:${PATH}"' > "${bash_env}"
+            printf '%s\n' '#!/bin/bash' 'printf "PATH=%s\n" "$PATH"' 'printf "BASH_ENV=%s\n" "${BASH_ENV-}"' 'printf "ARGS=%s\n" "$*"' > "${bash_brew}"
+            chmod +x "${bash_brew}"
+            env -i \
+                HOME="${HOME}" \
+                PATH="${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin" \
+                BASH_ENV="${bash_env}" \
+                DOTFILES_TEST_BREW="${bash_brew}" \
+                /bin/sh "${BREW_SHIM}" doctor
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include "PATH=${FAKE_BIN}:/usr/bin:/bin"
+        The output should include 'ARGS=doctor'
+        The output should include 'BASH_ENV='
+    End
 End

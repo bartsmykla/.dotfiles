@@ -10,7 +10,10 @@
 #
 # brew doctor warns if another brew is earlier on PATH (check_brew_path uses
 # the process's starting PATH). When the command is doctor, drop ~/.local/bin
-# from PATH before exec so that check sees only the Homebrew prefix.
+# from PATH before exec so that check sees only the Homebrew prefix. Also
+# unset BASH_ENV: configured shells export BASH_ENV=~/.bash_env, which
+# prepends ~/.local/bin, and Homebrew's Bash entry point would otherwise
+# restore the shim before the check runs.
 
 export HOMEBREW_NO_ENV_HINTS=1
 
@@ -45,6 +48,7 @@ if [ "${1-}" = doctor ]; then
 
   PATH="${_brew_new}"
   export PATH
+  unset BASH_ENV
   unset _brew_new _brew_rest _brew_dir _brew_shim_dir
 fi
 
