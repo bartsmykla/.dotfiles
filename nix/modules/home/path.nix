@@ -23,7 +23,7 @@
     force = true;
   };
 
-  # Private taps (kong/agent-auth-cli) download releases with
+  # Private taps download releases with
   # HOMEBREW_GITHUB_API_TOKEN. Take it from the gh CLI per brew call instead of
   # exporting the gh token, which has broad org scopes, to every process. A
   # shim on PATH covers fish, bash, zsh, Task and scripts alike. When the
