@@ -116,6 +116,53 @@ Describe 'Homebrew PATH shim'
         The output should include 'HINTS=1'
     End
 
+    It 'also drops ~/.local/bin from PATH for brew -v doctor'
+        run_shim() {
+            env -i \
+                HOME="${HOME}" \
+                PATH="${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${FAKE_BIN}/brew" \
+                /bin/sh "${BREW_SHIM}" -v doctor
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include "PATH=${FAKE_BIN}:/usr/bin:/bin"
+        The output should include 'ARGS=-v doctor'
+        The output should include 'HINTS=1'
+    End
+
+    It 'also drops ~/.local/bin from PATH for brew -v dr'
+        run_shim() {
+            env -i \
+                HOME="${HOME}" \
+                PATH="${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${FAKE_BIN}/brew" \
+                /bin/sh "${BREW_SHIM}" -v dr
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include "PATH=${FAKE_BIN}:/usr/bin:/bin"
+        The output should include 'ARGS=-v dr'
+        The output should include 'HINTS=1'
+    End
+
+    It 'keeps ~/.local/bin on PATH for brew -v update'
+        run_shim() {
+            env -i \
+                HOME="${HOME}" \
+                PATH="${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${FAKE_BIN}/brew" \
+                /bin/sh "${BREW_SHIM}" -v update
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include "PATH=${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin"
+        The output should include 'ARGS=-v update'
+    End
+
     It 'unsets BASH_ENV so Homebrew bash does not restore the shim during doctor'
         run_shim() {
             bash_env="${FAKE_BIN}/bash_env"

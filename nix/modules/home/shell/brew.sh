@@ -11,9 +11,12 @@
 # brew doctor warns if another brew is earlier on PATH (check_brew_path uses
 # the process's starting PATH). When the command is doctor or its official
 # alias dr, drop ~/.local/bin from PATH before exec so that check sees only
-# the Homebrew prefix. Also unset BASH_ENV: configured shells export
-# BASH_ENV=~/.bash_env, which prepends ~/.local/bin, and Homebrew's Bash
-# entry point would otherwise restore the shim before the check runs.
+# the Homebrew prefix. Homebrew moves a leading -v to the end before it
+# resolves the command, so treat `brew -v doctor` and `brew -v dr` the same
+# and still forward the original arguments. Also unset BASH_ENV: configured
+# shells export BASH_ENV=~/.bash_env, which prepends ~/.local/bin, and
+# Homebrew's Bash entry point would otherwise restore the shim before the
+# check runs.
 
 export HOMEBREW_NO_ENV_HINTS=1
 
@@ -22,7 +25,13 @@ if [ -z "${HOMEBREW_GITHUB_API_TOKEN:-}" ] && token=$(gh auth token 2>/dev/null)
   export HOMEBREW_GITHUB_API_TOKEN
 fi
 
-case "${1-}" in
+# Homebrew's brew.sh shifts a leading -v to the end before command lookup.
+_brew_cmd="${1-}"
+if [ "$_brew_cmd" = "-v" ]; then
+  _brew_cmd="${2-}"
+fi
+
+case "$_brew_cmd" in
 doctor|dr)
   _brew_shim_dir="${HOME}/.local/bin"
   _brew_new=""
@@ -55,6 +64,7 @@ doctor|dr)
 *)
   ;;
 esac
+unset _brew_cmd
 
 # DOTFILES_TEST_BREW is a test hook; production always uses the Homebrew prefix.
 exec "${DOTFILES_TEST_BREW:-/opt/homebrew/bin/brew}" "$@"
