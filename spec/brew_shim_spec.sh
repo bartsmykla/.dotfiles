@@ -100,6 +100,22 @@ Describe 'Homebrew PATH shim'
         The output should include 'ARGS=update'
     End
 
+    It 'also drops ~/.local/bin from PATH for the official doctor alias dr'
+        run_shim() {
+            env -i \
+                HOME="${HOME}" \
+                PATH="${HOME}/.local/bin:${FAKE_BIN}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${FAKE_BIN}/brew" \
+                /bin/sh "${BREW_SHIM}" dr
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include "PATH=${FAKE_BIN}:/usr/bin:/bin"
+        The output should include 'ARGS=dr'
+        The output should include 'HINTS=1'
+    End
+
     It 'unsets BASH_ENV so Homebrew bash does not restore the shim during doctor'
         run_shim() {
             bash_env="${FAKE_BIN}/bash_env"

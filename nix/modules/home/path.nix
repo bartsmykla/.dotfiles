@@ -27,8 +27,8 @@
   # HOMEBREW_GITHUB_API_TOKEN. Take it from the gh CLI per brew call instead of
   # exporting the gh token, which has broad org scopes, to every process. A
   # shim on PATH covers fish, bash, zsh, Task and scripts alike. When the
-  # command is doctor, the shim drops ~/.local/bin from PATH so brew doctor
-  # does not warn that this wrapper shadows the Homebrew prefix.
+  # command is doctor or its alias dr, the shim drops ~/.local/bin from PATH
+  # so brew doctor does not warn that this wrapper shadows the Homebrew prefix.
   home.file.".local/bin/brew" = {
     source = ./shell/brew.sh;
     executable = true;
