@@ -23,22 +23,16 @@
     force = true;
   };
 
-  # Private taps (kong/agent-auth-cli) download releases with
+  # Private taps download releases with
   # HOMEBREW_GITHUB_API_TOKEN. Take it from the gh CLI per brew call instead of
   # exporting the gh token, which has broad org scopes, to every process. A
-  # shim on PATH covers fish, bash, zsh, Task and scripts alike.
+  # shim on PATH covers fish, bash, zsh, Task and scripts alike. When the
+  # command is doctor or its alias dr, the shim drops ~/.local/bin from PATH
+  # so brew doctor does not warn that this wrapper shadows the Homebrew prefix.
   home.file.".local/bin/brew" = {
+    source = ./shell/brew.sh;
     executable = true;
     force = true;
-    text = ''
-      #!/bin/sh
-      export HOMEBREW_NO_ENV_HINTS=1
-      if [ -z "''${HOMEBREW_GITHUB_API_TOKEN:-}" ] && token=$(gh auth token 2>/dev/null) && [ -n "$token" ]; then
-        HOMEBREW_GITHUB_API_TOKEN=$token
-        export HOMEBREW_GITHUB_API_TOKEN
-      fi
-      exec /opt/homebrew/bin/brew "$@"
-    '';
   };
 
   # Pin hot, name-resolved binaries at the front of PATH. libuv (Node/Electron)
