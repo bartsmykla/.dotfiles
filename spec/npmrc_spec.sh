@@ -93,6 +93,11 @@ Describe 'npm registry auth file'
         The status should be success
     End
 
+    It 'registers the Darwin sops-nix agent again after the foreground decrypt'
+        When call grep -qF 'launchctl bootstrap' "${NPM_MODULE}"
+        The status should be success
+    End
+
     It 'restores the preserved npmrc when the sops secret is still the placeholder'
         When call grep -qF '.npmrc.hm-switch-preserve' "${NPM_MODULE}"
         The status should be success

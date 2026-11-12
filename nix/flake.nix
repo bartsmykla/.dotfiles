@@ -126,7 +126,9 @@
       ];
     };
 
-    darwinPackages = self.darwinConfigurations.${hostname}.pkgs;
+    # Known flake output (same package set previously exposed as an
+    # unofficial attribute that made `nix flake check` warn).
+    legacyPackages.${system} = self.darwinConfigurations.${hostname}.pkgs;
 
     # Standalone Home Manager entry so the CLI can be run without sudo.
     homeConfigurations = {
