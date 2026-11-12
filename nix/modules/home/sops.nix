@@ -29,6 +29,10 @@
       "exercism/user" = {
         path = "%r/secrets/exercism-user.json";
       };
+
+      # User-level npmrc (contains the registry auth token). Declared and
+      # installed in ./fish/functions/npm.nix so the file is 0600 in $HOME
+      # rather than a world-readable Nix store symlink.
     };
   };
 }
