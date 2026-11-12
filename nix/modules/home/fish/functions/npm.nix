@@ -47,15 +47,21 @@ in
     # for decryption. Stop that in-flight agent and run the same program in
     # the foreground so the current secret generation is installed before
     # we copy ~/.npmrc. Read Program from the Home Manager config: the
-    # generated plist uses ProgramArguments, not Program.
+    # generated plist uses ProgramArguments, not Program. After decrypting,
+    # put the agent back so it stays registered for later logins instead of
+    # remaining unloaded until the next reboot.
     sops_program='${config.launchd.agents.sops-nix.config.Program}'
     sops_path='${config.sops.environment.PATH}'
+    domain_target="gui/$(id -u)"
+    sops_plist="$HOME/Library/LaunchAgents/org.nix-community.home.sops-nix.plist"
     if [ -n "$sops_program" ] && [ -x "$sops_program" ]; then
       if [ -x /bin/launchctl ]; then
-        domain_target="gui/$(id -u)"
         $DRY_RUN_CMD /bin/launchctl bootout "$domain_target/org.nix-community.home.sops-nix" >/dev/null 2>&1 || true
       fi
       $DRY_RUN_CMD env PATH="$sops_path" "$sops_program"
+      if [ -x /bin/launchctl ] && [ -f "$sops_plist" ]; then
+        $DRY_RUN_CMD /bin/launchctl bootstrap "$domain_target" "$sops_plist" >/dev/null 2>&1 || true
+      fi
     fi
 
     if [ -x /usr/bin/getconf ]; then
