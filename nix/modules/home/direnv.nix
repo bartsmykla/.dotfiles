@@ -4,7 +4,7 @@
 # Direnv provides per-directory environment variable management.
 #
 # Fish integration is automatic when programs.fish.enable = true.
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   pythonEnvPath = ../../python-env;
@@ -22,20 +22,9 @@ in
   programs.direnv = {
     enable = true;
 
-    # Override to use git master with log_format fix (PR #1476, fixes #1419)
-    # https://github.com/direnv/direnv/pull/1476
-    # Verified 2026-08-19: nixpkgs still ships vanilla 2.37.1 (predates this
-    # fix by 10 days) and upstream has cut no release since. Still required.
-    # TODO: drop this override once a direnv release contains 92436eed.
-    package = pkgs.direnv.overrideAttrs (oldAttrs: rec {
-      version = "2.37.1-unstable-2025-07-30";
-      src = pkgs.fetchFromGitHub {
-        owner = "direnv";
-        repo = "direnv";
-        rev = "92436eed264bc286862c5cce6fff2781cd195778";  # PR #1476 merge commit
-        hash = "sha256-H75lGBk1wqWV/OrcgRvkUIDycaz6wAFVqdvIucDLyuw=";
-      };
-    });
+    # nixpkgs 2.38.2 includes the log_format = "-" fix from PR #1476.
+    # The previous git-master override broke the Home Manager build after the
+    # flake update because its go-modules hash no longer matched.
 
     # Use nix-direnv for faster nix shell loading
     nix-direnv.enable = true;
