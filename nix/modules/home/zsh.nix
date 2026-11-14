@@ -58,9 +58,6 @@
       export BUN_INSTALL="$HOME/.bun"
       export PATH="$BUN_INSTALL/bin:$PATH"
 
-      # Rancher Desktop
-      [ -d "$HOME/.rd/bin" ] && export PATH="$HOME/.rd/bin:$PATH"
-
       # For non-interactive shells, use mise hook-env
       mise_bin=""
       if [ -x "$HOME/.local/bin/mise" ]; then

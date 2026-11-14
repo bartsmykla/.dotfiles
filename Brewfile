@@ -250,7 +250,6 @@ cask "claude"            # Anthropic Claude AI desktop app
 
 # Container & Kubernetes
 cask "orbstack"          # Docker Desktop replacement (preferred)
-cask "rancher"           # Kubernetes management
 
 # Cloud Tools
 cask "gcloud-cli"        # Google Cloud SDK
