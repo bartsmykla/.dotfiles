@@ -32,7 +32,6 @@ tap "speakeasy-api/tap"      # API development tools
 # Infrastructure & Security
 tap "aquaproj/aqua"          # Declarative CLI version manager
 tap "aquasecurity/trivy"     # Container security scanner
-tap "cyclonedx/cyclonedx"    # Software Bill of Materials (SBOM)
 tap "derailed/popeye"        # Kubernetes cluster linter
 tap "hashicorp/tap"          # HashiCorp tools
 tap "mutagen-io/mutagen"     # File synchronization
@@ -87,7 +86,6 @@ brew "git-crypt"    # Transparent file encryption in git
 
 # Build Tools & Compilers
 brew "make"         # GNU Make
-brew "cmake"        # Cross-platform make
 brew "ninja"        # Small build system
 brew "autoconf"     # Automatic configure script builder
 brew "clang-format" # Code formatter (C/C++/Java/JS/TS)
@@ -107,14 +105,12 @@ brew "skaffold"     # Kubernetes development workflow
 
 # Cloud CLIs
 brew "awscli"       # AWS CLI
-brew "eksctl"       # Amazon EKS CLI
 
 # Infrastructure as Code
 brew "terraform"    # HashiCorp Terraform (IaC)
 brew "opentofu"     # OpenTofu (Terraform fork)
 
 # Security & Vulnerability Scanning
-brew "grype"        # Vulnerability scanner for containers
 brew "syft"         # SBOM generator
 brew "trivy", link: false  # Container vulnerability scanner
 brew "osv-scanner"  # OSV vulnerability database scanner
@@ -195,7 +191,6 @@ brew "zlib"         # Data compression library
 # CUSTOM TAP FORMULAS
 # ==============================================================================
 brew "smykla-skalski/tap/af"  # Personal CLI tool
-brew "cyclonedx/cyclonedx/cyclonedx-cli"  # CycloneDX SBOM tool
 brew "derailed/popeye/popeye"  # Kubernetes cluster linter
 brew "mutagen-io/mutagen/mutagen"  # File sync for remote dev
 
