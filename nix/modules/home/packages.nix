@@ -125,7 +125,6 @@ in
     # Security & Vulnerability Scanning
     # ============================================================================
     syft                # SBOM generator
-    trivy               # Container vulnerability scanner
     osv-scanner         # OSV vulnerability database scanner
     (mkExternalToolWrapper "scorecard" [
       "/opt/homebrew/bin/scorecard"
@@ -248,11 +247,5 @@ in
     # ============================================================================
     bazelisk            # User-friendly Bazel launcher
 
-    # ============================================================================
-    # Misc Development
-    # ============================================================================
-    # chart-releaser - not in nixpkgs
-    # vexctl - not in nixpkgs
-    overmind            # Process manager for tmux
   ];
 }

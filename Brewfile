@@ -31,7 +31,6 @@ tap "speakeasy-api/tap"      # API development tools
 
 # Infrastructure & Security
 tap "aquaproj/aqua"          # Declarative CLI version manager
-tap "aquasecurity/trivy"     # Container security scanner
 tap "derailed/popeye"        # Kubernetes cluster linter
 tap "hashicorp/tap"          # HashiCorp tools
 tap "mutagen-io/mutagen"     # File synchronization
@@ -112,7 +111,6 @@ brew "opentofu"     # OpenTofu (Terraform fork)
 
 # Security & Vulnerability Scanning
 brew "syft"         # SBOM generator
-brew "trivy", link: false  # Container vulnerability scanner
 brew "osv-scanner"  # OSV vulnerability database scanner
 brew "scorecard"    # OpenSSF security metrics
 
@@ -196,9 +194,6 @@ brew "mutagen-io/mutagen/mutagen"  # File sync for remote dev
 
 # Editors & IDEs
 brew "vim"          # Vi IMproved
-
-# Container Management (deprecated in favor of OrbStack)
-brew "overmind"     # Process manager for tmux
 
 # Bazel
 brew "bazelisk"     # User-friendly Bazel launcher

@@ -16,7 +16,6 @@
       "bufbuild/buf"                          # Protocol buffers
       "speakeasy-api/tap"                     # API tooling
       "aquaproj/aqua"                         # Version manager
-      "aquasecurity/trivy"                    # Security scanner
       "derailed/popeye"                       # Kubernetes linter
       "hashicorp/tap"                         # HashiCorp tools
       "mutagen-io/mutagen"                    # File sync

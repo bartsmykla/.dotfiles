@@ -74,7 +74,6 @@
       ./modules/home/lnav.nix
       ./modules/home/mise.nix
       ./modules/home/mocks-server.nix
-      ./modules/home/navi.nix
       ./modules/home/packages.nix
       ./modules/home/path.nix
       ./modules/home/shell-aliases.nix
