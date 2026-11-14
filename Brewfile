@@ -135,6 +135,7 @@ brew "yamllint"     # YAML linter
 brew "shellcheck"   # Shell script linter (installed via mise)
 
 # Testing Tools
+brew "check-jsonschema"  # JSON Schema validator (supports Taskfile)
 brew "shellspec"         # Shell script testing framework (BDD-style)
 
 # Protocol Buffers

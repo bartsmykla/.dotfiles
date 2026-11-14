@@ -36,6 +36,7 @@
       "swiftlint"                             # Swift linter
       "vale"                                  # Prose linter
       "commitlint"                            # Commit message linter
+      "check-jsonschema"                      # JSON Schema validator
       "aqua"                                  # CLI version manager
       "mise"                                  # Tool version manager
       "uv"                                    # Python package manager
