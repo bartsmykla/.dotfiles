@@ -52,7 +52,6 @@ in
     # ============================================================================
     # File Management & Navigation
     # ============================================================================
-    broot               # Directory tree navigation
     tree                # Directory tree display
     fswatch             # Cross-platform file change monitor
     # direnv - managed via programs.direnv in direnv.nix
