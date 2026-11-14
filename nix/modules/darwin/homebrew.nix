@@ -44,7 +44,6 @@
       "uv"                                    # Python package manager
       "chart-releaser"                        # Helm charts releaser
       "cloudflared"                           # Cloudflare Tunnel client
-      "vexctl"                                # VEX metadata tool
       "muffet"                                # Website link checker
       "toxiproxy"                             # TCP proxy for chaos
       "kubeshark"                             # Kubernetes network analyzer
