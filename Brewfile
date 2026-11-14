@@ -169,8 +169,6 @@ brew "pre-commit"   # Git pre-commit hooks framework
 # ==============================================================================
 # Network Tools
 brew "ipcalc"       # IP subnet calculator
-brew "sipcalc"      # Advanced IP subnet calculator
-brew "iproute2mac"  # IP command for macOS
 brew "cloudflared"  # Cloudflare Tunnel client
 brew "wget"         # Internet file retriever
 
