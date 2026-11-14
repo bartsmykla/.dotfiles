@@ -121,7 +121,6 @@ brew "opentofu"     # OpenTofu (Terraform fork)
 brew "grype"        # Vulnerability scanner for containers
 brew "syft"         # SBOM generator
 brew "trivy", link: false  # Container vulnerability scanner
-brew "snyk-cli"     # Snyk security scanner
 brew "osv-scanner"  # OSV vulnerability database scanner
 brew "scorecard"    # OpenSSF security metrics
 

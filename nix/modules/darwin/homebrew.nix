@@ -43,7 +43,6 @@
       "chart-releaser"                        # Helm charts releaser
       "cloudflared"                           # Cloudflare Tunnel client
       "jump"                                  # Directory bookmarking
-      "snyk-cli"                              # Security scanner
       "scorecard"                             # OpenSSF security metrics
       "gh"                                    # GitHub CLI (latest, auto-updating)
     ];
