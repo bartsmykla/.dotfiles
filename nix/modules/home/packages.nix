@@ -129,10 +129,6 @@ in
     grype               # Vulnerability scanner for containers
     syft                # SBOM generator
     trivy               # Container vulnerability scanner
-    (mkExternalToolWrapper "snyk" [
-      "/opt/homebrew/bin/snyk"
-      "/usr/local/bin/snyk"
-    ] "Install it with Homebrew (`brew install snyk`) or run `darwin-rebuild switch`.")
     osv-scanner         # OSV vulnerability database scanner
     (mkExternalToolWrapper "scorecard" [
       "/opt/homebrew/bin/scorecard"
