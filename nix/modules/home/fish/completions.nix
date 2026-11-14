@@ -76,8 +76,6 @@ in
     '';
 
     # Note: mise completions are handled by programs.mise.enableFishIntegration
-    # Note: broot integration (br.fish) is handled by programs.broot in broot.nix
-    # with enableFishIntegration = true
   };
 
   # Nix fish ignores XDG_DATA_DIRS, so it never reads the completions that

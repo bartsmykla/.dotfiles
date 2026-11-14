@@ -58,11 +58,8 @@
       # We do not rely on `man -k`, so keep cache generation disabled.
       {programs.man.generateCaches = false;}
       ./modules/home/bash.nix
-      ./modules/home/broot.nix
-      ./modules/home/broot-tips.nix
       ./modules/home/claude.nix
       ./modules/home/cloudflared.nix
-      ./modules/home/command-suggestions.nix
       ./modules/home/direnv.nix
       ./modules/home/fish.nix
       ./modules/home/git-signing.nix

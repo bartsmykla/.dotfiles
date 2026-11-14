@@ -65,7 +65,6 @@ brew "tmux"         # Terminal multiplexer
 brew "tmuxp"        # Tmux session manager
 
 # File Management & Navigation
-brew "broot"        # Directory tree navigation
 brew "jump"         # Directory bookmarking (learning-based)
 brew "tree"         # Directory tree display
 brew "direnv"       # Per-directory environment variables

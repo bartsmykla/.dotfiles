@@ -219,9 +219,6 @@
       # fzf integration
       [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-      # broot integration
-      [ -f "$HOME/.config/broot/launcher/bash/br" ] && source "$HOME/.config/broot/launcher/bash/br"
-
       # Activate mise for interactive shells (prompt hook re-evaluates on cd)
       mise_bin=""
       if [ -x "$HOME/.local/bin/mise" ]; then
