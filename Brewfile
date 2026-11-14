@@ -132,7 +132,6 @@ brew "scorecard"    # OpenSSF security metrics
 
 # Linters & Formatters
 brew "actionlint"   # GitHub Actions workflow linter
-brew "cfn-lint"     # CloudFormation template validator
 brew "commitlint"   # Commit message linter
 brew "hadolint"     # Dockerfile linter
 brew "swiftlint"    # Swift code linter
@@ -227,9 +226,6 @@ brew "bazelisk"     # User-friendly Bazel launcher
 
 # Chart Tools
 brew "chart-releaser"  # Helm Charts via GitHub
-
-# VEX (Vulnerability Exchange)
-brew "vexctl"       # VEX metadata tool
 
 # Misc
 brew "exercism"     # exercism.io CLI
