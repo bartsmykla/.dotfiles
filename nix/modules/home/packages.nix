@@ -81,7 +81,6 @@ in
     # Build Tools & Compilers
     # ============================================================================
     gnumake             # GNU Make
-    cmake               # Cross-platform make
     ninja               # Small build system
     autoconf            # Automatic configure script builder
     clang-tools         # clang-format, clang-tidy, etc.
@@ -118,7 +117,6 @@ in
       runtimeInputs = [ coreutils flock gnugrep gnused jq okta-aws-cli ];
       text = builtins.readFile ./okta-aws-cached.sh;
     })
-    eksctl              # Amazon EKS CLI
     scaleway-cli        # Scaleway CLI
     # gcloud - managed as cask via Homebrew
 
@@ -131,7 +129,6 @@ in
     # ============================================================================
     # Security & Vulnerability Scanning
     # ============================================================================
-    grype               # Vulnerability scanner for containers
     syft                # SBOM generator
     trivy               # Container vulnerability scanner
     (mkExternalToolWrapper "snyk" [

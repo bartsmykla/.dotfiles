@@ -17,7 +17,6 @@
       "speakeasy-api/tap"                     # API tooling
       "aquaproj/aqua"                         # Version manager
       "aquasecurity/trivy"                    # Security scanner
-      "cyclonedx/cyclonedx"                   # SBOM tools
       "derailed/popeye"                       # Kubernetes linter
       "hashicorp/tap"                         # HashiCorp tools
       "mutagen-io/mutagen"                    # File sync
@@ -28,7 +27,6 @@
 
     # Formulas not available in nixpkgs
     brews = [
-      "cyclonedx/cyclonedx/cyclonedx-cli"     # CycloneDX SBOM
       "derailed/popeye/popeye"                # Kubernetes cluster linter
       "mutagen-io/mutagen/mutagen"            # File sync
       "lnav"                                  # Log viewer
