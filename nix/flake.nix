@@ -64,7 +64,6 @@
       ./modules/home/cloudflared.nix
       ./modules/home/command-suggestions.nix
       ./modules/home/direnv.nix
-      ./modules/home/exercism.nix
       ./modules/home/fish.nix
       ./modules/home/git-signing.nix
       ./modules/home/ghostty.nix

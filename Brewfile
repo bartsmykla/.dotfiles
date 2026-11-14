@@ -42,7 +42,6 @@ tap "helm/tap"               # Kubernetes package manager
 tap "grafana/grafana"        # Observability platform
 
 # Log analysis
-tap "pamburus/tap"           # JSON log viewer
 
 # Official taps homebrew/cask-fonts, homebrew/cask-versions, and
 # homebrew/services are deprecated; their contents live in homebrew/cask
@@ -76,7 +75,6 @@ brew "direnv"       # Per-directory environment variables
 # Text Processing & Viewing
 brew "jq"           # JSON processor
 brew "yq"           # YAML/JSON/XML processor
-brew "fx"           # Terminal JSON viewer (interactive)
 brew "lnav", args: ["HEAD"]  # Log file viewer (using latest from HEAD)
 
 # ==============================================================================
@@ -103,16 +101,13 @@ brew "minikube"     # Local Kubernetes
 brew "kubernetes-cli"  # kubectl
 brew "kubectx"      # Switch kubectl contexts easily
 brew "k9s"          # Kubernetes TUI
-brew "kubeshark"    # Kubernetes network analyzer
 brew "helm"         # Kubernetes package manager
 brew "kustomize"    # Kubernetes manifest customization
 brew "kumactl"      # Kuma service mesh CLI
 brew "skaffold"     # Kubernetes development workflow
-brew "stern"        # Tail logs from multiple pods
 
 # Container Image Tools
 brew "crane"        # Tool for interacting with registries
-brew "skopeo"       # Work with remote image registries
 
 # Cloud CLIs
 brew "awscli"       # AWS CLI
@@ -140,7 +135,6 @@ brew "yamllint"     # YAML linter
 brew "shellcheck"   # Shell script linter (installed via mise)
 
 # Testing Tools
-brew "check-jsonschema"  # JSON Schema validator (supports Taskfile)
 brew "shellspec"         # Shell script testing framework (BDD-style)
 
 # Protocol Buffers
@@ -149,14 +143,12 @@ brew "buildifier"        # Bazel BUILD file formatter
 brew "buildozer"         # Bazel BUILD file editor
 
 # API Development
-brew "muffet"       # Website link checker
 brew "speakeasy-api/tap/speakeasy"  # API client generation
 
 # Monitoring & Debugging
 brew "htop"         # Interactive process viewer
 brew "watch"        # Execute program periodically
 brew "socat"        # SOcket CAT (netcat on steroids)
-brew "toxiproxy"    # TCP proxy for chaos testing
 
 # ==============================================================================
 # PACKAGE MANAGERS & VERSION MANAGERS
@@ -211,7 +203,6 @@ brew "smykla-skalski/tap/af"  # Personal CLI tool
 brew "cyclonedx/cyclonedx/cyclonedx-cli"  # CycloneDX SBOM tool
 brew "derailed/popeye/popeye"  # Kubernetes cluster linter
 brew "mutagen-io/mutagen/mutagen"  # File sync for remote dev
-brew "pamburus/tap/hl"  # JSON/logfmt log viewer
 
 # Editors & IDEs
 brew "vim"          # Vi IMproved
@@ -226,7 +217,6 @@ brew "bazelisk"     # User-friendly Bazel launcher
 brew "chart-releaser"  # Helm Charts via GitHub
 
 # Misc
-brew "exercism"     # exercism.io CLI
 
 # ==============================================================================
 # GUI APPLICATIONS (CASKS)

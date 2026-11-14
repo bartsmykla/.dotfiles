@@ -21,27 +21,7 @@
         np: networkpolicies
     '';
 
-    # Plugins for extended functionality
-    "k9s/plugins.yaml".text = ''
-      plugins:
-        # Leverage stern for log output
-        stern:
-          shortCut: Ctrl-L
-          confirm: false
-          description: "Logs <Stern>"
-          scopes:
-            - pods
-          command: stern
-          background: false
-          args:
-            - --tail
-            - "50"
-            - $FILTER
-            - -n
-            - $NAMESPACE
-            - --context
-            - $CONTEXT
-    '';
+    # plugins.yaml removed: it only provided a stern log plugin, and stern is no longer installed.
 
     # Symlink main config from sops secret
     # Note: K9s expects config.yaml but we have it in sops as k9s-config.yaml
