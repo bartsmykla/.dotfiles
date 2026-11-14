@@ -23,7 +23,6 @@
       "mutagen-io/mutagen"                    # File sync
       "helm/tap"                              # Helm charts
       "grafana/grafana"                       # Monitoring
-      "pamburus/tap"                          # Log viewer
       "stacklok/tap"                          # Stacklok tools (thv)
     ];
 
@@ -32,7 +31,6 @@
       "cyclonedx/cyclonedx/cyclonedx-cli"     # CycloneDX SBOM
       "derailed/popeye/popeye"                # Kubernetes cluster linter
       "mutagen-io/mutagen/mutagen"            # File sync
-      "pamburus/tap/hl"                       # JSON log viewer
       "lnav"                                  # Log viewer
       "kumactl"                               # Kuma service mesh CLI
       "swiftlint"                             # Swift linter
@@ -44,9 +42,6 @@
       "uv"                                    # Python package manager
       "chart-releaser"                        # Helm charts releaser
       "cloudflared"                           # Cloudflare Tunnel client
-      "muffet"                                # Website link checker
-      "toxiproxy"                             # TCP proxy for chaos
-      "kubeshark"                             # Kubernetes network analyzer
       "jump"                                  # Directory bookmarking
       "snyk-cli"                              # Security scanner
       "scorecard"                             # OpenSSF security metrics

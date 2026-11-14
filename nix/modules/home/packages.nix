@@ -68,7 +68,6 @@ in
     (writeShellScriptBin "tomlq" ''
       exec ${pkgs.python3Packages.yq}/bin/tomlq "$@"
     '')
-    fx                  # Terminal JSON viewer (interactive)
     # lnav - not easily available, keep in Homebrew for HEAD build
 
     # ============================================================================
@@ -96,18 +95,16 @@ in
     kubectl             # Kubernetes CLI
     kubectx             # Switch kubectl contexts easily
     k9s                 # Kubernetes TUI
-    # kubeshark - not in nixpkgs, keep in Homebrew
+    # kubeshark - not in nixpkgs
     kubernetes-helm     # Helm - Kubernetes package manager
     kustomize           # Kubernetes manifest customization
     # kumactl - not in nixpkgs, install via mise or direct download
     skaffold            # Kubernetes development workflow
-    stern               # Tail logs from multiple pods
 
     # ============================================================================
     # Container Image Tools
     # ============================================================================
     crane               # Tool for interacting with registries (from go-containerregistry)
-    skopeo              # Work with remote image registries
 
     # ============================================================================
     # Cloud CLIs
@@ -272,7 +269,6 @@ in
     # ============================================================================
     # chart-releaser - not in nixpkgs
     # vexctl - not in nixpkgs
-    exercism            # exercism.io CLI
     overmind            # Process manager for tmux
   ];
 }
