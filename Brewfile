@@ -105,9 +105,6 @@ brew "kustomize"    # Kubernetes manifest customization
 brew "kumactl"      # Kuma service mesh CLI
 brew "skaffold"     # Kubernetes development workflow
 
-# Container Image Tools
-brew "crane"        # Tool for interacting with registries
-
 # Cloud CLIs
 brew "awscli"       # AWS CLI
 brew "eksctl"       # Amazon EKS CLI
@@ -139,7 +136,6 @@ brew "shellspec"         # Shell script testing framework (BDD-style)
 
 # Protocol Buffers
 brew "bufbuild/buf/buf"  # Protocol Buffers tooling
-brew "buildifier"        # Bazel BUILD file formatter
 brew "buildozer"         # Bazel BUILD file editor
 
 # API Development

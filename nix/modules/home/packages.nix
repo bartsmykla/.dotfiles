@@ -102,11 +102,6 @@ in
     skaffold            # Kubernetes development workflow
 
     # ============================================================================
-    # Container Image Tools
-    # ============================================================================
-    crane               # Tool for interacting with registries (from go-containerregistry)
-
-    # ============================================================================
     # Cloud CLIs
     # ============================================================================
     awscli2             # AWS CLI v2
@@ -166,7 +161,6 @@ in
     # Protocol Buffers
     # ============================================================================
     buf                 # Protocol Buffers tooling
-    buildifier          # Bazel BUILD file formatter
     buildozer           # Bazel BUILD file editor
 
     # ============================================================================

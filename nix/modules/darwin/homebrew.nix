@@ -23,7 +23,6 @@
       "mutagen-io/mutagen"                    # File sync
       "helm/tap"                              # Helm charts
       "grafana/grafana"                       # Monitoring
-      "stacklok/tap"                          # Stacklok tools (thv)
     ];
 
     # Formulas not available in nixpkgs
@@ -60,7 +59,6 @@
       "chatgpt"                               # OpenAI ChatGPT
       "claude"                                # Anthropic Claude
       "orbstack"                              # Docker/Linux VMs
-      "stacklok/tap/thv"                      # ToolHive MCP server manager (tap ships it as a cask)
       "gcloud-cli"                            # Google Cloud CLI
       "azure-cli"                             # Azure CLI (migrated from homebrew-core to a cask)
       "discord"                               # Voice/text chat
