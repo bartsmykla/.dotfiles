@@ -155,9 +155,6 @@ in
     # vale - prose linter, not in nixpkgs
     yamllint            # YAML linter
     shellcheck          # Shell script linter
-    statix              # Nix linter (finds anti-patterns)
-    deadnix             # Nix dead code finder
-    alejandra           # Nix formatter
 
     # ============================================================================
     # Testing Tools

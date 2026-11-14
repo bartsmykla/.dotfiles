@@ -97,7 +97,6 @@ brew "llvm"         # Next-gen compiler infrastructure
 brew "docker"       # Container runtime
 brew "k3d"          # k3s in Docker (local k8s)
 brew "kind"         # Kubernetes IN Docker
-brew "minikube"     # Local Kubernetes
 brew "kubernetes-cli"  # kubectl
 brew "kubectx"      # Switch kubectl contexts easily
 brew "k9s"          # Kubernetes TUI
@@ -263,9 +262,6 @@ cask "wireshark-app"     # Network protocol analyzer
 
 # Gaming/Peripherals
 cask "steelseries-gg"    # SteelSeries peripheral settings
-
-# Development (Infrastructure)
-cask "hashicorp-vagrant"  # Development environment manager
 
 # Fonts
 cask "font-fira-code"           # Fira Code font
