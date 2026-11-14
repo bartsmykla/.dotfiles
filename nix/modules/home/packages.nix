@@ -207,8 +207,6 @@ in
     # Network Tools
     # ============================================================================
     ipcalc              # IP subnet calculator
-    sipcalc             # Advanced IP subnet calculator
-    iproute2mac         # IP command for macOS
     wget                # Internet file retriever
 
     # ============================================================================
