@@ -103,7 +103,6 @@ in
     # Cloud CLIs
     # ============================================================================
     awscli2             # AWS CLI v2
-    azure-cli           # Azure CLI
     okta-aws-cli        # AWS login via Okta (replaces saml2aws)
     # One shared, cached Okta login per credential_process profile
     (writeShellApplication {
@@ -117,18 +116,12 @@ in
     # ============================================================================
     # Infrastructure as Code
     # ============================================================================
-    terraform           # HashiCorp Terraform (IaC)
     opentofu            # OpenTofu (Terraform fork)
 
     # ============================================================================
     # Security & Vulnerability Scanning
     # ============================================================================
-    syft                # SBOM generator
     osv-scanner         # OSV vulnerability database scanner
-    (mkExternalToolWrapper "scorecard" [
-      "/opt/homebrew/bin/scorecard"
-      "/usr/local/bin/scorecard"
-    ] "Install it with Homebrew (`brew install scorecard`) or run `darwin-rebuild switch`.")
 
     # ============================================================================
     # Linters & Formatters

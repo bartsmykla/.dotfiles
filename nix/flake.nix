@@ -77,7 +77,6 @@
       ./modules/home/shell-functions.nix
       ./modules/home/sops.nix
       ./modules/home/starship.nix
-      ./modules/home/syft.nix
       ./modules/home/tmux.nix
       ./modules/home/tmuxp.nix
       ./modules/home/vim.nix
