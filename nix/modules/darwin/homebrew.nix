@@ -17,7 +17,6 @@
       "speakeasy-api/tap"                     # API tooling
       "aquaproj/aqua"                         # Version manager
       "derailed/popeye"                       # Kubernetes linter
-      "hashicorp/tap"                         # HashiCorp tools
       "mutagen-io/mutagen"                    # File sync
       "helm/tap"                              # Helm charts
       "grafana/grafana"                       # Monitoring
@@ -36,10 +35,8 @@
       "aqua"                                  # CLI version manager
       "mise"                                  # Tool version manager
       "uv"                                    # Python package manager
-      "chart-releaser"                        # Helm charts releaser
       "cloudflared"                           # Cloudflare Tunnel client
       "jump"                                  # Directory bookmarking
-      "scorecard"                             # OpenSSF security metrics
       "gh"                                    # GitHub CLI (latest, auto-updating)
     ];
 
@@ -50,13 +47,11 @@
       "hammerspoon"                           # macOS automation
       "rectangle"                             # Window management
       "ghostty"                               # Fast native terminal emulator
-      "firefox@developer-edition"             # Firefox dev edition
       "insomnia"                              # API client
       "chatgpt"                               # OpenAI ChatGPT
       "claude"                                # Anthropic Claude
       "orbstack"                              # Docker/Linux VMs
       "gcloud-cli"                            # Google Cloud CLI
-      "azure-cli"                             # Azure CLI (migrated from homebrew-core to a cask)
       "discord"                               # Voice/text chat
       "signal"                                # Secure messaging
       "hiddenbar"                             # Menu bar management
@@ -64,7 +59,6 @@
       # send-to-kindle - removed: cask disabled upstream 2026-06-01 (use amazon.com/sendtokindle)
       "omnigraffle"                           # Diagramming tool
       "gpg-suite"                             # GPG encryption
-      "wireshark-app"                         # Network analyzer
       "steelseries-gg"                        # Gaming peripherals
       "font-fira-code"                        # Programming font
       "font-fira-code-nerd-font"              # Nerd font variant

@@ -32,7 +32,6 @@ tap "speakeasy-api/tap"      # API development tools
 # Infrastructure & Security
 tap "aquaproj/aqua"          # Declarative CLI version manager
 tap "derailed/popeye"        # Kubernetes cluster linter
-tap "hashicorp/tap"          # HashiCorp tools
 tap "mutagen-io/mutagen"     # File synchronization
 
 # Kubernetes & Cloud
@@ -105,13 +104,10 @@ brew "skaffold"     # Kubernetes development workflow
 brew "awscli"       # AWS CLI
 
 # Infrastructure as Code
-brew "terraform"    # HashiCorp Terraform (IaC)
 brew "opentofu"     # OpenTofu (Terraform fork)
 
 # Security & Vulnerability Scanning
-brew "syft"         # SBOM generator
 brew "osv-scanner"  # OSV vulnerability database scanner
-brew "scorecard"    # OpenSSF security metrics
 
 # Linters & Formatters
 brew "actionlint"   # GitHub Actions workflow linter
@@ -197,9 +193,6 @@ brew "vim"          # Vi IMproved
 # Bazel
 brew "bazelisk"     # User-friendly Bazel launcher
 
-# Chart Tools
-brew "chart-releaser"  # Helm Charts via GitHub
-
 # Misc
 
 # ==============================================================================
@@ -209,9 +202,6 @@ brew "chart-releaser"  # Helm Charts via GitHub
 cask "1password-cli"     # 1Password command-line interface
 cask "alfred"            # Application launcher and productivity
 cask "rectangle"         # Window management via keyboard
-
-# Browsers
-cask "firefox@developer-edition"  # Firefox Developer Edition
 
 # Development Tools
 cask "insomnia"          # HTTP/GraphQL client
@@ -225,7 +215,6 @@ cask "orbstack"          # Docker Desktop replacement (preferred)
 
 # Cloud Tools
 cask "gcloud-cli"        # Google Cloud SDK
-cask "azure-cli"         # Azure CLI (migrated from homebrew-core to a cask)
 
 # Communication
 cask "discord"           # Voice and text chat
@@ -242,7 +231,6 @@ cask "omnigraffle"       # Diagramming tool
 
 # Security & Networking
 cask "gpg-suite"         # GPG tools for macOS
-cask "wireshark-app"     # Network protocol analyzer
 
 # Gaming/Peripherals
 cask "steelseries-gg"    # SteelSeries peripheral settings
