@@ -119,13 +119,19 @@ in {
       # Keep Ghostty terminal identity for app feature detection.
       term = "xterm-ghostty";
 
-      # Every surface runs the launcher. With initial-window = false the
-      # first surface is often the quick terminal, which would otherwise
-      # consume initial-command and start tmux. The launcher starts the
-      # shared tmux session only in the first regular window of the
-      # process and runs raw fish in the quick terminal, later tabs,
-      # and splits.
-      initial-command = "direct:${ghosttyLauncher}";
+      # The first surface is often the quick terminal: Ghostty creates it
+      # at launch when a global keybind is set, especially with
+      # initial-window = false. initial-command therefore stays on raw
+      # fish. Regular windows use the launcher, which starts the shared
+      # tmux session once per process and skips it when
+      # GHOSTTY_QUICK_TERMINAL=1 (set on a freshly created quick terminal
+      # and its splits in 1.4). Later tabs and splits stay on fish so
+      # they do not nest tmux.
+      # macOS window restore can drop GHOSTTY_QUICK_TERMINAL (#13042 in
+      # 1.4.0) and can also revive a hidden fullscreen window at launch.
+      # Session state lives in tmux, so window restore is disabled.
+      window-save-state = "never";
+      initial-command = "direct:${fishPath}";
       command = "direct:${ghosttyLauncher}";
 
       # Shell integration (title needed for fish_title to work)
