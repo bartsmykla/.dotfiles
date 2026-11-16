@@ -76,7 +76,9 @@ in {
       window-decoration = "auto";
       macos-option-as-alt = true;
       # Keep the default titlebar style: "hidden" disallows native tabs.
-      initial-window = true;
+      # No window at process start so a login agent can launch Ghostty
+      # for the global quick-terminal hotkey without a fullscreen window.
+      initial-window = false;
       fullscreen = true;
 
       # Scrollback
@@ -94,9 +96,17 @@ in {
       # Shell integration (title needed for fish_title to work)
       shell-integration-features = "cursor,sudo,title";
 
-      # Quick Terminal (drop-down from top)
+      # Quick terminal (drop-down from the top of the screen under the
+      # cursor). The global hotkey requires Ghostty to be running and
+      # macOS Accessibility permission. grave_accent is accepted and
+      # canonicalizes to backquote (the ` key) in Ghostty 1.4.
       quick-terminal-position = "top";
+      quick-terminal-screen = "mouse";
       quick-terminal-animation-duration = "0.1";
+      quick-terminal-autohide = true;
+      quick-terminal-space-behavior = "move";
+      # Primary-axis height for a top-positioned quick terminal.
+      quick-terminal-size = "50%";
 
       # Cursor
       cursor-style = "block";
@@ -206,6 +216,18 @@ in {
         "ctrl+shift+up=jump_to_prompt:-1"
         "ctrl+shift+down=jump_to_prompt:1"
       ];
+    };
+  };
+
+  # Global keybinds only work while Ghostty is running. Start it at login
+  # in the background so the quick terminal is available after a reboot
+  # without opening a window (see initial-window).
+  launchd.agents.ghostty-login = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    enable = true;
+    config = {
+      ProgramArguments = ["/usr/bin/open" "-ga" "Ghostty"];
+      RunAtLoad = true;
+      LimitLoadToSessionType = "Aqua";
     };
   };
 }
