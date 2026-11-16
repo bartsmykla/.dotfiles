@@ -203,50 +203,43 @@ in {
 
         # Ghostty always un-tabs new_window (ignores AppleWindowTabbingMode),
         # so Cmd+N opens a native tab instead. With no window open, new_tab
-        # falls back to creating a window.
+        # falls back to creating a window. In the macOS quick terminal,
+        # tabs are not supported (they require a title bar); splits work.
         "cmd+n=new_tab"
+        "cmd+t=new_tab"
+        "cmd+w=close_surface"
+        "cmd+shift+bracket_left=previous_tab"
+        "cmd+shift+bracket_right=next_tab"
+        "cmd+grave_accent=next_tab"
+        "cmd+shift+grave_accent=previous_tab"
+        "cmd+one=goto_tab:1"
+        "cmd+two=goto_tab:2"
+        "cmd+three=goto_tab:3"
+        "cmd+four=goto_tab:4"
+        "cmd+five=goto_tab:5"
+        "cmd+six=goto_tab:6"
+        "cmd+seven=goto_tab:7"
+        "cmd+eight=goto_tab:8"
+        "cmd+nine=last_tab"
 
-        # === Tmux-first pane workflow ===
-        # Create panes
-        "cmd+d=text:\\x01|"
-        "cmd+shift+d=text:\\x01-"
-        "cmd+alt+z=text:\\x01z"
-
-        # Navigate panes
-        "cmd+alt+left=text:\\x01h"
-        "cmd+alt+right=text:\\x01l"
-        "cmd+alt+up=text:\\x01k"
-        "cmd+alt+down=text:\\x01j"
-
+        # Ghostty-native splits. These also work in the quick terminal.
+        # Regular windows that run tmux can still use the tmux prefix
+        # for tmux panes and windows.
+        "cmd+d=new_split:right"
+        "cmd+shift+d=new_split:down"
+        "cmd+alt+left=goto_split:left"
+        "cmd+alt+right=goto_split:right"
+        "cmd+alt+up=goto_split:up"
+        "cmd+alt+down=goto_split:down"
         # Keep these for Ghostty split cycling used by Hammerspoon
         "cmd+bracket_left=goto_split:previous" # Cmd+[
         "cmd+bracket_right=goto_split:next" # Cmd+]
-
-        # Resize panes
-        "cmd+ctrl+left=text:\\x01H"
-        "cmd+ctrl+right=text:\\x01L"
-        "cmd+ctrl+up=text:\\x01K"
-        "cmd+ctrl+down=text:\\x01J"
-        "cmd+shift+equal=text:\\x01="
-
-        # === Tmux windows ===
-        "cmd+t=text:\\x01c"
-        "cmd+w=text:\\x01X"
-
-        # Window navigation
-        "cmd+one=text:\\x011"
-        "cmd+two=text:\\x012"
-        "cmd+three=text:\\x013"
-        "cmd+four=text:\\x014"
-        "cmd+five=text:\\x015"
-        "cmd+six=text:\\x016"
-        "cmd+seven=text:\\x017"
-        "cmd+eight=text:\\x018"
-        "cmd+nine=text:\\x019"
-        "cmd+shift+bracket_left=text:\\x01p"
-        "cmd+shift+bracket_right=text:\\x01n"
-        "cmd+grave_accent=text:\\x01n"
-        "cmd+shift+grave_accent=text:\\x01p"
+        "cmd+ctrl+left=resize_split:left,10"
+        "cmd+ctrl+right=resize_split:right,10"
+        "cmd+ctrl+up=resize_split:up,10"
+        "cmd+ctrl+down=resize_split:down,10"
+        "cmd+shift+equal=equalize_splits"
+        "cmd+alt+z=toggle_split_zoom"
 
         # === Utility shortcuts ===
         "cmd+k=clear_screen" # Clear screen (Terminal.app standard)
