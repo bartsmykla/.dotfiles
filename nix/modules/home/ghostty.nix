@@ -190,7 +190,7 @@ in {
       # Hammerspoon can modify this file to override settings without touching Nix config
       config-file = "?~/.config/ghostty/config.local";
 
-      # Keybindings - Using standard terminal shortcuts (iTerm2/Terminal.app style)
+      # Keybindings - standard macOS terminal shortcuts
       keybind = [
         # Shift+Enter sends newline (for Claude Code)
         "shift+enter=text:\\n"

@@ -156,9 +156,10 @@ in
 
     # PATH additions
 
-    # Homebrew prefix must be self-declared: iTerm2 launches fish directly from
-    # launchd, so nothing else exports HOMEBREW_PREFIX. Appended (not prepended)
-    # so Nix-managed tools keep priority over their Homebrew counterparts.
+    # Homebrew prefix must be self-declared: some terminals launch fish
+    # directly, so nothing else exports HOMEBREW_PREFIX. Appended (not
+    # prepended) so Nix-managed tools keep priority over their Homebrew
+    # counterparts.
     set --export HOMEBREW_PREFIX "/opt/homebrew"
     set --export HOMEBREW_NO_ENV_HINTS 1
     fish_add_path --global --append "$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin"
