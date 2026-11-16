@@ -16,6 +16,10 @@
 
     session_name="main"
 
+    start_fish() {
+      exec ${fishPath}
+    }
+
     start_tmux() {
       start_dir="''${PWD:-$HOME}"
       if [ ! -d "$start_dir" ]; then
@@ -25,12 +29,30 @@
       ${tmuxPath} new-session -A -s "$session_name" -c "$start_dir"
     }
 
-    # The quick terminal must never spawn tmux. Ghostty sets
-    # GHOSTTY_QUICK_TERMINAL=1 in the quick terminal surface, including when
-    # the quick terminal is the first surface at app launch and therefore runs
-    # initial-command (this launcher) instead of command (raw fish).
+    # Walk to the Ghostty app pid. Surfaces are spawned via /usr/bin/login,
+    # so the script's immediate parent is not Ghostty itself.
+    find_ghostty_pid() {
+      pid=$$
+      i=0
+      while [ "$i" -lt 8 ] && [ -n "$pid" ] && [ "$pid" != "0" ] && [ "$pid" != "1" ]; do
+        comm=$(ps -o comm= -p "$pid" 2>/dev/null | tr -d ' ')
+        case "$comm" in
+          *ghostty*|*Ghostty*)
+            printf '%s\n' "$pid"
+            return 0
+            ;;
+        esac
+        pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+        i=$((i + 1))
+      done
+      return 1
+    }
+
+    # Official Ghostty 1.3+ signal for a quick-terminal surface (1.4 still
+    # sets this on a freshly created quick terminal and its splits). There
+    # is no separate quick-terminal command option.
     if [ "''${GHOSTTY_QUICK_TERMINAL-}" = "1" ]; then
-      exec ${fishPath}
+      start_fish
     fi
 
     if [ -z "''${PWD-}" ]; then
@@ -38,7 +60,17 @@
     fi
 
     if [ -n "''${TMUX-}" ]; then
-      exec ${fishPath}
+      start_fish
+    fi
+
+    # Only the first non-quick surface in this Ghostty process starts or
+    # attaches the shared tmux session. Later tabs and splits stay on
+    # raw fish so they do not nest tmux.
+    if ghostty_pid=$(find_ghostty_pid); then
+      stamp="''${TMPDIR:-/tmp}/ghostty-tmux-started.$ghostty_pid"
+      if ! mkdir "$stamp" 2>/dev/null; then
+        start_fish
+      fi
     fi
 
     if start_tmux; then
@@ -54,7 +86,7 @@
     fi
 
     # Last resort: keep terminal usable even if tmux startup fails.
-    exec ${fishPath}
+    start_fish
   '';
 in {
   programs.ghostty = {
@@ -87,11 +119,14 @@ in {
       # Keep Ghostty terminal identity for app feature detection.
       term = "xterm-ghostty";
 
-      # Only the first app window launches into shared tmux. Every later
-      # surface, including the quick terminal and Ghostty native splits, uses
-      # raw fish so quick terminal panes never spawn tmux.
+      # Every surface runs the launcher. With initial-window = false the
+      # first surface is often the quick terminal, which would otherwise
+      # consume initial-command and start tmux. The launcher starts the
+      # shared tmux session only in the first regular window of the
+      # process and runs raw fish in the quick terminal, later tabs,
+      # and splits.
       initial-command = "direct:${ghosttyLauncher}";
-      command = "direct:${fishPath}";
+      command = "direct:${ghosttyLauncher}";
 
       # Shell integration (title needed for fish_title to work)
       shell-integration-features = "cursor,sudo,title";
