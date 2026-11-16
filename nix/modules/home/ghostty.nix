@@ -16,6 +16,10 @@
 
     session_name="main"
 
+    start_fish() {
+      exec ${fishPath}
+    }
+
     start_tmux() {
       start_dir="''${PWD:-$HOME}"
       if [ ! -d "$start_dir" ]; then
@@ -25,12 +29,30 @@
       ${tmuxPath} new-session -A -s "$session_name" -c "$start_dir"
     }
 
-    # The quick terminal must never spawn tmux. Ghostty sets
-    # GHOSTTY_QUICK_TERMINAL=1 in the quick terminal surface, including when
-    # the quick terminal is the first surface at app launch and therefore runs
-    # initial-command (this launcher) instead of command (raw fish).
+    # Walk to the Ghostty app pid. Surfaces are spawned via /usr/bin/login,
+    # so the script's immediate parent is not Ghostty itself.
+    find_ghostty_pid() {
+      pid=$$
+      i=0
+      while [ "$i" -lt 8 ] && [ -n "$pid" ] && [ "$pid" != "0" ] && [ "$pid" != "1" ]; do
+        comm=$(ps -o comm= -p "$pid" 2>/dev/null | tr -d ' ')
+        case "$comm" in
+          *ghostty*|*Ghostty*)
+            printf '%s\n' "$pid"
+            return 0
+            ;;
+        esac
+        pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+        i=$((i + 1))
+      done
+      return 1
+    }
+
+    # Official Ghostty 1.3+ signal for a quick-terminal surface (1.4 still
+    # sets this on a freshly created quick terminal and its splits). There
+    # is no separate quick-terminal command option.
     if [ "''${GHOSTTY_QUICK_TERMINAL-}" = "1" ]; then
-      exec ${fishPath}
+      start_fish
     fi
 
     if [ -z "''${PWD-}" ]; then
@@ -38,7 +60,17 @@
     fi
 
     if [ -n "''${TMUX-}" ]; then
-      exec ${fishPath}
+      start_fish
+    fi
+
+    # Only the first non-quick surface in this Ghostty process starts or
+    # attaches the shared tmux session. Later tabs and splits stay on
+    # raw fish so they do not nest tmux.
+    if ghostty_pid=$(find_ghostty_pid); then
+      stamp="''${TMPDIR:-/tmp}/ghostty-tmux-started.$ghostty_pid"
+      if ! mkdir "$stamp" 2>/dev/null; then
+        start_fish
+      fi
     fi
 
     if start_tmux; then
@@ -54,7 +86,7 @@
     fi
 
     # Last resort: keep terminal usable even if tmux startup fails.
-    exec ${fishPath}
+    start_fish
   '';
 in {
   programs.ghostty = {
@@ -76,7 +108,9 @@ in {
       window-decoration = "auto";
       macos-option-as-alt = true;
       # Keep the default titlebar style: "hidden" disallows native tabs.
-      initial-window = true;
+      # No window at process start so a login agent can launch Ghostty
+      # for the global quick-terminal hotkey without a fullscreen window.
+      initial-window = false;
       fullscreen = true;
 
       # Scrollback
@@ -85,18 +119,35 @@ in {
       # Keep Ghostty terminal identity for app feature detection.
       term = "xterm-ghostty";
 
-      # Only the first app window launches into shared tmux. Every later
-      # surface, including the quick terminal and Ghostty native splits, uses
-      # raw fish so quick terminal panes never spawn tmux.
-      initial-command = "direct:${ghosttyLauncher}";
-      command = "direct:${fishPath}";
+      # The first surface is often the quick terminal: Ghostty creates it
+      # at launch when a global keybind is set, especially with
+      # initial-window = false. initial-command therefore stays on raw
+      # fish. Regular windows use the launcher, which starts the shared
+      # tmux session once per process and skips it when
+      # GHOSTTY_QUICK_TERMINAL=1 (set on a freshly created quick terminal
+      # and its splits in 1.4). Later tabs and splits stay on fish so
+      # they do not nest tmux.
+      # macOS window restore can drop GHOSTTY_QUICK_TERMINAL (#13042 in
+      # 1.4.0) and can also revive a hidden fullscreen window at launch.
+      # Session state lives in tmux, so window restore is disabled.
+      window-save-state = "never";
+      initial-command = "direct:${fishPath}";
+      command = "direct:${ghosttyLauncher}";
 
       # Shell integration (title needed for fish_title to work)
       shell-integration-features = "cursor,sudo,title";
 
-      # Quick Terminal (drop-down from top)
+      # Quick terminal (drop-down from the top of the screen under the
+      # cursor). The global hotkey requires Ghostty to be running and
+      # macOS Accessibility permission. grave_accent is accepted and
+      # canonicalizes to backquote (the ` key) in Ghostty 1.4.
       quick-terminal-position = "top";
+      quick-terminal-screen = "mouse";
       quick-terminal-animation-duration = "0.1";
+      quick-terminal-autohide = true;
+      quick-terminal-space-behavior = "move";
+      # Primary-axis height for a top-positioned quick terminal.
+      quick-terminal-size = "50%";
 
       # Cursor
       cursor-style = "block";
@@ -139,7 +190,7 @@ in {
       # Hammerspoon can modify this file to override settings without touching Nix config
       config-file = "?~/.config/ghostty/config.local";
 
-      # Keybindings - Using standard terminal shortcuts (iTerm2/Terminal.app style)
+      # Keybindings - standard macOS terminal shortcuts
       keybind = [
         # Shift+Enter sends newline (for Claude Code)
         "shift+enter=text:\\n"
@@ -152,50 +203,43 @@ in {
 
         # Ghostty always un-tabs new_window (ignores AppleWindowTabbingMode),
         # so Cmd+N opens a native tab instead. With no window open, new_tab
-        # falls back to creating a window.
+        # falls back to creating a window. In the macOS quick terminal,
+        # tabs are not supported (they require a title bar); splits work.
         "cmd+n=new_tab"
+        "cmd+t=new_tab"
+        "cmd+w=close_surface"
+        "cmd+shift+bracket_left=previous_tab"
+        "cmd+shift+bracket_right=next_tab"
+        "cmd+grave_accent=next_tab"
+        "cmd+shift+grave_accent=previous_tab"
+        "cmd+one=goto_tab:1"
+        "cmd+two=goto_tab:2"
+        "cmd+three=goto_tab:3"
+        "cmd+four=goto_tab:4"
+        "cmd+five=goto_tab:5"
+        "cmd+six=goto_tab:6"
+        "cmd+seven=goto_tab:7"
+        "cmd+eight=goto_tab:8"
+        "cmd+nine=last_tab"
 
-        # === Tmux-first pane workflow ===
-        # Create panes
-        "cmd+d=text:\\x01|"
-        "cmd+shift+d=text:\\x01-"
-        "cmd+alt+z=text:\\x01z"
-
-        # Navigate panes
-        "cmd+alt+left=text:\\x01h"
-        "cmd+alt+right=text:\\x01l"
-        "cmd+alt+up=text:\\x01k"
-        "cmd+alt+down=text:\\x01j"
-
+        # Ghostty-native splits. These also work in the quick terminal.
+        # Regular windows that run tmux can still use the tmux prefix
+        # for tmux panes and windows.
+        "cmd+d=new_split:right"
+        "cmd+shift+d=new_split:down"
+        "cmd+alt+left=goto_split:left"
+        "cmd+alt+right=goto_split:right"
+        "cmd+alt+up=goto_split:up"
+        "cmd+alt+down=goto_split:down"
         # Keep these for Ghostty split cycling used by Hammerspoon
         "cmd+bracket_left=goto_split:previous" # Cmd+[
         "cmd+bracket_right=goto_split:next" # Cmd+]
-
-        # Resize panes
-        "cmd+ctrl+left=text:\\x01H"
-        "cmd+ctrl+right=text:\\x01L"
-        "cmd+ctrl+up=text:\\x01K"
-        "cmd+ctrl+down=text:\\x01J"
-        "cmd+shift+equal=text:\\x01="
-
-        # === Tmux windows ===
-        "cmd+t=text:\\x01c"
-        "cmd+w=text:\\x01X"
-
-        # Window navigation
-        "cmd+one=text:\\x011"
-        "cmd+two=text:\\x012"
-        "cmd+three=text:\\x013"
-        "cmd+four=text:\\x014"
-        "cmd+five=text:\\x015"
-        "cmd+six=text:\\x016"
-        "cmd+seven=text:\\x017"
-        "cmd+eight=text:\\x018"
-        "cmd+nine=text:\\x019"
-        "cmd+shift+bracket_left=text:\\x01p"
-        "cmd+shift+bracket_right=text:\\x01n"
-        "cmd+grave_accent=text:\\x01n"
-        "cmd+shift+grave_accent=text:\\x01p"
+        "cmd+ctrl+left=resize_split:left,10"
+        "cmd+ctrl+right=resize_split:right,10"
+        "cmd+ctrl+up=resize_split:up,10"
+        "cmd+ctrl+down=resize_split:down,10"
+        "cmd+shift+equal=equalize_splits"
+        "cmd+alt+z=toggle_split_zoom"
 
         # === Utility shortcuts ===
         "cmd+k=clear_screen" # Clear screen (Terminal.app standard)
@@ -206,6 +250,18 @@ in {
         "ctrl+shift+up=jump_to_prompt:-1"
         "ctrl+shift+down=jump_to_prompt:1"
       ];
+    };
+  };
+
+  # Global keybinds only work while Ghostty is running. Start it at login
+  # in the background so the quick terminal is available after a reboot
+  # without opening a window (see initial-window).
+  launchd.agents.ghostty-login = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    enable = true;
+    config = {
+      ProgramArguments = ["/usr/bin/open" "-ga" "Ghostty"];
+      RunAtLoad = true;
+      LimitLoadToSessionType = "Aqua";
     };
   };
 }
