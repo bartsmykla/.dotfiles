@@ -207,12 +207,9 @@ in
       source "$HOMEBREW_PREFIX/share/google-cloud-sdk/path.fish.inc"
     end
 
-    set -l home_local_bin "$HOME/.local/bin"
-    if test -d "$home_local_bin"
-      set -gx PATH $home_local_bin (string match -v -- "$home_local_bin" $PATH)
-    else
-      set -gx PATH (string match -v -- "$home_local_bin" $PATH)
-    end
+    # The Hermes Agent installer (hermes.nix) looks for this call and would
+    # otherwise append its own PATH line to the read-only config.fish.
+    fish_add_path --global --move --path "$HOME/.local/bin"
 
     # Note: Direnv hook handled by programs.direnv in direnv.nix
     # Manual hook disabled since direnv.nix handles integration

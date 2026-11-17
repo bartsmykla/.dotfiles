@@ -66,6 +66,7 @@
       ./modules/home/ghostty.nix
       ./modules/home/go-cache.nix
       ./modules/home/hammerspoon.nix
+      ./modules/home/hermes.nix
       ./modules/home/hindsight.nix
       ./modules/home/k9s.nix
       ./modules/home/lnav.nix
