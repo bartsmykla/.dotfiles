@@ -5,9 +5,14 @@ let
   # from prebuilt downloads, and `hermes update` keeps it current afterwards.
   # The upstream Nix flake is not used: it has no binary cache, so it compiles
   # the whole Python and Node tree on this machine.
-  installer = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/NousResearch/hermes-agent/v0.23.2/scripts/install.sh";
-    hash = "sha256-xz2tTc98nsrbmFeOKMx2PSPXvj+htRNUUxkDh5VJMhQ=";
+  #
+  # A commit rev locks fetchTree without a hash, so Renovate can move the
+  # release tag and its rev together (custom manager in renovate.json).
+  hermesSource = builtins.fetchTree {
+    type = "github";
+    owner = "NousResearch";
+    repo = "hermes-agent";
+    rev = "ae2a81ccc00e9b7c06301523e5bb09608397149c"; # v0.23.2
   };
 in
 {
@@ -19,7 +24,7 @@ in
       run env \
         SHELL=${config.programs.fish.package}/bin/fish \
         PATH="${config.programs.git.package}/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
-        ${pkgs.bash}/bin/bash ${installer} --skip-setup \
+        ${pkgs.bash}/bin/bash ${hermesSource}/scripts/install.sh --skip-setup \
         || warnEcho "Hermes Agent install failed, run home-manager switch again"
     fi
   '';
