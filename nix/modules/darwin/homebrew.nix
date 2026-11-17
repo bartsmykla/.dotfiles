@@ -38,6 +38,7 @@
       "cloudflared"                           # Cloudflare Tunnel client
       "jump"                                  # Directory bookmarking
       "gh"                                    # GitHub CLI (latest, auto-updating)
+      "hermes-agent"                          # Nous Research AI agent (prebuilt bottle)
     ];
 
     # GUI Applications (casks)

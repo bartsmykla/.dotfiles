@@ -209,6 +209,7 @@ cask "insomnia"          # HTTP/GraphQL client
 # AI Tools
 cask "chatgpt"           # OpenAI ChatGPT desktop app
 cask "claude"            # Anthropic Claude AI desktop app
+brew "hermes-agent"      # Nous Research AI agent CLI
 
 # Container & Kubernetes
 cask "orbstack"          # Docker Desktop replacement (preferred)
