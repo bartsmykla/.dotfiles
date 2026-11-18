@@ -6,6 +6,12 @@
 # mtime when it is used, so deleting entries untouched for 2 days is safe
 # during builds. A size cap is also required: same-day unique ActionIDs are
 # all younger than 2 days.
+#
+# The size pass must not fight live builds: skip it when compile/link/test/lint
+# is running or 1-minute load is above the CPU count; never delete files
+# touched in the last 60 minutes; evict largest eligible files first and unlink
+# them in one process; stop after a runtime cap. A lock directory prevents
+# overlapping runs.
 {
   config,
   lib,
@@ -20,68 +26,207 @@
 
     size_kb() { /usr/bin/du -sk "$1" 2>/dev/null | /usr/bin/awk '{print $1}'; }
 
-    # Delete oldest regular files in dir until it is at most target_kb.
-    # Skips trim.txt (go's own trim bookmark). Safe if a build is running:
-    # a missing cache file is a miss, not corruption. The file list is written
-    # to a temp file so the delete loop runs in this shell (a pipeline
-    # `while` would not stop the parent at the size target).
+    START=$(/bin/date +%s)
+    MAX_SECS="''${GO_CACHE_TRIM_MAX_SECS:-600}"
+    MIN_AGE_SECS="''${GO_CACHE_TRIM_MIN_AGE_SECS:-3600}"
+    NCPU=$(/usr/sbin/sysctl -n hw.ncpu 2>/dev/null || echo 1)
+    LOAD_THRESHOLD="''${GO_CACHE_TRIM_LOAD_THRESHOLD:-$NCPU}"
+    GOBUILD="''${GO_CACHE_TRIM_GOBUILD:-${home}/Library/Caches/go-build}"
+    GOLANGCI="''${GO_CACHE_TRIM_GOLANGCI:-${home}/Library/Caches/golangci-lint}"
+    GOBUILD_HIGH_KB="''${GO_CACHE_TRIM_GOBUILD_HIGH_KB:-$((15 * 1024 * 1024))}"
+    GOBUILD_TARGET_KB="''${GO_CACHE_TRIM_GOBUILD_TARGET_KB:-$((10 * 1024 * 1024))}"
+    GOLANGCI_HIGH_KB="''${GO_CACHE_TRIM_GOLANGCI_HIGH_KB:-$((2 * 1024 * 1024))}"
+    GOLANGCI_TARGET_KB="''${GO_CACHE_TRIM_GOLANGCI_TARGET_KB:-$((1 * 1024 * 1024))}"
+    LOCKDIR="''${GO_CACHE_TRIM_LOCKDIR:-${home}/Library/Caches/go-cache-trim.lock}"
+
+    elapsed() { echo $(( $(/bin/date +%s) - START )); }
+
+    over_time() { [ "$(elapsed)" -ge "$MAX_SECS" ]; }
+
+    acquire_lock() {
+      if /bin/mkdir "$LOCKDIR" 2>/dev/null; then
+        printf '%s\n' "$$" > "$LOCKDIR/pid"
+        return 0
+      fi
+      old=$(/bin/cat "$LOCKDIR/pid" 2>/dev/null || true)
+      if [ -n "$old" ] && /bin/kill -0 "$old" 2>/dev/null; then
+        log "already running pid $old, exit"
+        return 1
+      fi
+      log "removing stale lock (pid ''${old:-unknown})"
+      /bin/rm -rf "$LOCKDIR"
+      /bin/mkdir "$LOCKDIR" || return 1
+      printf '%s\n' "$$" > "$LOCKDIR/pid"
+      return 0
+    }
+
+    release_lock() { /bin/rm -rf "$LOCKDIR"; }
+
+    load1() {
+      if [ -n "''${GO_CACHE_TRIM_FAKE_LOAD+x}" ]; then
+        printf '%s\n' "$GO_CACHE_TRIM_FAKE_LOAD"
+        return
+      fi
+      /usr/sbin/sysctl -n vm.loadavg | /usr/bin/awk '{gsub(/[{}]/, "", $1); print $1}'
+    }
+
+    go_busy() {
+      if [ -n "''${GO_CACHE_TRIM_FAKE_BUSY+x}" ]; then
+        [ "$GO_CACHE_TRIM_FAKE_BUSY" = "1" ]
+        return
+      fi
+      # Match process names only so this script's own awk/perl source cannot
+      # self-match. Any `go` / compile / link / lint is enough to skip the
+      # size pass; a miss there is preferable to evicting a warm cache.
+      /bin/ps -axco comm= | /usr/bin/awk '
+        BEGIN { found = 0 }
+        $1 == "golangci-lint" { found = 1; exit }
+        $1 == "compile" { found = 1; exit }
+        $1 == "link" { found = 1; exit }
+        $1 == "asm" { found = 1; exit }
+        $1 == "go" { found = 1; exit }
+        END { exit found ? 0 : 1 }
+      '
+    }
+
+    size_pass_busy() {
+      if go_busy; then
+        log "skip size-prune: go compile/link/test/lint running"
+        return 0
+      fi
+      load=$(load1)
+      if /usr/bin/awk -v l="$load" -v t="$LOAD_THRESHOLD" 'BEGIN { exit !(l+0 > t+0) }'; then
+        log "skip size-prune: load $load > threshold $LOAD_THRESHOLD"
+        return 0
+      fi
+      return 1
+    }
+
+    # Delete largest eligible files (mtime older than MIN_AGE_SECS, not trim.txt)
+    # until the directory is at most target_kb, or the runtime cap is hit.
+    # Unlinks run in one perl process. Safe if a build is running: a missing
+    # cache file is a miss, not corruption. current size is measured once
+    # up front; a final du is left to the caller.
     prune_to_kb() {
       dir=$1
       target_kb=$2
+      if over_time; then
+        log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip size-prune $dir"
+        return 0
+      fi
       cur=$(size_kb "$dir")
       [ -n "$cur" ] || return 0
       [ "$cur" -gt "$target_kb" ] || return 0
-      log "size-prune $dir ''${cur}KB -> target ''${target_kb}KB"
-
-      list=$(/usr/bin/mktemp "''${TMPDIR:-/tmp}/go-cache-prune.XXXXXX") || return 1
-      /usr/bin/find "$dir" -type f ! -name 'trim.txt' -exec /usr/bin/stat -f '%m %z %N' {} + \
-        | /usr/bin/sort -n > "$list" || true
-
       need_bytes=$(( (cur - target_kb) * 1024 ))
-      freed=0
-      while read -r _mtime bytes path; do
-        [ -n "$path" ] || continue
-        /bin/rm -f "$path" || continue
-        freed=$((freed + bytes))
-        if [ "$freed" -ge "$need_bytes" ]; then
-          break
-        fi
-      done < "$list"
-      /bin/rm -f "$list"
+      deadline=$((START + MAX_SECS))
+      log "size-prune $dir ''${cur}KB -> target ''${target_kb}KB (min-age ''${MIN_AGE_SECS}s, largest-old first)"
 
-      log "size-prune $dir now $(size_kb "$dir")KB"
+      # Lines: PROGRESS n freed | DONE n freed | TIME n freed
+      # Process substitution keeps the heredoc attached to perl (a pipe after
+      # <<'PERL' would steal the while-loop body as the program text).
+      while IFS=' ' read -r ev n freed _; do
+        case $ev in
+          PROGRESS) log "size-prune progress unlinked $n freed ''${freed}B" ;;
+          DONE) log "size-prune unlinked $n freed ''${freed}B" ;;
+          TIME) log "time cap reached during size-prune unlinked $n freed ''${freed}B" ;;
+          *) log "size-prune unexpected $ev $n $freed" ;;
+        esac
+      done < <(/usr/bin/perl - "$dir" "$need_bytes" "$MIN_AGE_SECS" "$deadline" <<'PERL'
+use strict;
+use warnings;
+use File::Find;
+
+my ($dir, $need_bytes, $min_age, $deadline) = @ARGV;
+my $now = time;
+my @files;
+
+find(
+  {
+    wanted => sub {
+      my @st = lstat($_);
+      return unless @st && -f _;
+      return if $_ eq 'trim.txt';
+      return if $st[9] > $now - $min_age;
+      push @files, [ $st[7], $File::Find::name ];
+    },
+    no_chdir => 1,
+  },
+  $dir
+);
+
+@files = sort { $b->[0] <=> $a->[0] } @files;
+
+my $freed = 0;
+my $n     = 0;
+for my $it (@files) {
+  if (time >= $deadline) {
+    print "TIME $n $freed\n";
+    exit 0;
+  }
+  my ($sz, $path) = @$it;
+  if (unlink $path) {
+    $freed += $sz;
+    $n++;
+    print "PROGRESS $n $freed\n" if $n % 2000 == 0;
+  }
+  last if $freed >= $need_bytes;
+}
+print "DONE $n $freed\n";
+PERL
+      )
     }
 
-    # Shared caches plus stray per-worktree ones (e.g. GOCACHE=$PWD/bin/.cache/go-build).
-    for dir in "${home}/Library/Caches/go-build" "${home}/Library/Caches/golangci-lint"; do
+    if ! acquire_lock; then
+      exit 0
+    fi
+    trap release_lock EXIT
+
+    log "start max-secs=$MAX_SECS min-age=$MIN_AGE_SECS load-threshold=$LOAD_THRESHOLD"
+
+    for dir in "$GOBUILD" "$GOLANGCI"; do
+      if over_time; then
+        log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip remaining work"
+        break
+      fi
       if [ -d "$dir" ]; then
         log "age-trim $dir before $(size_kb "$dir")KB"
         /usr/bin/find "$dir" -type f -mtime +2 -delete
       fi
     done
 
-    # go-build: 15 GiB high water, 10 GiB target. golangci-lint: 2 GiB / 1 GiB.
-    if [ -d "${home}/Library/Caches/go-build" ]; then
-      cur=$(size_kb "${home}/Library/Caches/go-build")
-      if [ -n "$cur" ] && [ "$cur" -gt $((15 * 1024 * 1024)) ]; then
-        prune_to_kb "${home}/Library/Caches/go-build" $((10 * 1024 * 1024))
+    if over_time; then
+      log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip size-prune"
+    elif size_pass_busy; then
+      :
+    else
+      if [ -d "$GOBUILD" ]; then
+        cur=$(size_kb "$GOBUILD")
+        if [ -n "$cur" ] && [ "$cur" -gt "$GOBUILD_HIGH_KB" ]; then
+          prune_to_kb "$GOBUILD" "$GOBUILD_TARGET_KB"
+        fi
       fi
-    fi
-    if [ -d "${home}/Library/Caches/golangci-lint" ]; then
-      cur=$(size_kb "${home}/Library/Caches/golangci-lint")
-      if [ -n "$cur" ] && [ "$cur" -gt $((2 * 1024 * 1024)) ]; then
-        prune_to_kb "${home}/Library/Caches/golangci-lint" $((1 * 1024 * 1024))
+      if [ -d "$GOLANGCI" ]; then
+        cur=$(size_kb "$GOLANGCI")
+        if [ -n "$cur" ] && [ "$cur" -gt "$GOLANGCI_HIGH_KB" ]; then
+          prune_to_kb "$GOLANGCI" "$GOLANGCI_TARGET_KB"
+        fi
       fi
     fi
 
-    for root in /Users/Shared/codex-home/worktrees "${home}/.t3/worktrees" "${home}/Projects"; do
-      [ -d "$root" ] || continue
-      /usr/bin/find "$root" -maxdepth 6 -type d \( -name node_modules -o -name .git \) -prune -o \
-        -type d -path '*/.cache/go-build' -print 2>/dev/null |
-        while IFS= read -r dir; do /usr/bin/find "$dir" -type f -mtime +2 -delete; done
-    done
+    if ! over_time && [ -z "''${GO_CACHE_TRIM_NO_STRAY:-}" ]; then
+      for root in /Users/Shared/codex-home/worktrees "${home}/.t3/worktrees" "${home}/Projects"; do
+        [ -d "$root" ] || continue
+        if over_time; then
+          log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip stray-cache scan"
+          break
+        fi
+        /usr/bin/find "$root" -maxdepth 6 -type d \( -name node_modules -o -name .git \) -prune -o \
+          -type d -path '*/.cache/go-build' -print 2>/dev/null |
+          while IFS= read -r dir; do /usr/bin/find "$dir" -type f -mtime +2 -delete; done
+      done
+    fi
 
-    log "done go-build=$(size_kb "${home}/Library/Caches/go-build")KB golangci=$(size_kb "${home}/Library/Caches/golangci-lint")KB"
+    log "done go-build=$(size_kb "$GOBUILD")KB golangci=$(size_kb "$GOLANGCI")KB elapsed=$(elapsed)s"
   '';
 in {
   # The user go env file is read by every `go` invocation, including GUI/agent
