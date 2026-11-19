@@ -7,10 +7,11 @@
 # during builds. A size cap is also required: same-day unique ActionIDs are
 # all younger than 2 days.
 #
-# The size pass must not fight live builds: skip it when compile/link/test/lint
-# is running or 1-minute load is above the CPU count; never delete files
-# touched in the last 60 minutes; evict largest eligible files first and unlink
-# them in one process; stop after a runtime cap. A lock directory prevents
+# The size pass and the stray per-worktree cache scan must not fight live
+# builds: skip both when compile/link/test/lint is running or 1-minute load is
+# above the CPU count; never delete files touched in the last 60 minutes;
+# evict largest eligible files first and unlink them in one process; stop after
+# a runtime cap (including a long worktree find). A lock directory prevents
 # overlapping runs.
 {
   config,
@@ -77,7 +78,8 @@
       fi
       # Match process names only so this script's own awk/perl source cannot
       # self-match. Any `go` / compile / link / lint is enough to skip the
-      # size pass; a miss there is preferable to evicting a warm cache.
+      # size pass and stray-cache scan; a miss there is preferable to evicting
+      # a warm cache or walking worktrees under load.
       /bin/ps -axco comm= | /usr/bin/awk '
         BEGIN { found = 0 }
         $1 == "golangci-lint" { found = 1; exit }
@@ -89,14 +91,15 @@
       '
     }
 
-    size_pass_busy() {
+    is_busy() {
+      what=$1
       if go_busy; then
-        log "skip size-prune: go compile/link/test/lint running"
+        log "skip $what: go compile/link/test/lint running"
         return 0
       fi
       load=$(load1)
       if /usr/bin/awk -v l="$load" -v t="$LOAD_THRESHOLD" 'BEGIN { exit !(l+0 > t+0) }'; then
-        log "skip size-prune: load $load > threshold $LOAD_THRESHOLD"
+        log "skip $what: load $load > threshold $LOAD_THRESHOLD"
         return 0
       fi
       return 1
@@ -196,7 +199,7 @@ PERL
 
     if over_time; then
       log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip size-prune"
-    elif size_pass_busy; then
+    elif is_busy "size-prune"; then
       :
     else
       if [ -d "$GOBUILD" ]; then
@@ -213,17 +216,59 @@ PERL
       fi
     fi
 
-    if ! over_time && [ -z "''${GO_CACHE_TRIM_NO_STRAY:-}" ]; then
-      for root in /Users/Shared/codex-home/worktrees "${home}/.t3/worktrees" "${home}/Projects"; do
+    emit_stray_roots() {
+      if [ -n "''${GO_CACHE_TRIM_STRAY_ROOTS+x}" ]; then
+        printf '%s\n' "$GO_CACHE_TRIM_STRAY_ROOTS"
+      else
+        printf '%s\n' /Users/Shared/codex-home/worktrees "${home}/.t3/worktrees" "${home}/Projects"
+      fi
+    }
+
+    # Same busy-check as the size pass: a worktree find can saturate disk
+    # I/O even when it only age-trims. The walk is niced, prunes heavy
+    # directories, is capped at maxdepth 6, and is aborted at the runtime cap.
+    if over_time; then
+      log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip stray-cache scan"
+    elif [ -n "''${GO_CACHE_TRIM_NO_STRAY:-}" ]; then
+      :
+    elif is_busy "stray-cache scan"; then
+      :
+    else
+      while IFS= read -r root; do
+        [ -n "$root" ] || continue
         [ -d "$root" ] || continue
         if over_time; then
           log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip stray-cache scan"
           break
         fi
-        /usr/bin/find "$root" -maxdepth 6 -type d \( -name node_modules -o -name .git \) -prune -o \
-          -type d -path '*/.cache/go-build' -print 2>/dev/null |
-          while IFS= read -r dir; do /usr/bin/find "$dir" -type f -mtime +2 -delete; done
-      done
+        remain=$((MAX_SECS - $(elapsed)))
+        [ "$remain" -gt 0 ] || break
+        list=$(/usr/bin/mktemp "''${TMPDIR:-/tmp}/go-cache-stray.XXXXXX") || continue
+        # shellcheck disable=SC2016 # perl -e is single-quoted so bash does not expand it
+        /usr/bin/nice -n 15 /usr/bin/perl -e '
+          my $s = shift;
+          $SIG{ALRM} = sub { exit 142 };
+          alarm $s;
+          my $rc = system(@ARGV);
+          exit($rc == 0 ? 0 : ($? == -1 ? 1 : ($? & 127 ? 128 + ($? & 127) : $? >> 8)));
+        ' "$remain" /usr/bin/find "$root" -maxdepth 6 -type d \( -name node_modules -o -name .git \) -prune -o \
+          -type d -path "*/.cache/go-build" -print > "$list" 2>/dev/null
+        find_rc=$?
+        if [ "$find_rc" -eq 142 ] || over_time; then
+          log "time cap reached during stray-cache scan"
+          /bin/rm -f "$list"
+          break
+        fi
+        while IFS= read -r dir; do
+          [ -n "$dir" ] || continue
+          if over_time; then
+            log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip stray-cache scan"
+            break
+          fi
+          /usr/bin/find "$dir" -type f -mtime +2 -delete
+        done < "$list"
+        /bin/rm -f "$list"
+      done < <(emit_stray_roots)
     fi
 
     log "done go-build=$(size_kb "$GOBUILD")KB golangci=$(size_kb "$GOLANGCI")KB elapsed=$(elapsed)s"
