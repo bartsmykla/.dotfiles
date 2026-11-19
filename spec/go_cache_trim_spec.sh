@@ -41,7 +41,8 @@ PY
         # Eligible for the 2-day age trim; recent enough to skip the size pass.
         STRAY_OLD="${GO_CACHE_TRIM_STRAY_ROOTS}/wt/.cache/go-build/old-entry"
         echo stray-old >"$STRAY_OLD"
-        touch -A -030000 "$STRAY_OLD" 2>/dev/null || touch -d '3 days ago' "$STRAY_OLD"
+        # Portable mtime: macOS touch -A -030000 is a 3-hour adjustment, not 3 days.
+        python3 -c 'import os,sys,time; t=time.time()-3*86400; os.utime(sys.argv[1], (t,t))' "$STRAY_OLD"
         export STRAY_OLD
     }
 
