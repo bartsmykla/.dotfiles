@@ -6,9 +6,9 @@
 # command line or in GOFLAGS). go test never caches results of a run with
 # -exec, so injecting into a cacheable run would rerun every package.
 #
-# Skips injection when the caller passed -exec (or GOFLAGS has one), asked
-# for compile-only (-c) or a kept binary (-o), targets another GOOS/GOARCH,
-# or set GO_TEST_CAS=0. Never writes -exec into GOFLAGS.
+# Skips injection for the flags in blocks_inject (an own -exec, or a kept
+# test binary), quoted GOFLAGS, another GOOS/GOARCH, or GO_TEST_CAS=0.
+# Never writes -exec into GOFLAGS.
 #
 # Resolves the real go binary by walking PATH, skipping this script and
 # asking mise/asdf which go their shims would run.
@@ -107,9 +107,10 @@ fold_flag() {
   printf '%s\n' "$f"
 }
 
-# Flags (folded by fold_flag) that pick an executor or make go
-# keep the test binary (-c, -o, profiles, -work keeps $WORK). A kept binary can share the cache
-# entry's inode, so an edit to it would change the cached bytes.
+# Flags (folded by fold_flag) that pick an executor or make go keep the
+# test binary (-c, -o, profiles, and -work, which keeps $WORK). A kept binary
+# can share the cache entry's inode, so an edit to it would change the
+# cached bytes.
 blocks_inject() {
   case "$1" in
     -exec|-exec=*|-c|-c=true|-o|-o=*|-work|-work=*) return 0 ;;
