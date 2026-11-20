@@ -268,6 +268,10 @@ GO
             "a -test.run regex that looks like -count" test -test.run -count=1 ./pkg
             "a -tags value that looks like -count" test -tags -count=1 ./pkg
             "the -test.cpuprofile alias" test -count=1 -test.cpuprofile=cpu.out ./pkg
+            "the -test.cpuprofile alias with a separate value" test -count=1 -test.cpuprofile cpu.out ./pkg
+            "a -fuzz value that looks like -count" test -fuzz -count=1 ./pkg
+            "a profile flag after an unknown boolean" test -count=1 -newbool -cpuprofile cpu.out ./pkg
+            "-o after an unknown boolean" test -count=1 -newbool -o x.test ./pkg
             "explicit -exec" test -count=1 -exec /usr/bin/true ./pkg
         End
         It "does not inject for $1"
@@ -283,6 +287,12 @@ GO
             When call "$SHIM" test ./pkg
             The status should be success
             The contents of file "$MOCK_LOG" should eq "test ./pkg"
+        End
+
+        It 'treats -artifacts as a boolean'
+            When call "$SHIM" test -artifacts -count=1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should include "-exec=${GO_TEST_CAS_EXEC}"
         End
 
         It 'injects for -v -count 1 with a separate value'

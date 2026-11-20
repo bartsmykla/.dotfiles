@@ -138,6 +138,11 @@ should_inject() {
   for a in "$@"; do
     if [ "$skip_value" -eq 1 ]; then
       skip_value=0
+      # The value may belong to an unknown boolean and really be a flag, so
+      # it can still block (never enable) injection.
+      if [ "$saw_test" -eq 1 ] && blocks_inject "$(fold_flag "$a")"; then
+        return 1
+      fi
       continue
     fi
     if [ "$saw_test" -eq 0 ]; then
@@ -172,9 +177,10 @@ should_inject() {
       -count=*|-*=*|-) ;;
       -a|-n|-x|-v|-race|-msan|-asan|-cover|-json|-short|-failfast) ;;
       -fullpath|-benchmem|-trimpath|-linkshared|-modcacherw|-work|-buildvcs) ;;
+      -artifacts|-paniconexit0) ;;
       # Any other flag takes the next argument as its value (a -run regex
-      # can look like "-count=1"). An unknown boolean only hides a later
-      # -count, which leaves the result cache on.
+      # can look like "-count=1"). If it is an unknown boolean, a -count
+      # right after it is missed, which leaves the result cache on.
       -*) skip_value=1 ;;
     esac
     case "$a" in -count=*) has_count=1 ;; esac
