@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Idempotently add a PreToolUse hook entry to a Claude or Codex hooks/settings JSON.
+"""Idempotently add a PreToolUse hook entry to a Claude Code settings JSON.
 
 Does not print file contents. Exits 0 on success or a skip, 1 on unexpected
 I/O errors. Invalid JSON is a skip (exit 0) so Home Manager activation cannot
@@ -34,27 +34,26 @@ def main() -> int:
     parser.add_argument("--command", required=True)
     parser.add_argument("--matcher", default="Bash")
     parser.add_argument("--needle", default="go-test-cas-hook")
-    parser.add_argument("--create", action="store_true", help="create a hooks-only file if missing")
     args = parser.parse_args()
 
     path = Path(args.file)
-    if not path.exists():
-        if not args.create:
-            print(f"go-test-cas: skip hook merge, missing {path.name}", file=sys.stderr)
-            return 0
-        data = {"hooks": {}}
-    else:
-        try:
-            data = json.loads(path.read_text())
-        except json.JSONDecodeError:
-            print(f"go-test-cas: skip hook merge, invalid JSON in {path.name}", file=sys.stderr)
-            return 0
-        except OSError as exc:
-            print(f"go-test-cas: skip hook merge, cannot read {path.name}: {exc}", file=sys.stderr)
-            return 0
-        if not isinstance(data, dict):
-            print(f"go-test-cas: skip hook merge, unexpected JSON in {path.name}", file=sys.stderr)
-            return 0
+    # A symlink points at a file someone else manages; replacing it would
+    # turn it into a plain file.
+    if path.is_symlink() or not path.is_file():
+        print(f"go-test-cas: skip hook merge, {path.name} is missing or not a regular file", file=sys.stderr)
+        return 0
+    try:
+        before = path.stat().st_mtime_ns
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError:
+        print(f"go-test-cas: skip hook merge, invalid JSON in {path.name}", file=sys.stderr)
+        return 0
+    except OSError as exc:
+        print(f"go-test-cas: skip hook merge, cannot read {path.name}: {exc}", file=sys.stderr)
+        return 0
+    if not isinstance(data, dict):
+        print(f"go-test-cas: skip hook merge, unexpected JSON in {path.name}", file=sys.stderr)
+        return 0
 
     hooks = data.setdefault("hooks", {})
     if not isinstance(hooks, dict):
@@ -76,12 +75,15 @@ def main() -> int:
 
     text = json.dumps(data, indent=2) + "\n"
     try:
-        fd, tmp = tempfile.mkstemp(prefix="go-test-cas-hooks.", suffix=".json", dir=str(path.parent if path.parent.is_dir() else Path(tempfile.gettempdir())))
+        fd, tmp = tempfile.mkstemp(prefix="go-test-cas-hooks.", suffix=".json", dir=str(path.parent))
         try:
             with os.fdopen(fd, "w") as fh:
                 fh.write(text)
-            if path.exists():
-                os.chmod(tmp, path.stat().st_mode)
+            os.chmod(tmp, path.stat().st_mode)
+            if path.stat().st_mtime_ns != before:
+                os.unlink(tmp)
+                print(f"go-test-cas: skip hook merge, {path.name} changed during merge", file=sys.stderr)
+                return 0
             os.replace(tmp, path)
         except Exception:
             try:

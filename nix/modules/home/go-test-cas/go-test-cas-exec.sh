@@ -12,6 +12,9 @@
 # On any cache failure, exec the original binary so tests still run.
 
 set -u
+# The trim job can delete a cache entry between the -x test and exec. With
+# execfail a failed exec returns, so the original binary still runs.
+shopt -s execfail
 
 debug() {
   if [ "${GO_TEST_CAS_DEBUG:-0}" != "0" ]; then
@@ -57,7 +60,10 @@ DEST="${CACHE_DIR}/${sha}"
 
 if [ -x "$DEST" ]; then
   debug "hit $sha"
+  # Hits do not change the entry, so refresh mtime for the age trim.
+  /usr/bin/touch "$DEST" 2>/dev/null || true
   exec "$DEST" "$@"
+  run_original "$@"
 fi
 
 debug "miss $sha"
@@ -86,3 +92,4 @@ fi
 
 debug "exec cache $sha"
 exec "$DEST" "$@"
+run_original "$@"

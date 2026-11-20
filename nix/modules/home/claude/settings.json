@@ -89,7 +89,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.local/bin/go-test-cas-hook --claude"
+            "command": "$HOME/.local/bin/go-test-cas-hook"
           }
         ]
       }

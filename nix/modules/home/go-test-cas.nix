@@ -1,14 +1,15 @@
 # Content-addressed Go test binary exec cache (macOS XProtect mitigation).
 #
-# A PATH shim at ~/.local/bin/go injects `go test -exec=go-test-cas-exec` so
-# identical test binaries are executed from a stable inode under
-# ~/Library/Caches/go-test-cas and scanned once. The trim job in go-cache.nix
-# prunes that directory. GOFLAGS is left unchanged.
+# A PATH shim at ~/.local/bin/go injects `go test -exec=go-test-cas-exec` into
+# runs that already skip the test result cache (-count), so identical test
+# binaries are executed from a stable inode under ~/Library/Caches/go-test-cas
+# and scanned once. The trim job in go-cache.nix prunes that directory.
+# GOFLAGS is left unchanged.
 #
-# Live Claude Code and Codex settings/hooks files are user-owned. This module
-# installs the hook script and guidance, then merges additively if those files
-# already exist. It never replaces ~/.claude/settings.json, ~/.claude/hooks,
-# ~/.codex/hooks.json, or ~/.codex/config.toml.
+# Live Claude Code and Codex settings and docs are user-owned. This module
+# installs the Claude hook script and guidance, then merges additively if those
+# files already exist. It never replaces ~/.claude/settings.json or
+# ~/.codex/AGENTS.md.
 {
   config,
   lib,
@@ -59,13 +60,7 @@ in {
     $DRY_RUN_CMD "${pkgs.python3}/bin/python3" "$merge_hooks" \
       --file "${home}/.claude/settings.json" \
       --matcher "Bash" \
-      --command '$HOME/.local/bin/go-test-cas-hook --claude' \
-      --needle "go-test-cas-hook" || true
-
-    $DRY_RUN_CMD "${pkgs.python3}/bin/python3" "$merge_hooks" \
-      --file "${home}/.codex/hooks.json" \
-      --matcher "shell|shell_command|local_shell|exec_command|container.exec" \
-      --command '$HOME/.local/bin/go-test-cas-hook --codex' \
+      --command '$HOME/.local/bin/go-test-cas-hook' \
       --needle "go-test-cas-hook" || true
 
     $DRY_RUN_CMD "$merge_guidance" --file "${home}/.claude/CLAUDE.md" --block "$guidance" || true

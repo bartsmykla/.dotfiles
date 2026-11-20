@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2292  # POSIX [ ] tests are used consistently in these scripts
 # shellcheck disable=SC2249  # case patterns are exhaustive for the values we handle
-# PATH shim for `go`. Injects `go test -exec=<go-test-cas-exec>` unless the
-# caller already passed -exec, asked for compile-only (`go test -c`), or set
-# GO_TEST_CAS=0. Never writes -exec into GOFLAGS.
+# PATH shim for `go`. Injects `go test -exec=<go-test-cas-exec>` only for runs
+# that already bypass the Go test result cache (an explicit -count, on the
+# command line or in GOFLAGS). go test never caches results of a run with
+# -exec, so injecting into a cacheable run would rerun every package.
 #
-# Resolves the real go binary by walking PATH and known install locations,
-# skipping this script and path-lookup shims (mise, asdf) to avoid recursion.
+# Skips injection when the caller passed -exec (or GOFLAGS has one), asked
+# for compile-only (-c) or a kept binary (-o), targets another GOOS/GOARCH,
+# or set GO_TEST_CAS=0. Never writes -exec into GOFLAGS.
+#
+# Resolves the real go binary by walking PATH, skipping this script and
+# asking mise/asdf which go their shims would run.
 
 set -u
 
@@ -26,8 +31,9 @@ elif self_link=$(readlink "$0" 2>/dev/null) && [ -n "$self_link" ]; then
     *) SELF=$(cd "$(dirname "$0")" && pwd)/$self_link ;;
   esac
 fi
-SELF_DIR=$(cd "$(dirname "$SELF")" && pwd)
-EXEC_HELPER="${GO_TEST_CAS_EXEC:-${SELF_DIR}/go-test-cas-exec}"
+# Home Manager links each file to its own store path, so the helper sits next
+# to the invoked path ($0), not next to the resolved script.
+EXEC_HELPER="${GO_TEST_CAS_EXEC:-$(cd "$(dirname "$0")" && pwd)/go-test-cas-exec}"
 
 is_this_shim() {
   cand=$1
@@ -39,21 +45,10 @@ is_this_shim() {
   [ "$cand" = "$SELF" ] || [ "$cand" = "$0" ]
 }
 
-is_path_lookup_shim() {
-  cand=$1
-  case "$cand" in
-    */mise/shims/*|*/.mise/shims/*|*/asdf/shims/*|*/.asdf/shims/*)
-      return 0
-      ;;
-  esac
-  return 1
-}
-
 is_native_go() {
   cand=$1
-  [ -f "$cand" ] && [ -x "$cand" ] || return 1
+  [ -n "$cand" ] && [ -f "$cand" ] && [ -x "$cand" ] || return 1
   is_this_shim "$cand" && return 1
-  is_path_lookup_shim "$cand" && return 1
   # Real go toolchains are native binaries; shims are scripts.
   if [ -r "$cand" ]; then
     # Mach-O LE/BE, fat, or ELF. od is in PATH on macOS and Linux CI.
@@ -72,18 +67,22 @@ find_real_go() {
     return 0
   fi
 
-  # Guard against recursion if a shim on PATH re-invokes `go`.
-  if [ -n "${GO_TEST_CAS_RESOLVING:-}" ]; then
-    return 1
-  fi
-  export GO_TEST_CAS_RESOLVING=1
-
   IFS=':'
   # shellcheck disable=SC2086
   for dir in $PATH; do
     unset IFS
     [ -n "$dir" ] || continue
     cand="${dir}/go"
+    # A version-manager shim picks the go for the current directory; ask it
+    # for that binary instead of exec'ing the shim, which could re-enter us.
+    case "$cand" in
+      */mise/shims/go|*/.mise/shims/go)
+        cand=$(mise which go 2>/dev/null) || cand=""
+        ;;
+      */asdf/shims/go|*/.asdf/shims/go)
+        cand=$(asdf which go 2>/dev/null) || cand=""
+        ;;
+    esac
     if is_native_go "$cand"; then
       printf '%s\n' "$cand"
       return 0
@@ -91,12 +90,7 @@ find_real_go() {
   done
   unset IFS
 
-  # mise / Homebrew / usr local, newest mise install last-wins via glob sort
-  for cand in \
-    /opt/homebrew/bin/go \
-    /usr/local/bin/go \
-    "${HOME}/.local/share/mise/installs/go/"*/bin/go
-  do
+  for cand in /opt/homebrew/bin/go /usr/local/bin/go; do
     if is_native_go "$cand"; then
       printf '%s\n' "$cand"
       return 0
@@ -105,21 +99,9 @@ find_real_go() {
   return 1
 }
 
-goflags_has_exec() {
-  # Word-split GOFLAGS the way the go command does (spaces).
-  # shellcheck disable=SC2086
-  set -- ${GOFLAGS:-}
-  while [ "$#" -gt 0 ]; do
-    case "$1" in
-      -exec|--exec|-exec=*|--exec=*) return 0 ;;
-    esac
-    shift
-  done
-  return 1
-}
-
-# Return 0 if this invocation is `go test` that will run a binary and has no
-# -exec yet. Global flags before the subcommand (especially -C) are skipped.
+# Return 0 if this invocation is a `go test` run that will execute a binary,
+# already bypasses the test result cache, and has no -exec yet. Global flags
+# before the subcommand (especially -C) are skipped.
 should_inject() {
   if [ "${GO_TEST_CAS:-1}" = "0" ]; then
     return 1
@@ -130,8 +112,7 @@ should_inject() {
   fi
 
   saw_test=0
-  has_exec=0
-  has_c=0
+  has_count=0
   skip_value=0
 
   for a in "$@"; do
@@ -143,9 +124,6 @@ should_inject() {
       case "$a" in
         -C)
           skip_value=1
-          continue
-          ;;
-        -C=*)
           continue
           ;;
         -*)
@@ -162,16 +140,16 @@ should_inject() {
       esac
     fi
     case "$a" in
-      --) break ;;
-      -exec|--exec)
-        has_exec=1
+      -args|--args) break ;;
+      -exec|--exec|-exec=*|--exec=*) return 1 ;;
+      -c|--c|-c=true|--c=true) return 1 ;;
+      -o|--o|-o=*|--o=*) return 1 ;;
+      -count|--count)
+        has_count=1
         skip_value=1
         ;;
-      -exec=*|--exec=*)
-        has_exec=1
-        ;;
-      -c)
-        has_c=1
+      -count=*|--count=*)
+        has_count=1
         ;;
     esac
   done
@@ -179,13 +157,32 @@ should_inject() {
   if [ "$saw_test" -eq 0 ]; then
     return 1
   fi
-  if [ "$has_exec" -eq 1 ] || goflags_has_exec; then
+
+  # Effective values, including the go env file, not only the environment.
+  env_out=$("$REAL_GO" env GOFLAGS GOOS GOARCH GOHOSTOS GOHOSTARCH 2>/dev/null) || return 1
+  {
+    IFS= read -r goflags
+    read -r goos
+    read -r goarch
+    read -r hostos
+    read -r hostarch
+  } <<EOF
+$env_out
+EOF
+  # A cross target may use go_GOOS_GOARCH_exec; leave it to go.
+  if [ "$goos" != "$hostos" ] || [ "$goarch" != "$hostarch" ]; then
     return 1
   fi
-  if [ "$has_c" -eq 1 ]; then
-    return 1
-  fi
-  return 0
+  # shellcheck disable=SC2086
+  set -- $goflags
+  for a in "$@"; do
+    case "$a" in
+      -exec|--exec|-exec=*|--exec=*) return 1 ;;
+      -count=*|--count=*) has_count=1 ;;
+    esac
+  done
+
+  [ "$has_count" -eq 1 ]
 }
 
 # bash 3.2 with `set -u` treats "${arr[@]}" as unbound when arr is empty
@@ -210,11 +207,6 @@ inject_and_exec() {
         shift 2
         continue
         ;;
-      -C=*)
-        prefix+=("$1")
-        shift
-        continue
-        ;;
       -*)
         prefix+=("$1")
         shift
@@ -222,8 +214,20 @@ inject_and_exec() {
         ;;
       test)
         shift
+        prefix+=(test)
+        # go requires -C to be the first flag after the subcommand too.
+        case "${1:-}" in
+          -C)
+            prefix+=("$1" "$2")
+            shift 2
+            ;;
+          -C=*|--C=*)
+            prefix+=("$1")
+            shift
+            ;;
+        esac
         debug "inject -exec=$EXEC_HELPER"
-        exec_with_prefix "$real" test -exec="$EXEC_HELPER" "$@"
+        exec_with_prefix "$real" -exec="$EXEC_HELPER" "$@"
         ;;
       *)
         # Should not be reached; should_inject already checked.
@@ -238,6 +242,7 @@ REAL_GO=$(find_real_go) || {
   printf 'go-shim: could not resolve a real go binary (set GO_TEST_CAS_REAL_GO)\n' >&2
   exit 127
 }
+debug "real go: $REAL_GO"
 
 if should_inject "$@"; then
   inject_and_exec "$REAL_GO" "$@"

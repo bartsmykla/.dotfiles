@@ -42,6 +42,10 @@ BIN
         cat >"$MOCK_GO" <<'GO'
 #!/usr/bin/env bash
 set -u
+if [ "${1:-}" = "env" ]; then
+  printf '%s\n' "${GOFLAGS:-}" "${MOCK_GOOS:-darwin}" darwin-arch darwin darwin-arch
+  exit 0
+fi
 printf '%s\n' "$*" >>"${MOCK_LOG}"
 # If invoked as `go test -exec helper ...`, optionally run the helper so
 # integration-style cases can observe exec behaviour.
@@ -188,6 +192,18 @@ GO
             The contents of file "$FAKE_BIN_LOG" should include "fallback"
         End
 
+        It 'runs the original binary when the cache entry cannot be executed'
+            sha=$(sha_of "$FAKE_BIN")
+            # A missing interpreter makes exec fail with ENOENT, the same error
+            # as an entry the trim job deleted after the -x check.
+            printf '#!/nonexistent/interpreter\n' >"${GO_TEST_CAS_DIR}/${sha}"
+            chmod +x "${GO_TEST_CAS_DIR}/${sha}"
+            When call "$GO_TEST_CAS_EXEC" "$FAKE_BIN" after-bad-entry
+            The status should be success
+            The contents of file "$FAKE_BIN_LOG" should include "after-bad-entry"
+            The stderr should be present
+        End
+
         It 'runs the original binary when GO_TEST_CAS=0'
             export GO_TEST_CAS=0
             When call "$GO_TEST_CAS_EXEC" "$FAKE_BIN" opted-out
@@ -198,70 +214,169 @@ GO
     End
 
     Describe 'go shim'
-        It 'injects -exec for go test'
+        It 'injects -exec for go test -count'
+            When call "$SHIM" test -count=1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test -exec=${GO_TEST_CAS_EXEC} -count=1 ./pkg"
+        End
+
+        It 'leaves a cacheable go test alone so the result cache still works'
+            When call "$SHIM" test ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test ./pkg"
+        End
+
+        It 'injects when GOFLAGS has -count'
+            export GOFLAGS="-count=1"
             When call "$SHIM" test ./pkg
             The status should be success
             The contents of file "$MOCK_LOG" should include "-exec=${GO_TEST_CAS_EXEC}"
-            The contents of file "$MOCK_LOG" should include "test"
         End
 
         It 'injects -exec after go -C DIR test'
-            When call "$SHIM" -C /tmp test ./pkg
+            When call "$SHIM" -C /tmp test -count=1 ./pkg
             The status should be success
-            The contents of file "$MOCK_LOG" should include "-C /tmp test -exec=${GO_TEST_CAS_EXEC} ./pkg"
+            The contents of file "$MOCK_LOG" should eq "-C /tmp test -exec=${GO_TEST_CAS_EXEC} -count=1 ./pkg"
         End
 
-        It 'injects -exec for go test -json'
-            When call "$SHIM" test -json ./pkg
+        It 'keeps -C first after test'
+            When call "$SHIM" test -C /tmp -count=1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test -C /tmp -exec=${GO_TEST_CAS_EXEC} -count=1 ./pkg"
+        End
+
+        It 'ignores flags after -args'
+            When call "$SHIM" test -count=1 ./pkg -args -c
             The status should be success
             The contents of file "$MOCK_LOG" should include "-exec=${GO_TEST_CAS_EXEC}"
-            The contents of file "$MOCK_LOG" should include "-json"
         End
 
-        It 'does not inject -exec for go test -c'
-            When call "$SHIM" test -c -o /tmp/out.test ./pkg
-            The status should be success
-            The contents of file "$MOCK_LOG" should not include "-exec="
-            The contents of file "$MOCK_LOG" should include "test -c -o /tmp/out.test ./pkg"
+        Describe 'skips injection'
+        Parameters
+            "compile-only" test -count=1 -c ./pkg
+            "kept binary" test -count=1 -o /tmp/out.test ./pkg
+            "explicit -exec" test -count=1 -exec /usr/bin/true ./pkg
         End
-
-        It 'does not inject when -exec is already present'
-            When call "$SHIM" test -exec /usr/bin/true ./pkg
+        It "does not inject for $1"
+            shift
+            When call "$SHIM" "$@"
             The status should be success
-            The contents of file "$MOCK_LOG" should include "test -exec /usr/bin/true ./pkg"
             The contents of file "$MOCK_LOG" should not include "go-test-cas-exec"
+        End
         End
 
         It 'does not inject when GOFLAGS already has -exec'
-            export GOFLAGS="-exec=/usr/bin/true"
+            export GOFLAGS="-count=1 -exec=/usr/bin/true"
             When call "$SHIM" test ./pkg
             The status should be success
-            The contents of file "$MOCK_LOG" should include "test ./pkg"
-            The contents of file "$MOCK_LOG" should not include "go-test-cas-exec"
+            The contents of file "$MOCK_LOG" should eq "test ./pkg"
+        End
+
+        It 'does not inject for a cross-compiled target'
+            export MOCK_GOOS=linux
+            When call "$SHIM" test -count=1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test -count=1 ./pkg"
         End
 
         It 'does not inject when GO_TEST_CAS=0'
             export GO_TEST_CAS=0
-            When call "$SHIM" test ./pkg
+            When call "$SHIM" test -count=1 ./pkg
             The status should be success
-            The contents of file "$MOCK_LOG" should include "test ./pkg"
-            The contents of file "$MOCK_LOG" should not include "-exec="
+            The contents of file "$MOCK_LOG" should eq "test -count=1 ./pkg"
         End
 
-        It 'does not inject for go build or go list'
+        It 'does not inject for go build'
             When call "$SHIM" build ./pkg
             The status should be success
             The contents of file "$MOCK_LOG" should eq "build ./pkg"
         End
 
+        # Home Manager links each file to its own store path, so the helper
+        # must be found next to the invoked link, not next to the target.
+        installed_layout() {
+            unset GO_TEST_CAS_EXEC
+            bindir="${TEST_ROOT}/localbin"
+            mkdir -p "$bindir" "${TEST_ROOT}/store-a" "${TEST_ROOT}/store-b"
+            cp "$SHIM" "${TEST_ROOT}/store-a/go-shim.sh"
+            cp "${CAS_SRC}/go-test-cas-exec.sh" "${TEST_ROOT}/store-b/go-test-cas-exec.sh"
+            ln -s "${TEST_ROOT}/store-a/go-shim.sh" "${bindir}/go"
+            ln -s "${TEST_ROOT}/store-b/go-test-cas-exec.sh" "${bindir}/go-test-cas-exec"
+            "${bindir}/go" test -count=1 ./pkg
+        }
+
+        It 'finds the helper in the installed symlink layout'
+            When call installed_layout
+            The status should be success
+            The contents of file "$MOCK_LOG" should include "/localbin/go-test-cas-exec -count=1"
+        End
+
+        real_go_path() {
+            command -v go >/dev/null 2>&1 || return 1
+            p="$(go env GOROOT 2>/dev/null)/bin/go"
+            [ -x "$p" ] && printf '%s\n' "$p"
+        }
+
+        mise_shim_resolution() {
+            unset GO_TEST_CAS_REAL_GO
+            real=$(real_go_path)
+            mkdir -p "${TEST_ROOT}/mise/shims" "${TEST_ROOT}/tools"
+            printf '#!/bin/sh\nexit 99\n' >"${TEST_ROOT}/mise/shims/go"
+            printf '#!/bin/sh\necho %s\n' "$real" >"${TEST_ROOT}/tools/mise"
+            chmod +x "${TEST_ROOT}/mise/shims/go" "${TEST_ROOT}/tools/mise"
+            PATH="${TEST_ROOT}/mise/shims:${TEST_ROOT}/tools:/usr/bin:/bin" GO_TEST_CAS_DEBUG=1 "$SHIM" version
+        }
+
+        It 'asks mise for the go behind a mise shim'
+            Skip if "go is not installed" test -z "$(real_go_path)"
+            When call mise_shim_resolution
+            The status should be success
+            The output should include "go version"
+            The stderr should include "real go: $(real_go_path)"
+        End
+
         It 'does not recurse when the shim is first on PATH'
-            # Put the shim ahead of the mock on PATH; the shim must still
-            # exec the mock, not itself.
             PATH="$(dirname "$SHIM"):$PATH"
             export PATH
             When call "$SHIM" version
             The status should be success
             The contents of file "$MOCK_LOG" should eq "version"
+        End
+
+        real_go_module() {
+            export GO_TEST_CAS_REAL_GO
+            GO_TEST_CAS_REAL_GO=$(real_go_path)
+            mod="${TEST_ROOT}/mod"
+            mkdir -p "$mod"
+            printf 'module m\n\ngo 1.21\n' >"${mod}/go.mod"
+            printf 'package m\n\nimport "testing"\n\nfunc TestOK(t *testing.T) {}\n' >"${mod}/m_test.go"
+            cd "$mod" || return 1
+        }
+
+        cached_twice() {
+            real_go_module
+            "$SHIM" test . >/dev/null
+            "$SHIM" test .
+        }
+
+        forced_rerun_uses_cas() {
+            real_go_module
+            "$SHIM" test -count=1 . >/dev/null
+            find "$GO_TEST_CAS_DIR" -type f -name '????????????????????????????????????????????????????????????????' | grep -c .
+        }
+
+        It 'keeps the go test result cache with real go'
+            Skip if "go is not installed" test -z "$(real_go_path)"
+            When call cached_twice
+            The status should be success
+            The output should include "(cached)"
+        End
+
+        It 'stores the test binary in the cache for a -count=1 run with real go'
+            Skip if "go is not installed" test -z "$(real_go_path)"
+            When call forced_rerun_uses_cas
+            The status should be success
+            The output should eq "1"
         End
     End
 
@@ -289,7 +404,7 @@ env = os.environ.copy()
 env["GO_TEST_CAS_HOOK_HOME"] = root
 env["GO_TEST_CAS_HOOK_SHIM"] = shim
 env["GO_TEST_CAS_HOOK_BINDIR"] = bindir
-args = [hook, "--" + provider]
+args = [hook]
 proc = subprocess.run(args, input=json.dumps(payload), text=True, capture_output=True, env=env)
 Path_out = os.path.join(root, "hook-out.json")
 open(Path_out, "w").write(proc.stdout)
@@ -298,50 +413,54 @@ raise SystemExit(proc.returncode)
 PY
         }
 
-        hook_claude_gotest() { hook_run claude "go test ./pkg"; }
-        hook_codex_gotest() { hook_run codex "go test ./pkg"; }
-        hook_claude_abspath() { hook_run claude "/opt/homebrew/bin/go test ./pkg"; }
-        hook_claude_count() { hook_run claude "go test -count=1 ./pkg"; }
-        hook_claude_ls() { hook_run claude "ls -la"; }
-        hook_claude_optout() { hook_run claude "go test ./pkg"; }
+        hook_out_command() {
+            python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["hookSpecificOutput"]["updatedInput"]["command"])' "${TEST_ROOT}/hook-out.json"
+        }
 
-        It 'rewrites a go test command when the shim would not already be used'
-            When call hook_claude_gotest
+        compound_rewrite_is_valid_bash() {
+            hook_run claude 'for p in a b; do (cd "$p" && go test ./...); done' || return 1
+            hook_out_command >"${TEST_ROOT}/rewritten.sh"
+            bash -n "${TEST_ROOT}/rewritten.sh" && head -c 7 "${TEST_ROOT}/rewritten.sh"
+        }
+
+        It 'prefixes a go test command with an exported PATH'
+            When call hook_run claude "cd repo && go test ./pkg"
             The status should be success
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "PATH="
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "go test ./pkg"
+            The contents of file "${TEST_ROOT}/hook-out.json" should include 'export PATH=\"'"${TEST_ROOT}"'/localbin:$PATH\"; cd repo && go test ./pkg'
             The contents of file "${TEST_ROOT}/hook-out.json" should not include "permissionDecision"
         End
 
-        It 'adds permissionDecision allow for Codex rewrites'
-            When call hook_codex_gotest
+        It 'keeps a loop with a subshell valid bash'
+            When call compound_rewrite_is_valid_bash
             The status should be success
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "permissionDecision"
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "allow"
+            The output should eq "export "
         End
 
-        It 'rewrites an absolute go path to bare go so the shim wins'
-            When call hook_claude_abspath
-            The status should be success
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "go test ./pkg"
-            The contents of file "${TEST_ROOT}/hook-out.json" should not include "/opt/homebrew/bin/go test"
-        End
-
-        It 'does not rewrite when GO_TEST_CAS=0'
-            export GO_TEST_CAS=0
-            When call hook_claude_optout
+        It 'leaves an explicit go path alone'
+            When call hook_run claude "/opt/homebrew/bin/go test ./pkg"
             The status should be success
             The contents of file "${TEST_ROOT}/hook-out.json" should eq ""
         End
 
-        It 'does not strip -count=1'
-            When call hook_claude_count
+        It 'does not rewrite when the shim is already go on PATH'
+            PATH="${TEST_ROOT}/localbin:$PATH"
+            mkdir -p "${TEST_ROOT}/localbin"
+            ln -s "$SHIM" "${TEST_ROOT}/localbin/go"
+            export PATH
+            When call hook_run claude "go test ./pkg"
             The status should be success
-            The contents of file "${TEST_ROOT}/hook-out.json" should include "-count=1"
+            The contents of file "${TEST_ROOT}/hook-out.json" should eq ""
+        End
+
+        It 'does not rewrite when GO_TEST_CAS=0'
+            export GO_TEST_CAS=0
+            When call hook_run claude "go test ./pkg"
+            The status should be success
+            The contents of file "${TEST_ROOT}/hook-out.json" should eq ""
         End
 
         It 'leaves unrelated commands alone'
-            When call hook_claude_ls
+            When call hook_run claude "ls -la"
             The status should be success
             The contents of file "${TEST_ROOT}/hook-out.json" should eq ""
         End
@@ -351,8 +470,8 @@ PY
         merge_hooks_twice() {
             live="${TEST_ROOT}/settings.json"
             printf '%s\n' '{"hooks":{"PreToolUse":[]}}' >"$live"
-            python3 "${CAS_SRC}/merge-hooks.py" --file "$live" --matcher Bash --command '$HOME/.local/bin/go-test-cas-hook --claude' --needle go-test-cas-hook >/dev/null 2>&1
-            python3 "${CAS_SRC}/merge-hooks.py" --file "$live" --matcher Bash --command '$HOME/.local/bin/go-test-cas-hook --claude' --needle go-test-cas-hook >/dev/null 2>&1
+            python3 "${CAS_SRC}/merge-hooks.py" --file "$live" --matcher Bash --command '$HOME/.local/bin/go-test-cas-hook' --needle go-test-cas-hook >/dev/null 2>&1
+            python3 "${CAS_SRC}/merge-hooks.py" --file "$live" --matcher Bash --command '$HOME/.local/bin/go-test-cas-hook' --needle go-test-cas-hook >/dev/null 2>&1
             python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(len(d["hooks"]["PreToolUse"]))' "$live"
         }
 
@@ -364,10 +483,23 @@ PY
             grep -c 'managed:go-test-macos' "$live"
         }
 
+        merge_hooks_symlink() {
+            printf '%s\n' '{"hooks":{"PreToolUse":[]}}' >"${TEST_ROOT}/managed.json"
+            ln -s "${TEST_ROOT}/managed.json" "${TEST_ROOT}/settings.json"
+            python3 "${CAS_SRC}/merge-hooks.py" --file "${TEST_ROOT}/settings.json" --command x-go-test-cas-hook >/dev/null 2>&1
+            test -L "${TEST_ROOT}/settings.json" && cat "${TEST_ROOT}/managed.json"
+        }
+
         It 'adds a PreToolUse hook and is idempotent'
             When call merge_hooks_twice
             The output should eq "1"
             The status should be success
+        End
+
+        It 'leaves a symlinked settings file alone'
+            When call merge_hooks_symlink
+            The status should be success
+            The output should eq '{"hooks":{"PreToolUse":[]}}'
         End
 
         It 'appends guidance only once'
