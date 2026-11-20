@@ -69,6 +69,43 @@ Describe 'Homebrew PATH shim'
         The output should include 'ARGS=info wget'
     End
 
+    It 'falls back to the Homebrew gh when gh is not on PATH'
+        run_shim() {
+            no_gh_bin="${FAKE_BIN}/no-gh"
+            mkdir "${no_gh_bin}"
+            cp "${FAKE_BIN}/brew" "${no_gh_bin}/brew"
+            env -i \
+                HOME="${HOME}" \
+                PATH="${no_gh_bin}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${no_gh_bin}/brew" \
+                DOTFILES_TEST_GH="${FAKE_BIN}/gh" \
+                /bin/sh "${BREW_SHIM}" upgrade
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include 'TOKEN_SET=yes'
+        The output should include 'ARGS=upgrade'
+    End
+
+    It 'reports the gh failure on stderr and still runs brew'
+        run_shim() {
+            printf '%s\n' '#!/bin/sh' 'echo "no oauth token found" >&2' 'exit 1' > "${FAKE_BIN}/gh"
+            env -i \
+                HOME="${HOME}" \
+                PATH="${FAKE_BIN}:/usr/bin:/bin" \
+                DOTFILES_TEST_BREW="${FAKE_BIN}/brew" \
+                /bin/sh "${BREW_SHIM}" upgrade
+        }
+
+        When call run_shim
+        The status should be success
+        The output should include 'TOKEN_SET='
+        The output should not include 'TOKEN_SET=yes'
+        The output should include 'ARGS=upgrade'
+        The error should include 'no oauth token found'
+    End
+
     It 'drops ~/.local/bin from PATH when the command is doctor'
         run_shim() {
             env -i \
