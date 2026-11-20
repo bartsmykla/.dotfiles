@@ -272,6 +272,9 @@ GO
             "a -fuzz value that looks like -count" test -fuzz -count=1 ./pkg
             "a profile flag after an unknown boolean" test -count=1 -newbool -cpuprofile cpu.out ./pkg
             "-o after an unknown boolean" test -count=1 -newbool -o x.test ./pkg
+            "a -test. profile alias after an unknown boolean" test -count=1 -newbool -test.cpuprofile=cpu.out ./pkg
+            "-work, which keeps the test binary" test -count=1 -work ./pkg
+            "-o after a -test.args test flag" test -count=1 . -test.args -o kept.test
             "explicit -exec" test -count=1 -exec /usr/bin/true ./pkg
         End
         It "does not inject for $1"

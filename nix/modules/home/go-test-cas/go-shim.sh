@@ -108,11 +108,11 @@ fold_flag() {
 }
 
 # Flags (folded by fold_flag) that pick an executor or make go
-# keep the test binary (-c, -o, profiles). A kept binary can share the cache
+# keep the test binary (-c, -o, profiles, -work keeps $WORK). A kept binary can share the cache
 # entry's inode, so an edit to it would change the cached bytes.
 blocks_inject() {
   case "$1" in
-    -exec|-exec=*|-c|-c=true|-o|-o=*) return 0 ;;
+    -exec|-exec=*|-c|-c=true|-o|-o=*|-work|-work=*) return 0 ;;
     -cpuprofile|-cpuprofile=*|-memprofile|-memprofile=*) return 0 ;;
     -blockprofile|-blockprofile=*|-mutexprofile|-mutexprofile=*) return 0 ;;
   esac
@@ -164,19 +164,20 @@ should_inject() {
           ;;
       esac
     fi
+    # -test.args is a test's own flag, not -args, so match before folding.
+    case "$a" in -args|--args) break ;; esac
     a=$(fold_flag "$a")
     if blocks_inject "$a"; then
       return 1
     fi
     case "$a" in
-      -args) break ;;
       -count)
         has_count=1
         skip_value=1
         ;;
       -count=*|-*=*|-) ;;
       -a|-n|-x|-v|-race|-msan|-asan|-cover|-json|-short|-failfast) ;;
-      -fullpath|-benchmem|-trimpath|-linkshared|-modcacherw|-work|-buildvcs) ;;
+      -fullpath|-benchmem|-trimpath|-linkshared|-modcacherw|-buildvcs) ;;
       -artifacts|-paniconexit0) ;;
       # Any other flag takes the next argument as its value (a -run regex
       # can look like "-count=1"). If it is an unknown boolean, a -count
