@@ -20,9 +20,19 @@
 
 export HOMEBREW_NO_ENV_HINTS=1
 
-if [ -z "${HOMEBREW_GITHUB_API_TOKEN:-}" ] && token=$(gh auth token 2>/dev/null) && [ -n "$token" ]; then
-  HOMEBREW_GITHUB_API_TOKEN=$token
-  export HOMEBREW_GITHUB_API_TOKEN
+# Callers with a bare PATH (GUI apps, launchd, env -i) have no gh on it, so
+# fall back to the Homebrew gh. When no token comes back, say why on stderr:
+# Homebrew's own error only names the variable, not the gh failure behind it.
+# DOTFILES_TEST_GH is a test hook for that fallback path.
+if [ -z "${HOMEBREW_GITHUB_API_TOKEN:-}" ]; then
+  _brew_gh=$(command -v gh) || _brew_gh="${DOTFILES_TEST_GH:-/opt/homebrew/bin/gh}"
+  if _brew_token=$("$_brew_gh" auth token 2>&1) && [ -n "$_brew_token" ]; then
+    HOMEBREW_GITHUB_API_TOKEN=$_brew_token
+    export HOMEBREW_GITHUB_API_TOKEN
+  else
+    printf 'brew shim: no GitHub token from %s, private taps will fail: %s\n' "$_brew_gh" "$_brew_token" >&2
+  fi
+  unset _brew_gh _brew_token
 fi
 
 # Homebrew's brew.sh shifts a leading -v to the end before command lookup.
