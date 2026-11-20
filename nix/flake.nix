@@ -65,6 +65,7 @@
       ./modules/home/git-signing.nix
       ./modules/home/ghostty.nix
       ./modules/home/go-cache.nix
+      ./modules/home/go-test-cas.nix
       ./modules/home/hammerspoon.nix
       ./modules/home/hermes.nix
       ./modules/home/hindsight.nix

@@ -24,6 +24,7 @@ PY
 
         export GO_CACHE_TRIM_GOBUILD="${TEST_ROOT}/go-build"
         export GO_CACHE_TRIM_GOLANGCI="${TEST_ROOT}/golangci-lint"
+        export GO_CACHE_TRIM_GOTESTCAS="${TEST_ROOT}/go-test-cas"
         export GO_CACHE_TRIM_LOCKDIR="${TEST_ROOT}/lock"
         export GO_CACHE_TRIM_STRAY_ROOTS="${TEST_ROOT}/worktrees"
         export GO_CACHE_TRIM_FAKE_BUSY=0
@@ -37,7 +38,12 @@ PY
         export GO_CACHE_TRIM_GOLANGCI_TARGET_KB=10485760
 
         mkdir -p "${GO_CACHE_TRIM_GOBUILD}" "${GO_CACHE_TRIM_GOLANGCI}" \
+            "${GO_CACHE_TRIM_GOTESTCAS}" \
             "${GO_CACHE_TRIM_STRAY_ROOTS}/wt/.cache/go-build"
+        CAS_OLD="${GO_CACHE_TRIM_GOTESTCAS}/old-bin"
+        echo cas-old >"$CAS_OLD"
+        python3 -c 'import os,sys,time; t=time.time()-3*86400; os.utime(sys.argv[1], (t,t))' "$CAS_OLD"
+        export CAS_OLD
         # Eligible for the 2-day age trim; recent enough to skip the size pass.
         STRAY_OLD="${GO_CACHE_TRIM_STRAY_ROOTS}/wt/.cache/go-build/old-entry"
         echo stray-old >"$STRAY_OLD"
@@ -88,5 +94,24 @@ PY
         The output should include "done "
         The output should not include "skip stray-cache scan"
         The file "$STRAY_OLD" should not be exist
+    End
+
+    It 'age-trims go-test-cas entries when the system is not busy'
+        export GO_CACHE_TRIM_FAKE_BUSY=0
+        export GO_CACHE_TRIM_FAKE_LOAD=0
+        When call run_trim
+        The status should be success
+        The output should include "age-trim ${GO_CACHE_TRIM_GOTESTCAS}"
+        The output should include "go-test-cas="
+        The file "$CAS_OLD" should not be exist
+    End
+
+    It 'skips go-test-cas size-prune when go builds are running'
+        export GO_CACHE_TRIM_FAKE_BUSY=1
+        export GO_CACHE_TRIM_GOTESTCAS_HIGH_KB=0
+        export GO_CACHE_TRIM_GOTESTCAS_TARGET_KB=0
+        When call run_trim
+        The status should be success
+        The output should include "skip size-prune: go compile/link/test/lint running"
     End
 End

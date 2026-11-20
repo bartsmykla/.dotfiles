@@ -1,4 +1,4 @@
-# Trim of Go build and golangci-lint caches.
+# Trim of Go build, golangci-lint, and go-test-cas caches.
 #
 # Go only drops cache entries unused for 5 days and has no size cap, so a day
 # of agent-driven go test/build/vet/lint across many worktrees can add tens of
@@ -38,6 +38,9 @@
     GOBUILD_TARGET_KB="''${GO_CACHE_TRIM_GOBUILD_TARGET_KB:-$((10 * 1024 * 1024))}"
     GOLANGCI_HIGH_KB="''${GO_CACHE_TRIM_GOLANGCI_HIGH_KB:-$((2 * 1024 * 1024))}"
     GOLANGCI_TARGET_KB="''${GO_CACHE_TRIM_GOLANGCI_TARGET_KB:-$((1 * 1024 * 1024))}"
+    GOTESTCAS="''${GO_CACHE_TRIM_GOTESTCAS:-${home}/Library/Caches/go-test-cas}"
+    GOTESTCAS_HIGH_KB="''${GO_CACHE_TRIM_GOTESTCAS_HIGH_KB:-$((2 * 1024 * 1024))}"
+    GOTESTCAS_TARGET_KB="''${GO_CACHE_TRIM_GOTESTCAS_TARGET_KB:-$((1 * 1024 * 1024))}"
     LOCKDIR="''${GO_CACHE_TRIM_LOCKDIR:-${home}/Library/Caches/go-cache-trim.lock}"
 
     elapsed() { echo $(( $(/bin/date +%s) - START )); }
@@ -186,7 +189,7 @@ PERL
 
     log "start max-secs=$MAX_SECS min-age=$MIN_AGE_SECS load-threshold=$LOAD_THRESHOLD"
 
-    for dir in "$GOBUILD" "$GOLANGCI"; do
+    for dir in "$GOBUILD" "$GOLANGCI" "$GOTESTCAS"; do
       if over_time; then
         log "time cap reached ($(elapsed)s >= ''${MAX_SECS}s), skip remaining work"
         break
@@ -212,6 +215,12 @@ PERL
         cur=$(size_kb "$GOLANGCI")
         if [ -n "$cur" ] && [ "$cur" -gt "$GOLANGCI_HIGH_KB" ]; then
           prune_to_kb "$GOLANGCI" "$GOLANGCI_TARGET_KB"
+        fi
+      fi
+      if [ -d "$GOTESTCAS" ]; then
+        cur=$(size_kb "$GOTESTCAS")
+        if [ -n "$cur" ] && [ "$cur" -gt "$GOTESTCAS_HIGH_KB" ]; then
+          prune_to_kb "$GOTESTCAS" "$GOTESTCAS_TARGET_KB"
         fi
       fi
     fi
@@ -271,7 +280,7 @@ PERL
       done < <(emit_stray_roots)
     fi
 
-    log "done go-build=$(size_kb "$GOBUILD")KB golangci=$(size_kb "$GOLANGCI")KB elapsed=$(elapsed)s"
+    log "done go-build=$(size_kb "$GOBUILD")KB golangci=$(size_kb "$GOLANGCI")KB go-test-cas=$(size_kb "$GOTESTCAS")KB elapsed=$(elapsed)s"
   '';
 in {
   # The user go env file is read by every `go` invocation, including GUI/agent
