@@ -99,7 +99,15 @@ find_real_go() {
   return 1
 }
 
-# Flags (with any leading -- folded to -) that pick an executor or make go
+# Fold --flag and the -test.flag aliases go accepts to -flag.
+fold_flag() {
+  f=$1
+  case "$f" in --*) f=${f#-} ;; esac
+  case "$f" in -test.*) f=-${f#-test.} ;; esac
+  printf '%s\n' "$f"
+}
+
+# Flags (folded by fold_flag) that pick an executor or make go
 # keep the test binary (-c, -o, profiles). A kept binary can share the cache
 # entry's inode, so an edit to it would change the cached bytes.
 blocks_inject() {
@@ -151,7 +159,7 @@ should_inject() {
           ;;
       esac
     fi
-    case "$a" in --*) a=${a#-} ;; esac
+    a=$(fold_flag "$a")
     if blocks_inject "$a"; then
       return 1
     fi
@@ -161,14 +169,15 @@ should_inject() {
         has_count=1
         skip_value=1
         ;;
-      -count=*)
-        has_count=1
-        ;;
-      # Regex values may start with "-"; do not read them as flags.
-      -run|-skip|-bench|-list)
-        skip_value=1
-        ;;
+      -count=*|-*=*|-) ;;
+      -a|-n|-x|-v|-race|-msan|-asan|-cover|-json|-short|-failfast) ;;
+      -fullpath|-benchmem|-trimpath|-linkshared|-modcacherw|-work|-buildvcs) ;;
+      # Any other flag takes the next argument as its value (a -run regex
+      # can look like "-count=1"). An unknown boolean only hides a later
+      # -count, which leaves the result cache on.
+      -*) skip_value=1 ;;
     esac
+    case "$a" in -count=*) has_count=1 ;; esac
   done
 
   if [ "$saw_test" -eq 0 ]; then
@@ -197,7 +206,7 @@ EOF
   # shellcheck disable=SC2086
   set -- $goflags
   for a in "$@"; do
-    case "$a" in --*) a=${a#-} ;; esac
+    a=$(fold_flag "$a")
     if blocks_inject "$a"; then
       return 1
     fi

@@ -265,6 +265,9 @@ GO
             "kept binary" test -count=1 -o /tmp/out.test ./pkg
             "profile" test -count=1 -cpuprofile cpu.out ./pkg
             "a -run regex that looks like -count" test -run -count=1 ./pkg
+            "a -test.run regex that looks like -count" test -test.run -count=1 ./pkg
+            "a -tags value that looks like -count" test -tags -count=1 ./pkg
+            "the -test.cpuprofile alias" test -count=1 -test.cpuprofile=cpu.out ./pkg
             "explicit -exec" test -count=1 -exec /usr/bin/true ./pkg
         End
         It "does not inject for $1"
@@ -273,6 +276,19 @@ GO
             The status should be success
             The contents of file "$MOCK_LOG" should not include "go-test-cas-exec"
         End
+        End
+
+        It 'does not inject when GOFLAGS has a -test. profile alias'
+            export GOFLAGS="-count=1 -test.cpuprofile=cpu.out"
+            When call "$SHIM" test ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test ./pkg"
+        End
+
+        It 'injects for -v -count 1 with a separate value'
+            When call "$SHIM" test -v -count 1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test -exec=${GO_TEST_CAS_EXEC} -v -count 1 ./pkg"
         End
 
         It 'does not inject when GOFLAGS has quoted entries'
