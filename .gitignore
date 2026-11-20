@@ -15,4 +15,3 @@ result
 .claude/*
 !.claude/rules/
 .zcode/
-__pycache__/

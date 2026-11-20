@@ -83,15 +83,6 @@
             "timeout": 30
           }
         ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.local/bin/go-test-cas-hook"
-          }
-        ]
       }
     ],
     "Notification": [

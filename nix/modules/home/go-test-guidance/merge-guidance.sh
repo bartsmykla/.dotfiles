@@ -22,19 +22,19 @@ if [ -z "$FILE" ] || [ -z "$BLOCK" ]; then
   exit 2
 fi
 if [ ! -f "$BLOCK" ]; then
-  printf 'go-test-cas: guidance block missing\n' >&2
+  printf 'go-test-guidance: guidance block missing\n' >&2
   exit 1
 fi
 
 MARKER='<!-- managed:go-test-macos -->'
 
 if [ ! -e "$FILE" ]; then
-  printf 'go-test-cas: skip guidance merge, missing %s\n' "$(basename "$FILE")" >&2
+  printf 'go-test-guidance: skip guidance merge, missing %s\n' "$(basename "$FILE")" >&2
   exit 0
 fi
 
 if /usr/bin/grep -F -q "$MARKER" "$FILE"; then
-  printf 'go-test-cas: guidance already present in %s\n' "$(basename "$FILE")" >&2
+  printf 'go-test-guidance: guidance already present in %s\n' "$(basename "$FILE")" >&2
   exit 0
 fi
 
@@ -43,5 +43,5 @@ fi
   /bin/cat "$BLOCK"
   printf '\n'
 } >> "$FILE"
-printf 'go-test-cas: appended guidance to %s\n' "$(basename "$FILE")" >&2
+printf 'go-test-guidance: appended guidance to %s\n' "$(basename "$FILE")" >&2
 exit 0
