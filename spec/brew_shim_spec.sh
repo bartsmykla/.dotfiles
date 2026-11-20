@@ -74,9 +74,12 @@ Describe 'Homebrew PATH shim'
             no_gh_bin="${FAKE_BIN}/no-gh"
             mkdir "${no_gh_bin}"
             cp "${FAKE_BIN}/brew" "${no_gh_bin}/brew"
+            # Keep system directories off PATH: Ubuntu runners ship /usr/bin/gh
+            # (and /bin is often a usrmerge symlink to /usr/bin), which would
+            # hide the DOTFILES_TEST_GH fallback this case is meant to cover.
             env -i \
                 HOME="${HOME}" \
-                PATH="${no_gh_bin}:/usr/bin:/bin" \
+                PATH="${no_gh_bin}" \
                 DOTFILES_TEST_BREW="${no_gh_bin}/brew" \
                 DOTFILES_TEST_GH="${FAKE_BIN}/gh" \
                 /bin/sh "${BREW_SHIM}" upgrade
