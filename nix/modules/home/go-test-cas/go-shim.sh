@@ -188,6 +188,17 @@ should_inject() {
   return 0
 }
 
+# bash 3.2 with `set -u` treats "${arr[@]}" as unbound when arr is empty
+# (macOS /bin/bash). Only expand the prefix when it has elements.
+exec_with_prefix() {
+  real=$1
+  shift
+  if [ "${#prefix[@]}" -gt 0 ]; then
+    exec "$real" "${prefix[@]}" "$@"
+  fi
+  exec "$real" "$@"
+}
+
 inject_and_exec() {
   real=$1
   shift
@@ -212,15 +223,15 @@ inject_and_exec() {
       test)
         shift
         debug "inject -exec=$EXEC_HELPER"
-        exec "$real" "${prefix[@]}" test -exec="$EXEC_HELPER" "$@"
+        exec_with_prefix "$real" test -exec="$EXEC_HELPER" "$@"
         ;;
       *)
         # Should not be reached; should_inject already checked.
-        exec "$real" "${prefix[@]}" "$@"
+        exec_with_prefix "$real" "$@"
         ;;
     esac
   done
-  exec "$real" "${prefix[@]}"
+  exec_with_prefix "$real"
 }
 
 REAL_GO=$(find_real_go) || {
