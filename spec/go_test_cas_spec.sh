@@ -204,6 +204,14 @@ GO
             The stderr should be present
         End
 
+        It 'stops after a failed fallback exec'
+            export GO_TEST_CAS=0
+            When call "$GO_TEST_CAS_EXEC" "${TEST_ROOT}/missing.test"
+            The status should eq 127
+            The stderr should include "missing.test"
+            The stderr should not include "${GO_TEST_CAS_DIR}"
+        End
+
         It 'runs the original binary when GO_TEST_CAS=0'
             export GO_TEST_CAS=0
             When call "$GO_TEST_CAS_EXEC" "$FAKE_BIN" opted-out
@@ -255,6 +263,8 @@ GO
         Parameters
             "compile-only" test -count=1 -c ./pkg
             "kept binary" test -count=1 -o /tmp/out.test ./pkg
+            "profile" test -count=1 -cpuprofile cpu.out ./pkg
+            "a -run regex that looks like -count" test -run -count=1 ./pkg
             "explicit -exec" test -count=1 -exec /usr/bin/true ./pkg
         End
         It "does not inject for $1"
@@ -263,6 +273,26 @@ GO
             The status should be success
             The contents of file "$MOCK_LOG" should not include "go-test-cas-exec"
         End
+        End
+
+        It 'does not inject when GOFLAGS has quoted entries'
+            export GOFLAGS="'-exec=/usr/bin/false' -count=1"
+            When call "$SHIM" test ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test ./pkg"
+        End
+
+        It 'keeps --C first after test'
+            When call "$SHIM" test --C /tmp -count=1 ./pkg
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test --C /tmp -exec=${GO_TEST_CAS_EXEC} -count=1 ./pkg"
+        End
+
+        It 'passes a trailing -C with no value to go'
+            export GOFLAGS="-count=1"
+            When call "$SHIM" test -C
+            The status should be success
+            The contents of file "$MOCK_LOG" should eq "test -exec=${GO_TEST_CAS_EXEC} -C"
         End
 
         It 'does not inject when GOFLAGS already has -exec'

@@ -99,6 +99,18 @@ find_real_go() {
   return 1
 }
 
+# Flags (with any leading -- folded to -) that pick an executor or make go
+# keep the test binary (-c, -o, profiles). A kept binary can share the cache
+# entry's inode, so an edit to it would change the cached bytes.
+blocks_inject() {
+  case "$1" in
+    -exec|-exec=*|-c|-c=true|-o|-o=*) return 0 ;;
+    -cpuprofile|-cpuprofile=*|-memprofile|-memprofile=*) return 0 ;;
+    -blockprofile|-blockprofile=*|-mutexprofile|-mutexprofile=*) return 0 ;;
+  esac
+  return 1
+}
+
 # Return 0 if this invocation is a `go test` run that will execute a binary,
 # already bypasses the test result cache, and has no -exec yet. Global flags
 # before the subcommand (especially -C) are skipped.
@@ -122,7 +134,7 @@ should_inject() {
     fi
     if [ "$saw_test" -eq 0 ]; then
       case "$a" in
-        -C)
+        -C|--C)
           skip_value=1
           continue
           ;;
@@ -139,17 +151,22 @@ should_inject() {
           ;;
       esac
     fi
+    case "$a" in --*) a=${a#-} ;; esac
+    if blocks_inject "$a"; then
+      return 1
+    fi
     case "$a" in
-      -args|--args) break ;;
-      -exec|--exec|-exec=*|--exec=*) return 1 ;;
-      -c|--c|-c=true|--c=true) return 1 ;;
-      -o|--o|-o=*|--o=*) return 1 ;;
-      -count|--count)
+      -args) break ;;
+      -count)
         has_count=1
         skip_value=1
         ;;
-      -count=*|--count=*)
+      -count=*)
         has_count=1
+        ;;
+      # Regex values may start with "-"; do not read them as flags.
+      -run|-skip|-bench|-list)
+        skip_value=1
         ;;
     esac
   done
@@ -173,12 +190,19 @@ EOF
   if [ "$goos" != "$hostos" ] || [ "$goarch" != "$hostarch" ]; then
     return 1
   fi
+  # go accepts quoted GOFLAGS entries; do not guess how to split them.
+  case "$goflags" in
+    *\"*|*\'*) return 1 ;;
+  esac
   # shellcheck disable=SC2086
   set -- $goflags
   for a in "$@"; do
+    case "$a" in --*) a=${a#-} ;; esac
+    if blocks_inject "$a"; then
+      return 1
+    fi
     case "$a" in
-      -exec|--exec|-exec=*|--exec=*) return 1 ;;
-      -count=*|--count=*) has_count=1 ;;
+      -count=*) has_count=1 ;;
     esac
   done
 
@@ -202,7 +226,8 @@ inject_and_exec() {
   prefix=()
   while [ "$#" -gt 0 ]; do
     case "$1" in
-      -C)
+      -C|--C)
+        [ "$#" -ge 2 ] || break
         prefix+=("$1" "$2")
         shift 2
         continue
@@ -217,9 +242,11 @@ inject_and_exec() {
         prefix+=(test)
         # go requires -C to be the first flag after the subcommand too.
         case "${1:-}" in
-          -C)
-            prefix+=("$1" "$2")
-            shift 2
+          -C|--C)
+            if [ "$#" -ge 2 ]; then
+              prefix+=("$1" "$2")
+              shift 2
+            fi
             ;;
           -C=*|--C=*)
             prefix+=("$1")
@@ -235,7 +262,7 @@ inject_and_exec() {
         ;;
     esac
   done
-  exec_with_prefix "$real"
+  exec_with_prefix "$real" "$@"
 }
 
 REAL_GO=$(find_real_go) || {

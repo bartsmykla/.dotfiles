@@ -36,6 +36,8 @@ shift
 run_original() {
   debug "fallback to original binary"
   exec "$ORIG" "$@"
+  # execfail lets a failed exec return; never fall through into the cache path.
+  exit 127
 }
 
 if [ "${GO_TEST_CAS:-1}" = "0" ]; then
@@ -61,7 +63,8 @@ DEST="${CACHE_DIR}/${sha}"
 if [ -x "$DEST" ]; then
   debug "hit $sha"
   # Hits do not change the entry, so refresh mtime for the age trim.
-  /usr/bin/touch "$DEST" 2>/dev/null || true
+  # -c: never create an empty entry if the trim just removed it.
+  /usr/bin/touch -c "$DEST" 2>/dev/null || true
   exec "$DEST" "$@"
   run_original "$@"
 fi
