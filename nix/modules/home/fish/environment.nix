@@ -209,7 +209,10 @@ in
 
     # The Hermes Agent installer (hermes.nix) looks for this call and would
     # otherwise append its own PATH line to the read-only config.fish.
-    fish_add_path --global --move --path "$HOME/.local/bin"
+    # Keep it in fish_user_paths, not --path: fish puts fish_user_paths
+    # first on every rebuild, which would put /opt/homebrew/bin/brew ahead
+    # of the ~/.local/bin/brew token shim in a long-running shell.
+    fish_add_path --global --move "$HOME/.local/bin"
 
     # Note: Direnv hook handled by programs.direnv in direnv.nix
     # Manual hook disabled since direnv.nix handles integration
